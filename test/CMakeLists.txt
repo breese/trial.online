@@ -10,3 +10,4 @@
 
 trial_online_add_test(arithmetic_suite average/arithmetic_suite.cpp)
 trial_online_add_test(arithmetic_variance_suite average/arithmetic_variance_suite.cpp)
+trial_online_add_test(exponential_suite average/exponential_suite.cpp)
