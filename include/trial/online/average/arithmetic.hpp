@@ -44,7 +44,7 @@ public:
     size_type size() const;
 
 private:
-    typedef boost::circular_buffer<value_type> window_type;
+    using window_type = boost::circular_buffer<value_type>;
     window_type window;
     value_type sum;
 };
