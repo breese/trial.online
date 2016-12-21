@@ -1,0 +1,3 @@
+[submodule "external/brigand"]
+	path = external/brigand
+	url = https://github.com/edouarda/brigand.git

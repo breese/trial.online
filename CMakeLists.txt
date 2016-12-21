@@ -18,18 +18,23 @@ set(EXECUTABLE_OUTPUT_PATH ${TRIAL_ONLINE_BUILD_DIR}/bin)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_definitions(-Wall -Wextra)
+###############################################################################
+# Brigand package
+###############################################################################
+
+include_directories(external/brigand)
 
 ###############################################################################
 # Trial.Online package
 ###############################################################################
 
-include_directories(BEFORE include)
+include_directories(include)
 
 function(trial_online_add_test name)
   add_executable(${name} ${ARGN})
-  target_link_libraries(${name} ${TRIAL_ONLINE_DEPENDENT_LIBRARIES})
+  #target_link_libraries(${name} ${TRIAL_ONLINE_DEPENDENT_LIBRARIES})
   add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
+  target_compile_options(${name} PRIVATE -Wall -Wextra)
 endfunction()
 
 enable_testing()
