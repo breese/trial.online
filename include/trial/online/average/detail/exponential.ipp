@@ -17,36 +17,34 @@ namespace online
 namespace average
 {
 
-template <typename T>
-exponential<T>::exponential(value_type smoothing_factor)
-    : smoothing_factor(smoothing_factor),
-      average(),
+template <typename T, typename S>
+exponential<T, S>::exponential()
+    : average(),
       normalization()
 {
-    assert(smoothing_factor >= zero);
-    assert(smoothing_factor <= one);
 }
 
-template <typename T>
-void exponential<T>::clear()
+template <typename T, typename S>
+void exponential<T, S>::clear()
 {
-    average = zero;
-    normalization = zero;
+    average = {};
+    normalization = {};
 }
 
-template <typename T>
-typename exponential<T>::value_type exponential<T>::mean() const
+template <typename T, typename S>
+typename exponential<T, S>::value_type exponential<T, S>::value() const
 {
-    if (normalization > zero)
+    if (normalization > value_type(0))
         return average / normalization;
-    return zero;
+    return {};
 }
 
-template <typename T>
-void exponential<T>::push(value_type value)
+template <typename T, typename S>
+void exponential<T, S>::push(value_type value)
 {
     // Normalization is described in:
     //   http://breese.github.io/2015/10/26/on-average.html
+    const value_type one(1);
     normalization = smoothing_factor + (one - smoothing_factor) * normalization;
     average = smoothing_factor * value + (one - smoothing_factor) * average;
 }

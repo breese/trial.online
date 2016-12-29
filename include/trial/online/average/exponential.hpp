@@ -11,7 +11,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <type_traits>
+#include <ratio>
+#include <trial/online/detail/type_traits.hpp>
 
 namespace trial
 {
@@ -20,24 +21,23 @@ namespace online
 namespace average
 {
 
-template <typename T>
+template <typename T, typename Smoothing>
 class exponential
 {
 public:
     using value_type = T;
 
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
+    static_assert(detail::is_ratio<Smoothing>::value, "Smoothing factor must be a ratio");
 
-    exponential(value_type smoothing_factor);
+    exponential();
 
     void clear();
-    value_type mean() const;
+    value_type value() const;
     void push(value_type value);
 
 private:
-    static constexpr value_type zero = value_type(0);
-    static constexpr value_type one = value_type(1);
-    const value_type smoothing_factor;
+    static constexpr value_type smoothing_factor = { Smoothing::num / value_type(Smoothing::den) };
     value_type average;
     value_type normalization;
 };
