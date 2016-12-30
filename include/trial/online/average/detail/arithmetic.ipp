@@ -52,7 +52,7 @@ bool arithmetic<T, N>::full() const
 }
 
 template <typename T, std::size_t N>
-typename arithmetic<T, N>::value_type arithmetic<T, N>::mean() const
+typename arithmetic<T, N>::value_type arithmetic<T, N>::value() const
 {
     if (empty())
         return value_type();

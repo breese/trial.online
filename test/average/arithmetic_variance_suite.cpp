@@ -23,7 +23,7 @@ void test_empty()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
 
@@ -35,19 +35,19 @@ void test_many()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     filter.push(2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
 
@@ -71,7 +71,7 @@ void test_empty()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
 
@@ -82,7 +82,7 @@ void test_one()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
 
@@ -91,17 +91,17 @@ void test_same()
     trial::online::average::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
 
@@ -109,10 +109,10 @@ void test_two()
 {
     trial::online::average::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 2.0);
 }
 
@@ -120,13 +120,13 @@ void test_three()
 {
     trial::online::average::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 2.0);
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.5);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 4.5);
 }
 

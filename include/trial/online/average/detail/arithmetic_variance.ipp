@@ -58,7 +58,7 @@ bool arithmetic_variance<T, N>::full() const
 }
 
 template <typename T, std::size_t N>
-typename arithmetic_variance<T, N>::value_type arithmetic_variance<T, N>::mean() const
+typename arithmetic_variance<T, N>::value_type arithmetic_variance<T, N>::value() const
 {
     if (empty())
         return value_type();
@@ -68,7 +68,7 @@ typename arithmetic_variance<T, N>::value_type arithmetic_variance<T, N>::mean()
 template <typename T, std::size_t N>
 void arithmetic_variance<T, N>::push(value_type value)
 {
-    const value_type old_mean = mean();
+    const value_type old_mean = this->value();
     if (full())
     {
         const value_type old_value = window.front();
@@ -104,7 +104,7 @@ template <typename T, std::size_t N>
 typename arithmetic_variance<T, N>::value_type
 arithmetic_variance<T, N>::delta(value_type value, value_type old_mean)
 {
-    return (value - old_mean) * (value - mean());
+    return (value - old_mean) * (value - this->value());
 }
 
 } // namespace average

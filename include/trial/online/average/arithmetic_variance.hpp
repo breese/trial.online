@@ -38,7 +38,7 @@ public:
     void clear();
     bool empty() const;
     bool full() const;
-    value_type mean() const;
+    value_type value() const;
     void push(value_type value);
     size_type size() const;
     value_type variance() const;
