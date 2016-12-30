@@ -147,7 +147,7 @@ psquare<T, Quantiles...>::value() const
 
     if (count > parameter_length)
     {
-        return heights[2 + index_type::value];
+        return heights[2 * index_type::value + 2];
     }
 
     if (count > 0)

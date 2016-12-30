@@ -45,8 +45,8 @@ public:
     using size_type = std::size_t;
 
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
+    static_assert((sizeof...(Quantiles) > 0), "There must be at least one quantile");
     static_assert(brigand::all<QuantileList, detail::is_ratio<brigand::_1>>::value, "Quantiles must be ratios");
-    static_assert((sizeof...(Quantiles) == 1), "Not implemented yet");
 
     psquare();
     psquare(const psquare&);
@@ -62,6 +62,12 @@ public:
         parameter_type(size_type position,
                        value_type height);
 
+        bool operator== (const parameter_type& other)
+        {
+            return ((position == other.position) &&
+                    (height == other.height));
+        }
+
         size_type position;
         value_type height;
     };
@@ -76,7 +82,7 @@ private:
 private:
     static constexpr size_type quantile_length = sizeof...(Quantiles);
     static constexpr size_type parameter_length = 2 * quantile_length + 3;
-    static constexpr value_type quantiles[quantile_length] = { (Quantiles::num / value_type(Quantiles::den))... };
+    const value_type quantiles[quantile_length] = { (Quantiles::num / value_type(Quantiles::den))... };
 
     size_type count {0};
     std::array<size_type, parameter_length> positions;

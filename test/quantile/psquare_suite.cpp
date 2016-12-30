@@ -11,8 +11,9 @@
 #include <trial/online/detail/lightweight_test.hpp>
 #include <trial/online/quantile/psquare.hpp>
 
-typedef std::ratio<1, 4> quantile_25_type;
-typedef std::ratio<3, 4> quantile_75_type;
+typedef std::ratio<1, 2> median_quantile_type;
+typedef std::ratio<1, 4> lower_quantile_type;
+typedef std::ratio<3, 4> upper_quantile_type;
 typedef std::ratio<9, 10> quantile_90_type;
 
 //-----------------------------------------------------------------------------
@@ -22,236 +23,128 @@ namespace paper_example
 
 void test_median()
 {
+    using quantile_type = trial::online::quantile::psquare_median<double>;
+
     const double tolerance = 1e-5;
-    trial::online::quantile::psquare_median<double> quantile;
+    auto with_tolerance =
+        [tolerance]
+        (const quantile_type::parameter_type& lhs, const quantile_type::parameter_type& rhs)
+        {
+            return ((lhs.position == rhs.position) &&
+                    std::fabs(lhs.height - rhs.height) <= tolerance);
+        };
+
+    quantile_type quantile;
 
     auto params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 5);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 0.0, tolerance);
+    decltype(params) expected = { {1, 0.0}, {2, 0.0}, {3, 0.0}, {4, 0.0}, {5, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.02);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.02, tolerance); // 0.02
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 5);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 0.0, tolerance);
+    expected = { {1, 0.02}, {2, 0.0}, {3, 0.0}, {4, 0.0}, {5, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.5);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.02, tolerance); // 0.26
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 5);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 0.0, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.0}, {4, 0.0}, {5, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.74);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.5, tolerance); // 0.5
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 5);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 0.0, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {4, 0.0}, {5, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(3.39);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.5, tolerance); // 0.62
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 5);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 3.39, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 0.0, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {4, 3.39}, {5, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.83);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 0.74
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 5);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 0.83, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 3.39, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {4, 0.83}, {5, 3.39} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(22.37);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 0.785
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 6);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 8.04, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {5, 8.04}, {6, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(10.15);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 3.25333, tolerance); // 0.83
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 6);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 7);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 3.25333, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 14.41222, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {4, 3.25333}, {6, 14.41222}, {7, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.43);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 7.53148, tolerance); // 2.11
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 8);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 1.57778, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 7.53148, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 19.3584, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    expected = { {1, 0.02}, {3, 1.57778}, {5, 7.53148}, {7, 19.3584}, {8, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(38.62);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 7.53148, tolerance); // 3.39
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 9);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 1.57778, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 7.53148, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 19.3584, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {3, 1.57778}, {5, 7.53148}, {7, 19.3584}, {9, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.92);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 11.2658, tolerance); // 6.77
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 6);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 10);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 4.00514, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 11.2658, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 13.91597, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {4, 4.00514}, {6, 11.2658}, {7, 13.91597}, {10, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(34.60);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 11.2658, tolerance); // 10.15
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 6);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 8);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 11);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 1.75598, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 11.2658, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 17.97648, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {3, 1.75598}, {6, 11.2658}, {8, 17.97648}, {11, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(10.28);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 8.34625, tolerance); // 10.215
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 6);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 10);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 12);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 3.3787, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 8.34625, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 23.63396, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {4, 3.3787}, {6, 8.34625}, {10, 23.63396}, {12, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(1.47);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 8.34625, tolerance); // 10.15
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 10);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 13);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 1.71698, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 8.34625, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 17.97648, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {4, 1.71698}, {7, 8.34625}, {10, 17.97648}, {13, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.4);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 5.85354, tolerance); // 6.77
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 10);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 14);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.527512, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 5.85354, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 13.29556, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {4, 0.527512}, {7, 5.85354}, {10, 13.29556}, {14, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.05);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 5.85354, tolerance); // 3.39
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 8);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 12);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 15);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.527512, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 5.85354, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 17.97648, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {4, 0.527512}, {8, 5.85354}, {12, 17.97648}, {15, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 }
 
-void test_25_quantile()
+void test_lower_quantile()
 {
+    using quantile_type = trial::online::quantile::psquare<double, lower_quantile_type>;
+
     const double tolerance = 1e-5;
-    trial::online::quantile::psquare<double, quantile_25_type> quantile;
+    auto with_tolerance =
+        [tolerance]
+        (const quantile_type::parameter_type& lhs, const quantile_type::parameter_type& rhs)
+        {
+            return ((lhs.position == rhs.position) &&
+                    std::fabs(lhs.height - rhs.height) <= tolerance);
+        };
+
+    quantile_type quantile;
     quantile.push(0.02);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.02, tolerance); // 0.02
     quantile.push(0.5);
@@ -262,152 +155,85 @@ void test_25_quantile()
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.02, tolerance); // 0.26
     quantile.push(0.83);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.5, tolerance); // 0.38
+    auto params = quantile.parameters();
+    decltype(params) expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {4, 0.83}, {5, 3.39} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(22.37);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 0.75
-    auto params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 6);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 8.04, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    params = quantile.parameters();
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {5, 8.04}, {6, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(10.15);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 0.56
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 7);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 3.51125, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {4, 3.51125}, {7, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.43);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 0.62
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 8);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 7.05987, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {5, 7.05987}, {8, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(38.62);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 0.68
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 6);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 9);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 12.58486, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {6, 12.58486}, {9, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.92);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 2.83414, tolerance); // 0.74
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 10);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 2.83414, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 18.27693, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {4, 2.83414}, {7, 18.27693}, {10, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(34.60);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 2.83414, tolerance); // 0.7625
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 8);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 11);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 1.43805, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 2.83414, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 23.3892, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {3, 1.43805}, {4, 2.83414}, {8, 23.3892}, {11, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(10.28);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 1.24651, tolerance); // 0.785
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 8);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 12);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 1.24651, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 18.92848, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {3, 1.24651}, {8, 18.92848}, {12, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(1.47);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 2.62173, tolerance); // 0.8075
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 8);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 13);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 2.62173, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 14.92867, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {4, 2.62173}, {8, 14.92867}, {13, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.4);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 1.13148, tolerance); // 0.74
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 10);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 14);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.054784, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 1.13148, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 18.8754, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {2, 0.054784}, {4, 1.13148}, {10, 18.8754}, {14, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.05);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.195157, tolerance); // 0.56
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 10);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 15);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.054784, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.195157, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 14.96996, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {2, 0.054784}, {4, 0.195157}, {10, 14.96996}, {15, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 }
 
-void test_75_quantile()
+void test_upper_quantile()
 {
-    const double tolerance = 1e-4;
-    trial::online::quantile::psquare<double, quantile_75_type> quantile;
+    using quantile_type = trial::online::quantile::psquare<double, upper_quantile_type>;
+
+    const double tolerance = 1e-5;
+    auto with_tolerance =
+        [tolerance]
+        (const quantile_type::parameter_type& lhs, const quantile_type::parameter_type& rhs)
+        {
+            return ((lhs.position == rhs.position) &&
+                    std::fabs(lhs.height - rhs.height) <= tolerance);
+        };
+
+    quantile_type quantile;
     quantile.push(0.02);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.02, tolerance); // 0.02
     quantile.push(0.5);
@@ -418,153 +244,265 @@ void test_75_quantile()
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 2.065
     quantile.push(0.83);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.83, tolerance); // 1.47
+    auto params = quantile.parameters();
+    decltype(params) expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {4, 0.83}, {5, 3.39} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(22.37);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 0.74, tolerance); // 3.39
-    auto params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 6);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 0.74, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 8.04, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    params = quantile.parameters();
+    expected = { {1, 0.02}, {2, 0.5}, {3, 0.74}, {5, 8.04}, {6, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(10.15);
     TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 3.25333, tolerance); // 8.46
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 2);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 6);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 7);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 3.25333, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 14.4122, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    expected = { {1, 0.02}, {2, 0.5}, {4, 3.25333}, {6, 14.41222}, {7, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.43);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 7.53148, tolerance); // 12.79
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 7.531481, tolerance); // 12.79
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 3);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 8);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 1.57778, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 7.53148, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 19.3584, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 22.37, tolerance);
+    expected = { {1, 0.02}, {3, 1.57778}, {5, 7.531481}, {7, 19.3584}, {8, 22.37} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(38.62);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 12.6492, tolerance); // 17.165
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 12.64923, tolerance); // 17.165
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 6);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 8);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 9);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 4.00514, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 12.6492, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 28.0153, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {4, 4.005139}, {6, 12.64923}, {8, 28.01532}, {9, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.92);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 17.6706, tolerance); // 15.92
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 17.67064, tolerance); // 15.92
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 8);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 10);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 7.72845, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 17.6706, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 21.0322, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {5, 7.72845}, {7, 17.67064}, {8, 21.0322}, {10, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(34.60);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 17.6706, tolerance); // 20.7575
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 17.67064, tolerance); // 20.7575
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 4);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 9);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 11);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 4.27935, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 17.6706, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 25.6443, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {4, 4.27935}, {7, 17.67064}, {9, 25.64428}, {11, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(10.28);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 21.5847, tolerance); // 19.145
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 21.58474, tolerance); // 19.145
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 9);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 11);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 12);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 6.80087, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 21.5847, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 31.3227, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {5, 6.80087}, {9, 21.58474}, {11, 31.32269}, {12, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(1.47);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 21.5847, tolerance); // 17.5325
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 21.58474, tolerance); // 17.5325
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 10);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 11);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 13);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 4.40479, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 21.5847, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 25.6443, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {5, 4.40479}, {10, 21.58474}, {11, 25.64428}, {13, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.4);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 17.7765, tolerance); // 15.92
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 17.77648, tolerance); // 15.92
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 10);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 13);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 14);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 2.50422, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 17.7765, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 31.4936, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {5, 2.50422}, {10, 17.77648}, {13, 31.49365}, {14, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.05);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 21.9882, tolerance); // 15.7975
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 21.98825, tolerance); // 15.7975
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 1);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 7);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 12);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 13);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 15);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, 0.02, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 4.53562, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 21.9882, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 25.9497, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 38.62, tolerance);
+    expected = { {1, 0.02}, {7, 4.53562}, {12, 21.98825}, {13, 25.94973}, {15, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+}
+
+void test_quantiles()
+{
+    using quantile_type = trial::online::quantile::psquare<double, lower_quantile_type, median_quantile_type, upper_quantile_type>;
+
+    const double tolerance = 1e-5;
+    auto with_tolerance =
+        [tolerance]
+        (const quantile_type::parameter_type& lhs, const quantile_type::parameter_type& rhs)
+        {
+            return ((lhs.position == rhs.position) &&
+                    std::fabs(lhs.height - rhs.height) <= tolerance);
+        };
+
+    quantile_type quantile;
+
+    auto params = quantile.parameters();
+    decltype(params) expected = {
+        {1, 0.0}, {2, 0.0}, {3, 0.0},
+        {4, 0.0}, {5, 0.0}, {6, 0.0},
+        {7, 0.0}, {8, 0.0}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(0.02);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.02, tolerance); // 0.02
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.02, tolerance); // 0.02
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 0.02, tolerance); // 0.02
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.0}, {3, 0.0},
+        {4, 0.0}, {5, 0.0}, {6, 0.0},
+        {7, 0.0}, {8, 0.0}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(0.5);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.02, tolerance); // 0.02
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.02, tolerance); // 0.26
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 0.5, tolerance); // 0.5
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.0},
+        {4, 0.0},  {5, 0.0}, {6, 0.0},
+        {7, 0.0},  {8, 0.0}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(0.74);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.02, tolerance); // 0.14
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.5, tolerance); // 0.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 0.74, tolerance); // 0.68
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.0}, {5, 0.0}, {6, 0.0},
+        {7, 0.0}, {8, 0.0}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(3.39);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.02, tolerance); // 0.26
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.5, tolerance); // 0.62
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 0.74, tolerance); // 2.065
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 3.39}, {5, 0.0}, {6, 0.0},
+        {7, 0.0}, {8, 0.0},  {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(0.83);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.5, tolerance); // 0.38
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.74, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 0.83, tolerance); // 1.47
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {5, 3.39}, {6, 0.0},
+        {7, 0.0}, {8, 0.0}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(22.37);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.5, tolerance); // 0.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.74, tolerance); // 0.785
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 3.39, tolerance); // 3.39
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {5, 3.39}, {6, 22.37},
+        {7, 0.0}, {8, 0.0}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(10.15);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.5, tolerance); // 0.56
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.83, tolerance); // 0.83
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 10.15, tolerance); // 8.46
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {5, 3.39}, {6, 10.15},
+        {7, 22.37}, {8, 0.0}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(15.43);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.5, tolerance); // 0.62
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 0.83, tolerance); // 2.11
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 10.15, tolerance); // 12.79
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {5, 3.39}, {6, 10.15},
+        {7, 15.43}, {8, 22.37}, {9, 0.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(38.62);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.74, tolerance); // 0.68
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 3.39, tolerance); // 3.39
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 15.43, tolerance); // 17.165
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {5, 3.39}, {6, 10.15},
+        {7, 15.43}, {8, 22.37}, {9, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(15.92);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.74, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 3.39, tolerance); // 6.77
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 19.50333, tolerance); // 15.92
+    params = quantile.parameters();
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {5, 3.39}, {6, 10.15},
+        {8, 19.50333}, {9, 22.37}, {10, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(34.60);
+    params = quantile.parameters();
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.74, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 3.39, tolerance); // 6.77
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 19.50333, tolerance); // 15.92
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {5, 3.39}, {7, 15.52111},
+        {8, 19.50333}, {10, 28.74222}, {11, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(10.28);
+    params = quantile.parameters();
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.74, tolerance); // 0.785
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 6.69185, tolerance); // 10.215
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 23.9995, tolerance); // 19.145
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {4, 0.83}, {6, 6.69185}, {7, 11.25061},
+        {10, 23.99951}, {11, 28.74222}, {12, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(1.47);
+    params = quantile.parameters();
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.74, tolerance); // 0.8075
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 6.69185, tolerance); // 10.15
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 19.63704, tolerance); // 17.5325
+    expected = {
+        {1, 0.02}, {2, 0.5}, {3, 0.74},
+        {5, 1.851975}, {7, 6.69185}, {9, 15.65481},
+        {10, 19.63704}, {11, 22.41457}, {13, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(0.4);
+    params = quantile.parameters();
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 1.21699, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 3.75653, tolerance); // 6.77
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 16.05907, tolerance); // 15.92
+    expected = {
+        {1, 0.02}, {2, 0.26}, {5, 1.21699},
+        {6, 1.851975}, {7, 3.75653}, {9, 11.68066},
+        {10, 16.05907}, {13, 29.28604}, {14, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    quantile.push(0.05);
+    params = quantile.parameters();
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quantile_type>(), 0.72432, tolerance); // 0.56
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_quantile_type>(), 3.75653, tolerance); // 3.39
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quantile_type>(), 20.40031, tolerance); // 15.7975
+    expected = {
+        {1, 0.02}, {2, 0.1002}, {5, 0.72432},
+        {6, 0.84124}, {8, 3.75653}, {9, 7.57981},
+        {12, 20.40031}, {13, 23.21281}, {15, 38.62} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 }
 
 void test()
 {
     test_median();
-    test_25_quantile();
-    test_75_quantile();
+    test_lower_quantile();
+    test_upper_quantile();
+    test_quantiles();
 }
 
 } // namespace paper_example
@@ -629,30 +567,32 @@ namespace double_approx_suite
 
 void test_count_100()
 {
-    const double tolerance = 1e-4;
-    trial::online::quantile::psquare_median<double> quantile;
-    // Approximate normal distribution with expectation 1 and spread 1 after 100 iterations.
-    quantile.parameters({
+    using quantile_type = trial::online::quantile::psquare_median<double>;
+
+    const double tolerance = 1e-5;
+    auto with_tolerance =
+        [tolerance]
+        (const quantile_type::parameter_type& lhs, const quantile_type::parameter_type& rhs)
+        {
+            return ((lhs.position == rhs.position) &&
+                    std::fabs(lhs.height - rhs.height) <= tolerance);
+        };
+
+    quantile_type quantile;
+   // Approximate normal distribution with expectation 1 and spread 1 after 100 iterations.
+   decltype(quantile.parameters()) expected = {
             { 20, -2.0 },
             { 40, 0.5 },
             { 60, 1.0 },
             { 80, 1.5 },
-            { 100, 4.0 } });
+            { 100, 4.0 } };
+   quantile.parameters(expected);
 
     quantile.push(1000.0);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 1.02378, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), 1.023782, tolerance);
     auto params = quantile.parameters();
-    TRIAL_ONLINE_TEST_EQUAL(params.size(), 5);
-    TRIAL_ONLINE_TEST_EQUAL(params[0].position, 20);
-    TRIAL_ONLINE_TEST_EQUAL(params[1].position, 41);
-    TRIAL_ONLINE_TEST_EQUAL(params[2].position, 61);
-    TRIAL_ONLINE_TEST_EQUAL(params[3].position, 81);
-    TRIAL_ONLINE_TEST_EQUAL(params[4].position, 101);
-    TRIAL_ONLINE_TEST_CLOSE(params[0].height, -2.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[1].height, 0.5725, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[2].height, 1.02378, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[3].height, 25.2863, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(params[4].height, 1000.0, tolerance);
+    expected = { {20, -2.0}, {41, 0.5725}, {61, 1.023782}, {81, 25.28634}, {101, 1000.0} };
+    TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 }
 
 void test()
