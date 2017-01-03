@@ -89,12 +89,12 @@ void psquare<T, Quantiles...>::push(value_type number)
         }
 
 
-        for (size_type i = k; i < parameter_length; ++i)
-        {
-            positions[i] += 1;
-        }
         for (size_type i = 0; i < parameter_length; ++i)
         {
+            if (i >= k)
+            {
+                positions[i] += 1;
+            }
             desired_positions[i] += constant_deltas[i];
         }
         for (size_type i = 1; i <= parameter_length - 2; ++i)
