@@ -53,9 +53,14 @@ public:
 
     void push(value_type);
 
-    // Select middle quantile parameter by default
+    // Get value by type.
+    // Select middle quantile parameter by default.
     template < typename Q = brigand::at_c<QuantileList, sizeof...(Quantiles) / 2> >
     value_type value() const;
+
+    // Get value by index.
+    template <std::size_t Index = 1 + sizeof...(Quantiles) / 2>
+    value_type get() const;
 
     struct parameter_type
     {

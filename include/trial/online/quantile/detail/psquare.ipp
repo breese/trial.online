@@ -139,6 +139,16 @@ psquare<T, Quantiles...>::value() const
 {
     using index_type = brigand::index_of<QuantileList, Q>;
 
+    return get<index_type::value + 1>();
+}
+
+template <typename T, typename... Quantiles>
+template <std::size_t Index>
+typename psquare<T, Quantiles...>::value_type
+psquare<T, Quantiles...>::get() const
+{
+    static_assert((Index <= 1 + sizeof...(Quantiles)), "Index must be within range");
+
     // The p-square algorithm assumes that we have more than @c parameter_length
     // observations.
     //
@@ -147,12 +157,17 @@ psquare<T, Quantiles...>::value() const
 
     if (count > parameter_length)
     {
-        return heights[2 * index_type::value + 2];
+        return heights[2 * Index];
     }
 
     if (count > 0)
     {
-        const size_type nearest_rank = std::ceil(count * quantiles[index_type::value]);
+        const size_type nearest_rank =
+            (Index == 0)
+            ? 1
+            : ((Index == 1 + sizeof...(Quantiles))
+               ? Index + 1
+               : std::ceil(count * quantiles[Index - 1]));
         assert(nearest_rank > 0);
         assert(nearest_rank <= parameter_length);
         return heights[nearest_rank - 1];

@@ -495,6 +495,13 @@ void test_quantiles()
         {6, 0.84124}, {8, 3.75653}, {9, 7.57981},
         {12, 20.40031}, {13, 23.21281}, {15, 38.62} };
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
+
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<1>(), quantile.value<lower_quantile_type>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), quantile.value<median_quantile_type>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<3>(), quantile.value<upper_quantile_type>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.value<median_quantile_type>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), quantile.value(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.value(), tolerance);
 }
 
 void test()
