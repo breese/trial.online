@@ -139,7 +139,7 @@ psquare<T, Quantiles...>::value() const
 {
     using index_type = brigand::index_of<QuantileList, Q>;
 
-    return get<index_type::value + 1>();
+    return get<index_type::value>();
 }
 
 template <typename T, typename... Quantiles>
@@ -147,7 +147,7 @@ template <std::size_t Index>
 typename psquare<T, Quantiles...>::value_type
 psquare<T, Quantiles...>::get() const
 {
-    static_assert((Index <= 1 + sizeof...(Quantiles)), "Index must be within range");
+    static_assert((Index <= brigand::index_of<QuantileList, maximum_ratio>::value), "Index must be within range");
 
     // The p-square algorithm assumes that we have more than @c parameter_length
     // observations.

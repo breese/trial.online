@@ -495,9 +495,18 @@ void test_quartiles()
         {12, 20.40031}, {13, 23.21281}, {15, 38.62} };
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 0.02, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.72432, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 3.75653, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 20.40031, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 38.62, tolerance);
+
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<0>(), quantile.value<minimum_ratio>(), tolerance);
     TRIAL_ONLINE_TEST_CLOSE(quantile.get<1>(), quantile.value<lower_quartile_ratio>(), tolerance);
     TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), quantile.value<median_ratio>(), tolerance);
     TRIAL_ONLINE_TEST_CLOSE(quantile.get<3>(), quantile.value<upper_quartile_ratio>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<4>(), quantile.value<maximum_ratio>(), tolerance);
+    // Defaults
     TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.value<median_ratio>(), tolerance);
     TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), quantile.value(), tolerance);
     TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.value(), tolerance);

@@ -35,10 +35,13 @@ namespace online
 namespace quantile
 {
 
+using minimum_ratio = std::ratio<0, 1>;
+using maximum_ratio = std::ratio<1, 1>;
+
 template <typename T, typename... Quantiles>
 class psquare
 {
-    using QuantileList = brigand::list<Quantiles...>;
+    using QuantileList = brigand::list<minimum_ratio, Quantiles..., maximum_ratio>;
 
 public:
     using value_type = T;
@@ -55,7 +58,7 @@ public:
 
     // Get value by type.
     // Select middle quantile parameter by default.
-    template < typename Q = brigand::at_c<QuantileList, sizeof...(Quantiles) / 2> >
+    template < typename Q = brigand::at_c<QuantileList, 1 + sizeof...(Quantiles) / 2> >
     value_type value() const;
 
     // Get value by index.
