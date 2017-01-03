@@ -97,12 +97,12 @@ private:
 };
 
 // Convenience types
-using median_type = std::ratio<1, 2>;
-using lower_quartile_type = std::ratio<1, 4>;
-using upper_quartile_type = std::ratio<3, 4>;
+using median_ratio = std::ratio<1, 2>;
+using lower_quartile_ratio = std::ratio<1, 4>;
+using upper_quartile_ratio = std::ratio<3, 4>;
 
-template <typename T> using psquare_median = psquare<T, median_type>;
-template <typename T> using psquare_quartile = psquare<T, lower_quartile_type, median_type, upper_quartile_type>;
+template <typename T> using psquare_median = psquare<T, median_ratio>;
+template <typename T> using psquare_quartile = psquare<T, lower_quartile_ratio, median_ratio, upper_quartile_ratio>;
 
 } // namespace quantile
 } // namespace online

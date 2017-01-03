@@ -13,7 +13,7 @@
 
 using namespace trial::online::quantile;
 
-using upper_decile_type = std::ratio<9, 10>;
+using upper_decile_ratio = std::ratio<9, 10>;
 
 //-----------------------------------------------------------------------------
 
@@ -132,7 +132,7 @@ void test_median()
 
 void test_lower_quartile()
 {
-    using quantile_type = psquare<double, lower_quartile_type>;
+    using quantile_type = psquare<double, lower_quartile_ratio>;
 
     const double tolerance = 1e-5;
     auto with_tolerance =
@@ -221,7 +221,7 @@ void test_lower_quartile()
 
 void test_upper_quartile()
 {
-    using quantile_type = psquare<double, upper_quartile_type>;
+    using quantile_type = psquare<double, upper_quartile_ratio>;
 
     const double tolerance = 1e-5;
     auto with_tolerance =
@@ -331,9 +331,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.02);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.02, tolerance); // 0.02
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.02, tolerance); // 0.02
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 0.02, tolerance); // 0.02
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.02, tolerance); // 0.02
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.02, tolerance); // 0.02
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 0.02, tolerance); // 0.02
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.0}, {3, 0.0},
@@ -342,9 +342,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.5);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.02, tolerance); // 0.02
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.02, tolerance); // 0.26
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 0.5, tolerance); // 0.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.02, tolerance); // 0.02
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.02, tolerance); // 0.26
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 0.5, tolerance); // 0.5
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.0},
@@ -353,9 +353,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.74);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.02, tolerance); // 0.14
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.5, tolerance); // 0.5
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 0.74, tolerance); // 0.68
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.02, tolerance); // 0.14
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.5, tolerance); // 0.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 0.74, tolerance); // 0.68
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -364,9 +364,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(3.39);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.02, tolerance); // 0.26
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.5, tolerance); // 0.62
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 0.74, tolerance); // 2.065
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.02, tolerance); // 0.26
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.5, tolerance); // 0.62
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 0.74, tolerance); // 2.065
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -375,9 +375,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(0.83);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.5, tolerance); // 0.38
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.74, tolerance); // 0.74
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 0.83, tolerance); // 1.47
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.5, tolerance); // 0.38
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.74, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 0.83, tolerance); // 1.47
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -386,9 +386,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(22.37);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.5, tolerance); // 0.5
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.74, tolerance); // 0.785
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 3.39, tolerance); // 3.39
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.5, tolerance); // 0.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.74, tolerance); // 0.785
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 3.39, tolerance); // 3.39
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -397,9 +397,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(10.15);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.5, tolerance); // 0.56
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.83, tolerance); // 0.83
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 10.15, tolerance); // 8.46
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.5, tolerance); // 0.56
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.83, tolerance); // 0.83
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 10.15, tolerance); // 8.46
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -408,9 +408,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.43);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.5, tolerance); // 0.62
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 0.83, tolerance); // 2.11
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 10.15, tolerance); // 12.79
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.5, tolerance); // 0.62
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 0.83, tolerance); // 2.11
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 10.15, tolerance); // 12.79
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -419,9 +419,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(38.62);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.74, tolerance); // 0.68
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 3.39, tolerance); // 3.39
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 15.43, tolerance); // 17.165
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.74, tolerance); // 0.68
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 3.39, tolerance); // 3.39
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 15.43, tolerance); // 17.165
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -430,9 +430,9 @@ void test_quartiles()
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
     quantile.push(15.92);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.74, tolerance); // 0.74
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 3.39, tolerance); // 6.77
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 19.50333, tolerance); // 15.92
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.74, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 3.39, tolerance); // 6.77
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 19.50333, tolerance); // 15.92
     params = quantile.parameters();
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
@@ -442,9 +442,9 @@ void test_quartiles()
 
     quantile.push(34.60);
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.74, tolerance); // 0.74
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 3.39, tolerance); // 6.77
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 19.50333, tolerance); // 15.92
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.74, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 3.39, tolerance); // 6.77
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 19.50333, tolerance); // 15.92
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
         {4, 0.83}, {5, 3.39}, {7, 15.52111},
@@ -453,9 +453,9 @@ void test_quartiles()
 
     quantile.push(10.28);
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.74, tolerance); // 0.785
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 6.69185, tolerance); // 10.215
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 23.9995, tolerance); // 19.145
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.74, tolerance); // 0.785
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 6.69185, tolerance); // 10.215
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 23.9995, tolerance); // 19.145
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
         {4, 0.83}, {6, 6.69185}, {7, 11.25061},
@@ -464,9 +464,9 @@ void test_quartiles()
 
     quantile.push(1.47);
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.74, tolerance); // 0.8075
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 6.69185, tolerance); // 10.15
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 19.63704, tolerance); // 17.5325
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.74, tolerance); // 0.8075
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 6.69185, tolerance); // 10.15
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 19.63704, tolerance); // 17.5325
     expected = {
         {1, 0.02}, {2, 0.5}, {3, 0.74},
         {5, 1.851975}, {7, 6.69185}, {9, 15.65481},
@@ -475,9 +475,9 @@ void test_quartiles()
 
     quantile.push(0.4);
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 1.21699, tolerance); // 0.74
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 3.75653, tolerance); // 6.77
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 16.05907, tolerance); // 15.92
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 1.21699, tolerance); // 0.74
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 3.75653, tolerance); // 6.77
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 16.05907, tolerance); // 15.92
     expected = {
         {1, 0.02}, {2, 0.26}, {5, 1.21699},
         {6, 1.851975}, {7, 3.75653}, {9, 11.68066},
@@ -486,19 +486,19 @@ void test_quartiles()
 
     quantile.push(0.05);
     params = quantile.parameters();
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_type>(), 0.72432, tolerance); // 0.56
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_type>(), 3.75653, tolerance); // 3.39
-    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_type>(), 20.40031, tolerance); // 15.7975
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 0.72432, tolerance); // 0.56
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 3.75653, tolerance); // 3.39
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 20.40031, tolerance); // 15.7975
     expected = {
         {1, 0.02}, {2, 0.1002}, {5, 0.72432},
         {6, 0.84124}, {8, 3.75653}, {9, 7.57981},
         {12, 20.40031}, {13, 23.21281}, {15, 38.62} };
     TRIAL_ONLINE_TEST_ALL_WITH(params.begin(), params.end(), expected.begin(), expected.end(), with_tolerance);
 
-    TRIAL_ONLINE_TEST_CLOSE(quantile.get<1>(), quantile.value<lower_quartile_type>(), tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), quantile.value<median_type>(), tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.get<3>(), quantile.value<upper_quartile_type>(), tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.value<median_type>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<1>(), quantile.value<lower_quartile_ratio>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), quantile.value<median_ratio>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<3>(), quantile.value<upper_quartile_ratio>(), tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.value<median_ratio>(), tolerance);
     TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), quantile.value(), tolerance);
     TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.value(), tolerance);
 }
@@ -520,20 +520,20 @@ namespace double_90_suite
 
 void test_empty()
 {
-    psquare<double, upper_decile_type> quantile;
+    psquare<double, upper_decile_ratio> quantile;
     TRIAL_ONLINE_TEST_EQUAL(quantile.value(), 0.0);
 }
 
 void test_one()
 {
-    psquare<double, upper_decile_type> quantile;
+    psquare<double, upper_decile_ratio> quantile;
     quantile.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(quantile.value(), 1.0);
 }
 
 void test_accumulate_one()
 {
-    psquare<double, upper_decile_type> quantile;
+    psquare<double, upper_decile_ratio> quantile;
     quantile.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(quantile.value(), 1.0);
     quantile.push(2.0);
