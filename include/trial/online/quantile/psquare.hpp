@@ -96,7 +96,13 @@ private:
     std::array<value_type, parameter_length> constant_deltas;
 };
 
-template <typename T> using psquare_median = psquare<T, std::ratio<1, 2>>;
+// Convenience types
+using median_type = std::ratio<1, 2>;
+using lower_quartile_type = std::ratio<1, 4>;
+using upper_quartile_type = std::ratio<3, 4>;
+
+template <typename T> using psquare_median = psquare<T, median_type>;
+template <typename T> using psquare_quartile = psquare<T, lower_quartile_type, median_type, upper_quartile_type>;
 
 } // namespace quantile
 } // namespace online
