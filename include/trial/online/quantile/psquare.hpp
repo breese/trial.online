@@ -54,6 +54,9 @@ public:
     psquare();
     psquare(const psquare&);
 
+    void clear();
+    bool empty() const;
+
     void push(value_type);
 
     // Get value by type.

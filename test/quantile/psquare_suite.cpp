@@ -17,6 +17,96 @@ using upper_decile_ratio = std::ratio<9, 10>;
 
 //-----------------------------------------------------------------------------
 
+namespace api_suite
+{
+
+void test_empty()
+{
+    psquare_median<double> quantile;
+    TRIAL_ONLINE_TEST(quantile.empty());
+    quantile.push(1);
+    TRIAL_ONLINE_TEST(!quantile.empty());
+}
+
+void test_clear()
+{
+    psquare_median<double> quantile;
+    quantile.push(1);
+    quantile.push(2);
+    quantile.push(3);
+    TRIAL_ONLINE_TEST(!quantile.empty());
+    TRIAL_ONLINE_TEST_EQUAL(quantile.value(), 2);
+    quantile.clear();
+    TRIAL_ONLINE_TEST(quantile.empty());
+    TRIAL_ONLINE_TEST_EQUAL(quantile.value(), 0);
+}
+
+void test_value()
+{
+    const double tolerance = 1e-5;
+    psquare_quartile<double> quantile;
+    quantile.push(1);
+    quantile.push(2);
+    quantile.push(3);
+    quantile.push(4);
+    quantile.push(5);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 2, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 3, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 4, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value(), quantile.value<median_ratio>(), tolerance);
+    quantile.push(6);
+    quantile.push(7);
+    quantile.push(8);
+    quantile.push(9);
+    quantile.push(10);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 3, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 7, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 10, tolerance);
+}
+
+void test_get()
+{
+    const double tolerance = 1e-5;
+    psquare_quartile<double> quantile;
+    quantile.push(1);
+    quantile.push(2);
+    quantile.push(3);
+    quantile.push(4);
+    quantile.push(5);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<0>(), 1, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<1>(), 2, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), 3, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<3>(), 4, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<4>(), 5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get(), quantile.get<2>(), tolerance);
+    quantile.push(6);
+    quantile.push(7);
+    quantile.push(8);
+    quantile.push(9);
+    quantile.push(10);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<0>(), 1, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<1>(), 3, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<2>(), 5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<3>(), 7, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.get<4>(), 10, tolerance);
+}
+
+void test()
+{
+    test_empty();
+    test_clear();
+    test_value();
+    test_get();
+}
+
+} // api_suite
+
+//-----------------------------------------------------------------------------
+
 namespace paper_example
 {
 
@@ -623,6 +713,7 @@ void test()
 
 int main()
 {
+    api_suite::test();
     paper_example::test();
     double_90_suite::test();
     double_approx_suite::test();

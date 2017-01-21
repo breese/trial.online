@@ -69,6 +69,18 @@ void psquare<T, Quantiles...>::initialize()
 }
 
 template <typename T, typename... Quantiles>
+void psquare<T, Quantiles...>::clear()
+{
+    initialize();
+}
+
+template <typename T, typename... Quantiles>
+bool psquare<T, Quantiles...>::empty() const
+{
+    return (count == 0);
+}
+
+template <typename T, typename... Quantiles>
 void psquare<T, Quantiles...>::push(value_type number)
 {
     if (count >= parameter_length)
