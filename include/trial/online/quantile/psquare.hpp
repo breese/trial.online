@@ -25,7 +25,7 @@
 #include <ratio>
 #include <brigand/sequences/list.hpp>
 #include <brigand/sequences/at.hpp>
-#include <brigand/algorithms/any.hpp>
+#include <brigand/algorithms/all.hpp>
 #include <trial/online/detail/type_traits.hpp>
 
 namespace trial
