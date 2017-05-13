@@ -12,8 +12,6 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
-#include <brigand/sequences/contains.hpp>
-#include <brigand/algorithms/index_of.hpp>
 
 namespace trial
 {
@@ -150,7 +148,7 @@ template <typename Q>
 typename psquare<T, Quantiles...>::value_type
 psquare<T, Quantiles...>::value() const
 {
-    using index_type = brigand::index_of<QuantileList, Q>;
+    using index_type = boost::mp11::mp_find<QuantileList, Q>;
 
     return get<index_type::value>();
 }
@@ -160,7 +158,7 @@ template <std::size_t Index>
 typename psquare<T, Quantiles...>::value_type
 psquare<T, Quantiles...>::get() const
 {
-    static_assert((Index <= brigand::index_of<QuantileList, maximum_ratio>::value), "Index must be within range");
+    static_assert((Index <= boost::mp11::mp_find<QuantileList, maximum_ratio>::value), "Index must be within range");
 
     // The p-square algorithm assumes that we have more than @c parameter_length
     // observations.

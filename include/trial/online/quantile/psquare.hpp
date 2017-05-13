@@ -23,9 +23,8 @@
 #include <vector>
 #include <array>
 #include <ratio>
-#include <brigand/sequences/list.hpp>
-#include <brigand/sequences/at.hpp>
-#include <brigand/algorithms/all.hpp>
+#include <boost/mp11/list.hpp>
+#include <boost/mp11/algorithm.hpp>
 #include <trial/online/detail/type_traits.hpp>
 
 namespace trial
@@ -41,7 +40,7 @@ using maximum_ratio = std::ratio<1, 1>;
 template <typename T, typename... Quantiles>
 class psquare
 {
-    using QuantileList = brigand::list<minimum_ratio, Quantiles..., maximum_ratio>;
+    using QuantileList = boost::mp11::mp_list<minimum_ratio, Quantiles..., maximum_ratio>;
 
 public:
     using value_type = T;
@@ -49,7 +48,7 @@ public:
 
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
     static_assert((sizeof...(Quantiles) > 0), "There must be at least one quantile");
-    static_assert(brigand::all<QuantileList, detail::is_ratio<brigand::_1>>::value, "Quantiles must be ratios");
+    static_assert(boost::mp11::mp_all_of<QuantileList, detail::is_ratio>::value, "Quantiles must be ratios");
 
     psquare();
     psquare(const psquare&);
@@ -61,7 +60,7 @@ public:
 
     // Get value by type.
     // Select middle quantile parameter by default.
-    template < typename Q = brigand::at_c<QuantileList, 1 + sizeof...(Quantiles) / 2> >
+    template < typename Q = boost::mp11::mp_at_c<QuantileList, 1 + sizeof...(Quantiles) / 2> >
     value_type value() const;
 
     // Get value by index.

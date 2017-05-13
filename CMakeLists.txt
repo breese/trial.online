@@ -19,10 +19,10 @@ set(EXECUTABLE_OUTPUT_PATH ${TRIAL_ONLINE_BUILD_DIR}/bin)
 set(CMAKE_CXX_STANDARD 11)
 
 ###############################################################################
-# Brigand package
+# MP11 package
 ###############################################################################
 
-include_directories(external/brigand)
+include_directories(external/mp11/include)
 
 ###############################################################################
 # Trial.Online package
