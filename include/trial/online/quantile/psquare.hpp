@@ -40,15 +40,15 @@ using maximum_ratio = std::ratio<1, 1>;
 template <typename T, typename... Quantiles>
 class psquare
 {
-    using QuantileList = boost::mp11::mp_list<minimum_ratio, Quantiles..., maximum_ratio>;
+    static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
+    static_assert((sizeof...(Quantiles) > 0), "There must be at least one quantile");
+
+    using QuantileList = boost::mp11::mp_sort<boost::mp11::mp_list<minimum_ratio, Quantiles..., maximum_ratio>, std::ratio_less>;
+    static_assert(boost::mp11::mp_all_of<QuantileList, detail::is_ratio>::value, "Quantiles must be ratios");
 
 public:
     using value_type = T;
     using size_type = std::size_t;
-
-    static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
-    static_assert((sizeof...(Quantiles) > 0), "There must be at least one quantile");
-    static_assert(boost::mp11::mp_all_of<QuantileList, detail::is_ratio>::value, "Quantiles must be ratios");
 
     psquare();
     psquare(const psquare&);
