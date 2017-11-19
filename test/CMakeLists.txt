@@ -22,3 +22,6 @@ trial_online_add_test(psquare_suite quantile/psquare_suite.cpp)
 # impulse
 trial_online_add_test(finite_suite impulse/finite_suite.cpp)
 trial_online_add_test(infinite_suite impulse/infinite_suite.cpp)
+
+# sampling
+trial_online_add_test(reservoir_suite sampling/reservoir_suite.cpp)
