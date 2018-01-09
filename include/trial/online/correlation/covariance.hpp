@@ -13,6 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
+#include <trial/online/average/cumulative.hpp>
 
 // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
 
@@ -23,8 +24,8 @@ namespace online
 namespace correlation
 {
 
-template <typename T>
-class covariance
+template <typename T, template <typename> class Avg>
+class basic_covariance
 {
 public:
     using value_type = T;
@@ -32,19 +33,19 @@ public:
     
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
 
-    covariance();
-
     size_type size() const;
     void clear();
     void push(value_type first, value_type second);
     value_type value() const;
 
 private:
-    value_type x_mean = value_type(0);
-    value_type y_mean = value_type(0);
+    Avg<value_type> average_x;
+    Avg<value_type> average_y;
     value_type cov = value_type(0);
-    size_type count = size_type(0);
 };
+
+template <typename T>
+using covariance = basic_covariance<T, average::cumulative>;
 
 } // namespace correlation
 } // namespace online

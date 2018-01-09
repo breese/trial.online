@@ -15,42 +15,35 @@ namespace online
 namespace correlation
 {
 
-template <typename T>
-covariance<T>::covariance()
+template <typename T, template <typename> class Avg>
+auto basic_covariance<T, Avg>::size() const -> size_type
 {
+    return average_x.size();
 }
 
-template <typename T>
-auto covariance<T>::size() const -> size_type
+template <typename T, template <typename> class Avg>
+void basic_covariance<T, Avg>::clear()
 {
-    return count;
-}
-
-template <typename T>
-void covariance<T>::clear()
-{
-    x_mean = value_type(0);
-    y_mean = value_type(0);
+    average_x.clear();
+    average_y.clear();
     cov = value_type(0);
-    count = size_type(0);
 }
 
-template <typename T>
-void covariance<T>::push(value_type x, value_type y)
+template <typename T, template <typename> class Avg>
+void basic_covariance<T, Avg>::push(value_type x, value_type y)
 {
-    ++count;
-    x_mean += (x - x_mean) / count;
-    const auto d_y = y - y_mean;
-    y_mean += d_y / count;
-    cov += (x - x_mean) * d_y;
+    average_x.push(x);
+    const auto previous_average_y = average_y.value();
+    average_y.push(y);
+    cov += (x - average_x.value()) * (y - previous_average_y);
 }
 
-template <typename T>
-auto covariance<T>::value() const -> value_type
+template <typename T, template <typename> class Avg>
+auto basic_covariance<T, Avg>::value() const -> value_type
 {
-    if (count == 0)
+    if (size() == 0)
         return value_type(0);
-    return cov / count;
+    return cov / size();
 }
 
 } // namespace correlation
