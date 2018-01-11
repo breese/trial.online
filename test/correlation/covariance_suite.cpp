@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/average/cumulative_variance.hpp>
+#include <trial/online/average/cumulative.hpp>
 #include <trial/online/correlation/covariance.hpp>
 
 //-----------------------------------------------------------------------------

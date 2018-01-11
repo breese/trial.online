@@ -15,13 +15,13 @@ namespace online
 namespace correlation
 {
 
-template <typename T, template <typename> class Avg>
+template <typename T, template <typename, bool> class Avg>
 auto basic_covariance<T, Avg>::size() const -> size_type
 {
     return average_x.size();
 }
 
-template <typename T, template <typename> class Avg>
+template <typename T, template <typename, bool> class Avg>
 void basic_covariance<T, Avg>::clear()
 {
     average_x.clear();
@@ -29,7 +29,7 @@ void basic_covariance<T, Avg>::clear()
     cov = value_type(0);
 }
 
-template <typename T, template <typename> class Avg>
+template <typename T, template <typename, bool> class Avg>
 void basic_covariance<T, Avg>::push(value_type x, value_type y)
 {
     average_x.push(x);
@@ -38,7 +38,7 @@ void basic_covariance<T, Avg>::push(value_type x, value_type y)
     cov += (x - average_x.value()) * (y - previous_average_y);
 }
 
-template <typename T, template <typename> class Avg>
+template <typename T, template <typename, bool> class Avg>
 auto basic_covariance<T, Avg>::value() const -> value_type
 {
     if (size() == 0)
