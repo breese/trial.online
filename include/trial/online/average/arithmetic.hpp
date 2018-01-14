@@ -22,11 +22,11 @@ namespace online
 namespace average
 {
 
-template <typename T, std::size_t N, bool WithVariance>
+template <typename T, std::size_t N, int Moment>
 class basic_arithmetic;
 
 template <typename T, std::size_t N>
-class basic_arithmetic<T, N, false>
+class basic_arithmetic<T, N, 1>
 {
 public:
     using value_type = T;
@@ -53,7 +53,7 @@ private:
 };
 
 template <typename T, std::size_t N>
-class basic_arithmetic<T, N, true>
+class basic_arithmetic<T, N, 2>
 {
 public:
     using value_type = T;
@@ -84,10 +84,10 @@ private:
 };
 
 template <typename T, std::size_t N>
-using arithmetic = basic_arithmetic<T, N, false>;
+using arithmetic = basic_arithmetic<T, N, 1>;
 
 template <typename T, std::size_t N>
-using arithmetic_variance = basic_arithmetic<T, N, true>;
+using arithmetic_variance = basic_arithmetic<T, N, 2>;
 
 } // namespace average
 } // namespace online

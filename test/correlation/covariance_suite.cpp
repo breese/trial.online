@@ -397,8 +397,8 @@ void run()
 namespace arithmetic_properties_suite
 {
 
-template <typename T, bool WithVariance>
-using average_type = trial::online::average::basic_arithmetic<T, 64, WithVariance>;
+template <typename T, int Moment>
+using average_type = trial::online::average::basic_arithmetic<T, 64, Moment>;
 
 template <typename T>
 using covariance_type = trial::online::correlation::basic_covariance<T, average_type>;
@@ -423,7 +423,7 @@ void test_same()
     // Cov(X, X) = Var(X)
     const double tolerance = 1e-6;
     covariance_type<double> filter;
-    average_type<double, true> average;
+    average_type<double, 2> average;
     {
         double x = 0.0;
         filter.push(x, x);

@@ -20,26 +20,26 @@ namespace average
 //-----------------------------------------------------------------------------
 
 template <typename T>
-void basic_cumulative<T, false>::clear()
+void basic_cumulative<T, 1>::clear()
 {
     mean = value_type(0);
     count = size_type(0);
 }
 
 template <typename T>
-auto basic_cumulative<T, false>::size() const -> size_type
+auto basic_cumulative<T, 1>::size() const -> size_type
 {
     return count;
 }
 
 template <typename T>
-auto basic_cumulative<T, false>::value() const -> value_type
+auto basic_cumulative<T, 1>::value() const -> value_type
 {
     return mean;
 }
 
 template <typename T>
-void basic_cumulative<T, false>::push(value_type input)
+void basic_cumulative<T, 1>::push(value_type input)
 {
     ++count;
     mean += (input - mean) / T(count);
@@ -50,7 +50,7 @@ void basic_cumulative<T, false>::push(value_type input)
 //-----------------------------------------------------------------------------
 
 template <typename T>
-void basic_cumulative<T, true>::clear()
+void basic_cumulative<T, 2>::clear()
 {
     mean = value_type(0);
     numerator = value_type(0);
@@ -58,19 +58,19 @@ void basic_cumulative<T, true>::clear()
 }
 
 template <typename T>
-auto basic_cumulative<T, true>::size() const -> size_type
+auto basic_cumulative<T, 2>::size() const -> size_type
 {
     return count;
 }
 
 template <typename T>
-auto basic_cumulative<T, true>::value() const -> value_type
+auto basic_cumulative<T, 2>::value() const -> value_type
 {
     return mean;
 }
 
 template <typename T>
-auto basic_cumulative<T, true>::variance() const -> value_type
+auto basic_cumulative<T, 2>::variance() const -> value_type
 {
     if (count > 0)
         return numerator / count;
@@ -78,7 +78,7 @@ auto basic_cumulative<T, true>::variance() const -> value_type
 }
 
 template <typename T>
-void basic_cumulative<T, true>::push(value_type input)
+void basic_cumulative<T, 2>::push(value_type input)
 {
     ++count;
     if (count > 1)

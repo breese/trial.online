@@ -24,7 +24,7 @@ namespace online
 namespace correlation
 {
 
-template <typename T, template <typename, bool> class Avg>
+template <typename T, template <typename, int> class Avg>
 class basic_covariance
 {
 public:
@@ -40,8 +40,8 @@ public:
     value_type normalized_value() const;
 
 private:
-    Avg<value_type, false> average_x;
-    Avg<value_type, false> average_y;
+    Avg<value_type, 1> average_x;
+    Avg<value_type, 1> average_y;
     value_type cov = value_type(0);
 };
 

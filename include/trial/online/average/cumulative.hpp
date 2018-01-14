@@ -21,11 +21,11 @@ namespace online
 namespace average
 {
 
-template <typename T, bool WithVariance>
+template <typename T, int Moment>
 class basic_cumulative;
 
 template <typename T>
-class basic_cumulative<T, false>
+class basic_cumulative<T, 1>
 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
@@ -45,7 +45,7 @@ private:
 };
 
 template <typename T>
-class basic_cumulative<T, true>
+class basic_cumulative<T, 2>
 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
@@ -67,10 +67,10 @@ private:
 };
 
 template <typename T>
-using cumulative = basic_cumulative<T, false>;
+using cumulative = basic_cumulative<T, 1>;
 
 template <typename T>
-using cumulative_variance = basic_cumulative<T, true>;
+using cumulative_variance = basic_cumulative<T, 2>;
 
 } // namespace average
 } // namespace online

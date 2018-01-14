@@ -23,14 +23,14 @@ namespace average
 //-----------------------------------------------------------------------------
 
 template <typename T, std::size_t N>
-basic_arithmetic<T, N, false>::basic_arithmetic()
+basic_arithmetic<T, N, 1>::basic_arithmetic()
     : window(N),
       sum()
 {
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, false>::capacity() const -> size_type
+auto basic_arithmetic<T, N, 1>::capacity() const -> size_type
 {
     assert(window.capacity() == N);
 
@@ -38,32 +38,32 @@ auto basic_arithmetic<T, N, false>::capacity() const -> size_type
 }
 
 template <typename T, std::size_t N>
-void basic_arithmetic<T, N, false>::clear()
+void basic_arithmetic<T, N, 1>::clear()
 {
     sum = value_type();
     window.clear();
 }
 
 template <typename T, std::size_t N>
-bool basic_arithmetic<T, N, false>::empty() const
+bool basic_arithmetic<T, N, 1>::empty() const
 {
     return window.empty();
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, false>::size() const -> size_type
+auto basic_arithmetic<T, N, 1>::size() const -> size_type
 {
     return window.size();
 }
 
 template <typename T, std::size_t N>
-bool basic_arithmetic<T, N, false>::full() const
+bool basic_arithmetic<T, N, 1>::full() const
 {
     return window.full();
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, false>::value() const -> value_type
+auto basic_arithmetic<T, N, 1>::value() const -> value_type
 {
     if (empty())
         return value_type();
@@ -71,7 +71,7 @@ auto basic_arithmetic<T, N, false>::value() const -> value_type
 }
 
 template <typename T, std::size_t N>
-void basic_arithmetic<T, N, false>::push(value_type value)
+void basic_arithmetic<T, N, 1>::push(value_type value)
 {
     if (full())
     {
@@ -90,7 +90,7 @@ void basic_arithmetic<T, N, false>::push(value_type value)
 //-----------------------------------------------------------------------------
 
 template <typename T, std::size_t N>
-basic_arithmetic<T, N, true>::basic_arithmetic()
+basic_arithmetic<T, N, 2>::basic_arithmetic()
     : window(N),
       sum(),
       numerator()
@@ -99,7 +99,7 @@ basic_arithmetic<T, N, true>::basic_arithmetic()
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, true>::capacity() const -> size_type
+auto basic_arithmetic<T, N, 2>::capacity() const -> size_type
 {
     assert(window.capacity() == N);
 
@@ -107,7 +107,7 @@ auto basic_arithmetic<T, N, true>::capacity() const -> size_type
 }
 
 template <typename T, std::size_t N>
-void basic_arithmetic<T, N, true>::clear()
+void basic_arithmetic<T, N, 2>::clear()
 {
     sum = value_type();
     numerator = value_type();
@@ -115,25 +115,25 @@ void basic_arithmetic<T, N, true>::clear()
 }
 
 template <typename T, std::size_t N>
-bool basic_arithmetic<T, N, true>::empty() const
+bool basic_arithmetic<T, N, 2>::empty() const
 {
     return window.empty();
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, true>::size() const -> size_type
+auto basic_arithmetic<T, N, 2>::size() const -> size_type
 {
     return window.size();
 }
 
 template <typename T, std::size_t N>
-bool basic_arithmetic<T, N, true>::full() const
+bool basic_arithmetic<T, N, 2>::full() const
 {
     return window.full();
 }
 
 template <typename T, std::size_t N>
-void basic_arithmetic<T, N, true>::push(value_type value)
+void basic_arithmetic<T, N, 2>::push(value_type value)
 {
     const value_type old_mean = this->value();
     if (full())
@@ -153,7 +153,7 @@ void basic_arithmetic<T, N, true>::push(value_type value)
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, true>::value() const -> value_type
+auto basic_arithmetic<T, N, 2>::value() const -> value_type
 {
     if (empty())
         return value_type();
@@ -161,7 +161,7 @@ auto basic_arithmetic<T, N, true>::value() const -> value_type
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, true>::variance() const -> value_type
+auto basic_arithmetic<T, N, 2>::variance() const -> value_type
 {
     if (size() < 2)
         return value_type();
@@ -170,7 +170,7 @@ auto basic_arithmetic<T, N, true>::variance() const -> value_type
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, true>::delta(value_type value, value_type old_mean) -> value_type
+auto basic_arithmetic<T, N, 2>::delta(value_type value, value_type old_mean) -> value_type
 {
     return (value - old_mean) * (value - this->value());
 }

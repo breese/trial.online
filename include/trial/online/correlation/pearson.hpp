@@ -23,7 +23,7 @@ namespace online
 namespace correlation
 {
 
-template <typename T, template <typename, bool> class Avg>
+template <typename T, template <typename, int> class Avg>
 class basic_pearson
 {
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
@@ -39,8 +39,8 @@ public:
 
 private:
     correlation::basic_covariance<value_type, Avg> covariance;
-    Avg<value_type, true> average_x;
-    Avg<value_type, true> average_y;
+    Avg<value_type, 2> average_x;
+    Avg<value_type, 2> average_y;
 };
 
 template <typename T>
