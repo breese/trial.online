@@ -22,8 +22,11 @@ namespace online
 namespace average
 {
 
+template <typename T, std::size_t N, bool WithVariance>
+class basic_arithmetic;
+
 template <typename T, std::size_t N>
-class arithmetic
+class basic_arithmetic<T, N, false>
 {
 public:
     using value_type = T;
@@ -33,7 +36,7 @@ public:
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
 
-    arithmetic();
+    basic_arithmetic();
 
     size_type capacity() const;
     void clear();
@@ -48,6 +51,43 @@ private:
     window_type window;
     value_type sum;
 };
+
+template <typename T, std::size_t N>
+class basic_arithmetic<T, N, true>
+{
+public:
+    using value_type = T;
+    using size_type = std::size_t;
+
+    static_assert(N > 0, "N must be larger than zero");
+    static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
+
+    basic_arithmetic();
+
+    size_type capacity() const;
+    void clear();
+    bool empty() const;
+    bool full() const;
+    value_type value() const;
+    void push(value_type value);
+    size_type size() const;
+    value_type variance() const;
+
+private:
+    value_type delta(value_type, value_type);
+
+private:
+    using window_type = boost::circular_buffer<value_type>;
+    window_type window;
+    value_type sum;
+    value_type numerator;
+};
+
+template <typename T, std::size_t N>
+using arithmetic = basic_arithmetic<T, N, false>;
+
+template <typename T, std::size_t N>
+using arithmetic_variance = basic_arithmetic<T, N, true>;
 
 } // namespace average
 } // namespace online
