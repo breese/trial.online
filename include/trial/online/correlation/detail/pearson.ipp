@@ -43,12 +43,10 @@ void basic_pearson<T, Avg>::push(value_type x, value_type y)
 template <typename T, template <typename, bool> class Avg>
 auto basic_pearson<T, Avg>::value() const -> value_type
 {
-    if (size() == 0)
-        return value_type(1);
     const value_type variance_product = average_x.variance() * average_y.variance();
-    if (std::abs(variance_product) < std::numeric_limits<value_type>::epsilon())
+    if (variance_product < std::numeric_limits<value_type>::epsilon())
         return value_type(1);
-    return covariance.value() / std::sqrt(variance_product);
+    return covariance.normalized_value() / std::sqrt(variance_product);
 }
 
 } // namespace correlation

@@ -41,9 +41,17 @@ void basic_covariance<T, Avg>::push(value_type x, value_type y)
 template <typename T, template <typename, bool> class Avg>
 auto basic_covariance<T, Avg>::value() const -> value_type
 {
-    if (size() == 0)
-        return value_type(0);
-    return cov / size();
+    if (size() > 1)
+        return cov / (size() - 1);
+    return value_type(0);
+}
+
+template <typename T, template <typename, bool> class Avg>
+auto basic_covariance<T, Avg>::normalized_value() const -> value_type
+{
+    if (size() > 0)
+        return cov / size();
+    return value_type(0);
 }
 
 } // namespace correlation

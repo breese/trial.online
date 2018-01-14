@@ -37,6 +37,7 @@ public:
     void clear();
     void push(value_type first, value_type second);
     value_type value() const;
+    value_type normalized_value() const;
 
 private:
     Avg<value_type, false> average_x;
