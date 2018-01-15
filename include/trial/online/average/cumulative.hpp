@@ -13,6 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
+#include <trial/online/average/types.hpp>
 
 namespace trial
 {
@@ -21,11 +22,11 @@ namespace online
 namespace average
 {
 
-template <typename T, int Moment>
+template <typename T, moment_type Moment>
 class basic_cumulative;
 
 template <typename T>
-class basic_cumulative<T, 1>
+class basic_cumulative<T, with_mean>
 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
@@ -45,7 +46,7 @@ private:
 };
 
 template <typename T>
-class basic_cumulative<T, 2>
+class basic_cumulative<T, with_variance>
 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
@@ -67,10 +68,10 @@ private:
 };
 
 template <typename T>
-using cumulative = basic_cumulative<T, 1>;
+using cumulative = basic_cumulative<T, with_mean>;
 
 template <typename T>
-using cumulative_variance = basic_cumulative<T, 2>;
+using cumulative_variance = basic_cumulative<T, with_variance>;
 
 } // namespace average
 } // namespace online

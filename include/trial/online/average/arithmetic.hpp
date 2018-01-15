@@ -14,6 +14,7 @@
 #include <cstddef> // std::size_t
 #include <type_traits>
 #include <boost/circular_buffer.hpp>
+#include <trial/online/average/types.hpp>
 
 namespace trial
 {
@@ -22,11 +23,11 @@ namespace online
 namespace average
 {
 
-template <typename T, std::size_t N, int Moment>
+template <typename T, std::size_t N, moment_type Moment>
 class basic_arithmetic;
 
 template <typename T, std::size_t N>
-class basic_arithmetic<T, N, 1>
+class basic_arithmetic<T, N, with_mean>
 {
 public:
     using value_type = T;
@@ -53,7 +54,7 @@ private:
 };
 
 template <typename T, std::size_t N>
-class basic_arithmetic<T, N, 2>
+class basic_arithmetic<T, N, with_variance>
 {
 public:
     using value_type = T;
@@ -84,10 +85,10 @@ private:
 };
 
 template <typename T, std::size_t N>
-using arithmetic = basic_arithmetic<T, N, 1>;
+using arithmetic = basic_arithmetic<T, N, with_mean>;
 
 template <typename T, std::size_t N>
-using arithmetic_variance = basic_arithmetic<T, N, 2>;
+using arithmetic_variance = basic_arithmetic<T, N, with_variance>;
 
 } // namespace average
 } // namespace online
