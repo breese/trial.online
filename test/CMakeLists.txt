@@ -11,10 +11,10 @@
 # detail
 trial_online_add_test(type_traits_suite detail/type_traits_suite.cpp)
 
-# average
-trial_online_add_test(arithmetic_suite average/arithmetic_suite.cpp)
-trial_online_add_test(exponential_suite average/exponential_suite.cpp)
-trial_online_add_test(cumulative_suite average/cumulative_suite.cpp)
+# moment
+trial_online_add_test(arithmetic_suite moment/arithmetic_suite.cpp)
+trial_online_add_test(exponential_suite moment/exponential_suite.cpp)
+trial_online_add_test(cumulative_suite moment/cumulative_suite.cpp)
 
 # correlation
 trial_online_add_test(covariance_suite correlation/covariance_suite.cpp)

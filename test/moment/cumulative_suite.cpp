@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/average/cumulative.hpp>
+#include <trial/online/moment/cumulative.hpp>
 
 //-----------------------------------------------------------------------------
 
@@ -18,14 +18,14 @@ namespace average_double_suite
 
 void test_empty()
 {
-    trial::online::average::cumulative<double> filter;
+    trial::online::moment::cumulative<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
 }
 
 void test_same()
 {
-    trial::online::average::cumulative<int> filter;
+    trial::online::moment::cumulative<int> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -39,7 +39,7 @@ void test_same()
 
 void test_increasing()
 {
-    trial::online::average::cumulative<int> filter;
+    trial::online::moment::cumulative<int> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -53,7 +53,7 @@ void test_increasing()
 
 void test_decreasing()
 {
-    trial::online::average::cumulative<int> filter;
+    trial::online::moment::cumulative<int> filter;
     filter.push(5.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 5.0);
@@ -82,14 +82,14 @@ namespace average_int_suite
 
 void test_empty()
 {
-    trial::online::average::cumulative<int> filter;
+    trial::online::moment::cumulative<int> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0);
 }
 
 void test_same()
 {
-    trial::online::average::cumulative<int> filter;
+    trial::online::moment::cumulative<int> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
@@ -103,7 +103,7 @@ void test_same()
 
 void test_increasing()
 {
-    trial::online::average::cumulative<int> filter;
+    trial::online::moment::cumulative<int> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
@@ -131,14 +131,14 @@ namespace variance_double_suite
 
 void test_empty()
 {
-    trial::online::average::cumulative_variance<double> filter;
+    trial::online::moment::cumulative_variance<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
 
 void test_same()
 {
-    trial::online::average::cumulative_variance<double> filter;
+    trial::online::moment::cumulative_variance<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -153,7 +153,7 @@ void test_same()
 void test_increasing()
 {
     const double tolerance = 1e-6;
-    trial::online::average::cumulative_variance<double> filter;
+    trial::online::moment::cumulative_variance<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);

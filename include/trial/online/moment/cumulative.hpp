@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_AVERAGE_CUMULATIVE_HPP
-#define TRIAL_ONLINE_AVERAGE_CUMULATIVE_HPP
+#ifndef TRIAL_ONLINE_MOMENT_CUMULATIVE_HPP
+#define TRIAL_ONLINE_MOMENT_CUMULATIVE_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,16 +13,16 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
-#include <trial/online/average/types.hpp>
+#include <trial/online/moment/types.hpp>
 
 namespace trial
 {
 namespace online
 {
-namespace average
+namespace moment
 {
 
-template <typename T, moment_type Moment>
+template <typename T, moment::type Moment>
 class basic_cumulative;
 
 template <typename T>
@@ -73,10 +73,10 @@ using cumulative = basic_cumulative<T, with_mean>;
 template <typename T>
 using cumulative_variance = basic_cumulative<T, with_variance>;
 
-} // namespace average
+} // namespace moment
 } // namespace online
 } // namespace trial
 
-#include <trial/online/average/detail/cumulative.ipp>
+#include <trial/online/moment/detail/cumulative.ipp>
 
-#endif // TRIAL_ONLINE_AVERAGE_CUMULATIVE_HPP
+#endif // TRIAL_ONLINE_MOMENT_CUMULATIVE_HPP

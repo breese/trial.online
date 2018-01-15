@@ -9,8 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/average/cumulative.hpp>
-#include <trial/online/average/arithmetic.hpp>
+#include <trial/online/moment/cumulative.hpp>
+#include <trial/online/moment/arithmetic.hpp>
 #include <trial/online/correlation/covariance.hpp>
 
 //-----------------------------------------------------------------------------
@@ -213,7 +213,7 @@ void test_same()
     // Cov(X, X) = Var(X)
     const double tolerance = 1e-6;
     trial::online::correlation::covariance<double> filter;
-    trial::online::average::cumulative_variance<double> average;
+    trial::online::moment::cumulative_variance<double> average;
     {
         double x = 0.0;
         filter.push(x, x);
@@ -397,11 +397,11 @@ void run()
 namespace arithmetic_properties_suite
 {
 
-template <typename T, trial::online::average::moment_type Moment>
-using average_type = trial::online::average::basic_arithmetic<T, 64, Moment>;
+template <typename T, trial::online::moment::type Moment>
+using moment_type = trial::online::moment::basic_arithmetic<T, 64, Moment>;
 
 template <typename T>
-using covariance_type = trial::online::correlation::basic_covariance<T, average_type>;
+using covariance_type = trial::online::correlation::basic_covariance<T, moment_type>;
 
 void test_constant()
 {
@@ -423,7 +423,7 @@ void test_same()
     // Cov(X, X) = Var(X)
     const double tolerance = 1e-6;
     covariance_type<double> filter;
-    average_type<double, trial::online::average::with_variance> average;
+    moment_type<double, trial::online::moment::with_variance> average;
     {
         double x = 0.0;
         filter.push(x, x);

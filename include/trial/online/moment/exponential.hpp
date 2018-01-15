@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_AVERAGE_EXPONENTIAL_HPP
-#define TRIAL_ONLINE_AVERAGE_EXPONENTIAL_HPP
+#ifndef TRIAL_ONLINE_MOMENT_EXPONENTIAL_HPP
+#define TRIAL_ONLINE_MOMENT_EXPONENTIAL_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -18,7 +18,7 @@ namespace trial
 {
 namespace online
 {
-namespace average
+namespace moment
 {
 
 template <typename T, typename Smoothing>
@@ -42,10 +42,10 @@ private:
     value_type normalization;
 };
 
-} // namespace average
+} // namespace moment
 } // namespace online
 } // namespace trial
 
-#include <trial/online/average/detail/exponential.ipp>
+#include <trial/online/moment/detail/exponential.ipp>
 
-#endif // TRIAL_ONLINE_AVERAGE_EXPONENTIAL_HPP
+#endif // TRIAL_ONLINE_MOMENT_EXPONENTIAL_HPP

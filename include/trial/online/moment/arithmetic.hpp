@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_AVERAGE_ARITHMETIC_HPP
-#define TRIAL_ONLINE_AVERAGE_ARITHMETIC_HPP
+#ifndef TRIAL_ONLINE_MOMENT_ARITHMETIC_HPP
+#define TRIAL_ONLINE_MOMENT_ARITHMETIC_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -14,16 +14,16 @@
 #include <cstddef> // std::size_t
 #include <type_traits>
 #include <boost/circular_buffer.hpp>
-#include <trial/online/average/types.hpp>
+#include <trial/online/moment/types.hpp>
 
 namespace trial
 {
 namespace online
 {
-namespace average
+namespace moment
 {
 
-template <typename T, std::size_t N, moment_type Moment>
+template <typename T, std::size_t N, moment::type Moment>
 class basic_arithmetic;
 
 template <typename T, std::size_t N>
@@ -90,10 +90,10 @@ using arithmetic = basic_arithmetic<T, N, with_mean>;
 template <typename T, std::size_t N>
 using arithmetic_variance = basic_arithmetic<T, N, with_variance>;
 
-} // namespace average
+} // namespace moment
 } // namespace online
 } // namespace trial
 
-#include <trial/online/average/detail/arithmetic.ipp>
+#include <trial/online/moment/detail/arithmetic.ipp>
 
-#endif // TRIAL_ONLINE_AVERAGE_ARITHMETIC_HPP
+#endif // TRIAL_ONLINE_MOMENT_ARITHMETIC_HPP

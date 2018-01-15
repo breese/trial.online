@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/average/arithmetic.hpp>
+#include <trial/online/moment/arithmetic.hpp>
 
 //-----------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ namespace average_double_1_suite
 
 void test_empty()
 {
-    trial::online::average::arithmetic<double, 1> filter;
+    trial::online::moment::arithmetic<double, 1> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -28,7 +28,7 @@ void test_empty()
 
 void test_many()
 {
-    trial::online::average::arithmetic<double, 1> filter;
+    trial::online::moment::arithmetic<double, 1> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 1);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
@@ -62,7 +62,7 @@ namespace average_double_2_suite
 
 void test_empty()
 {
-    trial::online::average::arithmetic<double, 2> filter;
+    trial::online::moment::arithmetic<double, 2> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -72,7 +72,7 @@ void test_empty()
 
 void test_one()
 {
-    trial::online::average::arithmetic<double, 2> filter;
+    trial::online::moment::arithmetic<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -82,7 +82,7 @@ void test_one()
 
 void test_same()
 {
-    trial::online::average::arithmetic<double, 2> filter;
+    trial::online::moment::arithmetic<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -98,7 +98,7 @@ void test_same()
 
 void test_two()
 {
-    trial::online::average::arithmetic<double, 2> filter;
+    trial::online::moment::arithmetic<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(3.0);
@@ -107,7 +107,7 @@ void test_two()
 
 void test_three()
 {
-    trial::online::average::arithmetic<double, 2> filter;
+    trial::online::moment::arithmetic<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(3.0);
@@ -118,7 +118,7 @@ void test_three()
 
 void test_clear()
 {
-    trial::online::average::arithmetic<double, 2> filter;
+    trial::online::moment::arithmetic<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     filter.clear();
@@ -147,7 +147,7 @@ namespace average_float_2_suite
 
 void test_empty()
 {
-    trial::online::average::arithmetic<float, 2> filter;
+    trial::online::moment::arithmetic<float, 2> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -157,7 +157,7 @@ void test_empty()
 
 void test_one()
 {
-    trial::online::average::arithmetic<float, 2> filter;
+    trial::online::moment::arithmetic<float, 2> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -167,7 +167,7 @@ void test_one()
 
 void test_same()
 {
-    trial::online::average::arithmetic<float, 2> filter;
+    trial::online::moment::arithmetic<float, 2> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -183,7 +183,7 @@ void test_same()
 
 void test_two()
 {
-    trial::online::average::arithmetic<float, 2> filter;
+    trial::online::moment::arithmetic<float, 2> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(3.0f);
@@ -192,7 +192,7 @@ void test_two()
 
 void test_three()
 {
-    trial::online::average::arithmetic<float, 2> filter;
+    trial::online::moment::arithmetic<float, 2> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(3.0f);
@@ -203,7 +203,7 @@ void test_three()
 
 void test_clear()
 {
-    trial::online::average::arithmetic<float, 2> filter;
+    trial::online::moment::arithmetic<float, 2> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     filter.clear();
@@ -232,7 +232,7 @@ namespace average_int_2_suite
 
 void test_empty()
 {
-    trial::online::average::arithmetic<int, 2> filter;
+    trial::online::moment::arithmetic<int, 2> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -242,7 +242,7 @@ void test_empty()
 
 void test_one()
 {
-    trial::online::average::arithmetic<int, 2> filter;
+    trial::online::moment::arithmetic<int, 2> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -252,7 +252,7 @@ void test_one()
 
 void test_same()
 {
-    trial::online::average::arithmetic<int, 2> filter;
+    trial::online::moment::arithmetic<int, 2> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
@@ -268,7 +268,7 @@ void test_same()
 
 void test_two()
 {
-    trial::online::average::arithmetic<int, 2> filter;
+    trial::online::moment::arithmetic<int, 2> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
     filter.push(3);
@@ -277,7 +277,7 @@ void test_two()
 
 void test_three()
 {
-    trial::online::average::arithmetic<int, 2> filter;
+    trial::online::moment::arithmetic<int, 2> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
     filter.push(3);
@@ -288,7 +288,7 @@ void test_three()
 
 void test_clear()
 {
-    trial::online::average::arithmetic<int, 2> filter;
+    trial::online::moment::arithmetic<int, 2> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     filter.clear();
@@ -317,7 +317,7 @@ namespace variance_double_1_suite
 
 void test_empty()
 {
-    trial::online::average::arithmetic_variance<double, 1> filter;
+    trial::online::moment::arithmetic_variance<double, 1> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -328,7 +328,7 @@ void test_empty()
 
 void test_many()
 {
-    trial::online::average::arithmetic_variance<double, 1> filter;
+    trial::online::moment::arithmetic_variance<double, 1> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 1);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
@@ -365,7 +365,7 @@ namespace variance_double_2_suite
 
 void test_empty()
 {
-    trial::online::average::arithmetic_variance<double, 2> filter;
+    trial::online::moment::arithmetic_variance<double, 2> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -376,7 +376,7 @@ void test_empty()
 
 void test_one()
 {
-    trial::online::average::arithmetic_variance<double, 2> filter;
+    trial::online::moment::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
@@ -387,7 +387,7 @@ void test_one()
 
 void test_same()
 {
-    trial::online::average::arithmetic_variance<double, 2> filter;
+    trial::online::moment::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -406,7 +406,7 @@ void test_same()
 
 void test_two()
 {
-    trial::online::average::arithmetic_variance<double, 2> filter;
+    trial::online::moment::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -417,7 +417,7 @@ void test_two()
 
 void test_three()
 {
-    trial::online::average::arithmetic_variance<double, 2> filter;
+    trial::online::moment::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -431,7 +431,7 @@ void test_three()
 
 void test_clear()
 {
-    trial::online::average::arithmetic_variance<double, 2> filter;
+    trial::online::moment::arithmetic_variance<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     filter.clear();

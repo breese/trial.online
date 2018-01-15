@@ -13,7 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
-#include <trial/online/average/cumulative.hpp>
+#include <trial/online/moment/cumulative.hpp>
 
 // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
 
@@ -24,7 +24,7 @@ namespace online
 namespace correlation
 {
 
-template <typename T, template <typename, average::moment_type> class Avg>
+template <typename T, template <typename, moment::type> class Avg>
 class basic_covariance
 {
 public:
@@ -40,13 +40,13 @@ public:
     value_type normalized_value() const;
 
 private:
-    Avg<value_type, average::with_mean> average_x;
-    Avg<value_type, average::with_mean> average_y;
+    Avg<value_type, moment::with_mean> average_x;
+    Avg<value_type, moment::with_mean> average_y;
     value_type cov = value_type(0);
 };
 
 template <typename T>
-using covariance = basic_covariance<T, average::basic_cumulative>;
+using covariance = basic_covariance<T, moment::basic_cumulative>;
 
 } // namespace correlation
 } // namespace online

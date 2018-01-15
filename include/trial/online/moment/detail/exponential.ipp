@@ -14,7 +14,7 @@ namespace trial
 {
 namespace online
 {
-namespace average
+namespace moment
 {
 
 template <typename T, typename S>
@@ -49,6 +49,6 @@ void exponential<T, S>::push(value_type value)
     average = smoothing_factor * value + (one - smoothing_factor) * average;
 }
 
-} // namespace average
+} // namespace moment
 } // namespace online
 } // namespace trial

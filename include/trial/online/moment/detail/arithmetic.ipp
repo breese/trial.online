@@ -15,7 +15,7 @@ namespace trial
 {
 namespace online
 {
-namespace average
+namespace moment
 {
 
 //-----------------------------------------------------------------------------
@@ -175,6 +175,6 @@ auto basic_arithmetic<T, N, with_variance>::delta(value_type value, value_type o
     return (value - old_mean) * (value - this->value());
 }
 
-} // namespace average
+} // namespace moment
 } // namespace online
 } // namespace trial

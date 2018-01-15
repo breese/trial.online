@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/average/exponential.hpp>
+#include <trial/online/moment/exponential.hpp>
 
 //-----------------------------------------------------------------------------
 
@@ -20,13 +20,13 @@ using ratio_type = std::ratio<1, 8>;
 
 void test_empty()
 {
-    trial::online::average::exponential<double, ratio_type> filter;
+    trial::online::moment::exponential<double, ratio_type> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
 }
 
 void test_clear()
 {
-    trial::online::average::exponential<double, ratio_type> filter;
+    trial::online::moment::exponential<double, ratio_type> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.clear();
@@ -35,7 +35,7 @@ void test_clear()
 
 void test_same()
 {
-    trial::online::average::exponential<double, ratio_type> filter;
+    trial::online::moment::exponential<double, ratio_type> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(1.0);
@@ -46,7 +46,7 @@ void test_same()
 
 void test_two()
 {
-    trial::online::average::exponential<double, ratio_type> filter;
+    trial::online::moment::exponential<double, ratio_type> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(4.0);
@@ -57,7 +57,7 @@ void test_many()
 {
     const double tolerance = 1e-5;
 
-    trial::online::average::exponential<double, ratio_type> filter;
+    trial::online::moment::exponential<double, ratio_type> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(2.0);
@@ -88,13 +88,13 @@ using ratio_type = std::ratio<1, 8>;
 
 void test_empty()
 {
-    trial::online::average::exponential<float, ratio_type> filter;
+    trial::online::moment::exponential<float, ratio_type> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0f);
 }
 
 void test_clear()
 {
-    trial::online::average::exponential<float, ratio_type> filter;
+    trial::online::moment::exponential<float, ratio_type> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.clear();
@@ -103,7 +103,7 @@ void test_clear()
 
 void test_same()
 {
-    trial::online::average::exponential<float, ratio_type> filter;
+    trial::online::moment::exponential<float, ratio_type> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(1.0f);
@@ -114,7 +114,7 @@ void test_same()
 
 void test_two()
 {
-    trial::online::average::exponential<float, ratio_type> filter;
+    trial::online::moment::exponential<float, ratio_type> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(4.0f);

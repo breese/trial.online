@@ -12,7 +12,7 @@ namespace trial
 {
 namespace online
 {
-namespace average
+namespace moment
 {
 
 //-----------------------------------------------------------------------------
@@ -94,6 +94,6 @@ void basic_cumulative<T, with_variance>::push(value_type input)
     }
 }
 
-} // namespace average
+} // namespace moment
 } // namespace online
 } // namespace trial

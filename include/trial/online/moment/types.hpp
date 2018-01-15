@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_AVERAGE_TYPES_HPP
-#define TRIAL_ONLINE_AVERAGE_TYPES_HPP
+#ifndef TRIAL_ONLINE_MOMENT_TYPES_HPP
+#define TRIAL_ONLINE_MOMENT_TYPES_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -15,17 +15,17 @@ namespace trial
 {
 namespace online
 {
-namespace average
+namespace moment
 {
 
-enum moment_type
+enum type
 {
     with_mean = 1,
     with_variance = 2
 };
 
-} // namespace average
+} // namespace moment
 } // namespace online
 } // namespace trial
 
-#endif // TRIAL_ONLINE_AVERAGE_TYPES_HPP
+#endif // TRIAL_ONLINE_MOMENT_TYPES_HPP
