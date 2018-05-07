@@ -58,7 +58,7 @@ void psquare<T, Quantiles...>::initialize()
     constant_deltas[2 * quantile_length + 1] = (constant_deltas[2 * quantile_length] + constant_deltas[2 * quantile_length + 2]) / 2;
 
     std::iota(positions.begin(), positions.end(), 1);
-    std::fill(heights.begin(), heights.end(), 0);
+    std::uninitialized_fill(heights.begin(), heights.end(), 0);
 
     for (size_type i = 0; i < desired_positions.size(); ++i)
     {
