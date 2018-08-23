@@ -11,32 +11,14 @@
 cmake_minimum_required(VERSION 3.0)
 project(trial.online)
 
-set(TRIAL_ONLINE_BUILD_DIR ${CMAKE_BINARY_DIR})
-set(TRIAL_ONLINE_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-set(LIBRARY_OUTPUT_PATH ${TRIAL_ONLINE_BUILD_DIR}/lib)
-set(EXECUTABLE_OUTPUT_PATH ${TRIAL_ONLINE_BUILD_DIR}/bin)
-
-set(CMAKE_CXX_STANDARD 11)
-
-###############################################################################
-# MP11 package
-###############################################################################
-
-include_directories(external/mp11/include)
-
-###############################################################################
-# Trial.Online package
-###############################################################################
-
-include_directories(include)
-
 function(trial_online_add_test name)
   add_executable(${name} ${ARGN})
-  #target_link_libraries(${name} ${TRIAL_ONLINE_DEPENDENT_LIBRARIES})
+  target_link_libraries(${name} trial-online)
   add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
   target_compile_options(${name} PRIVATE -Wall -Wextra)
 endfunction()
 
 enable_testing()
 
+add_subdirectory(cmake)
 add_subdirectory(test)
