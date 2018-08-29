@@ -20,6 +20,9 @@ trial_online_add_test(cumulative_suite moment/cumulative_suite.cpp)
 trial_online_add_test(covariance_suite correlation/covariance_suite.cpp)
 trial_online_add_test(pearson_suite correlation/pearson_suite.cpp)
 
+# regression
+trial_online_add_test(linear_suite regression/linear_suite.cpp)
+
 # quantile
 trial_online_add_test(psquare_suite quantile/psquare_suite.cpp)
 
