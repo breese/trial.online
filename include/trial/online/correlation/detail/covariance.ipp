@@ -18,31 +18,31 @@ namespace correlation
 template <typename T, template <typename, moment::type> class Avg>
 auto basic_covariance<T, Avg>::size() const -> size_type
 {
-    return average_x.size();
+    return x_moment.size();
 }
 
 template <typename T, template <typename, moment::type> class Avg>
 void basic_covariance<T, Avg>::clear()
 {
-    average_x.clear();
-    average_y.clear();
-    cov = value_type(0);
+    x_moment.clear();
+    y_moment.clear();
+    co_moment = value_type(0);
 }
 
 template <typename T, template <typename, moment::type> class Avg>
 void basic_covariance<T, Avg>::push(value_type x, value_type y)
 {
-    average_x.push(x);
-    const auto previous_average_y = average_y.value();
-    average_y.push(y);
-    cov += (x - average_x.value()) * (y - previous_average_y);
+    x_moment.push(x);
+    // Using new x moment and old y moment
+    co_moment += (x - x_moment.value()) * (y - y_moment.value());
+    y_moment.push(y);
 }
 
 template <typename T, template <typename, moment::type> class Avg>
 auto basic_covariance<T, Avg>::value() const -> value_type
 {
     if (size() > 1)
-        return cov / (size() - 1);
+        return co_moment / (size() - 1);
     return value_type(0);
 }
 
@@ -50,7 +50,7 @@ template <typename T, template <typename, moment::type> class Avg>
 auto basic_covariance<T, Avg>::normalized_value() const -> value_type
 {
     if (size() > 0)
-        return cov / size();
+        return co_moment / size();
     return value_type(0);
 }
 

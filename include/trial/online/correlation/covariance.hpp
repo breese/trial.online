@@ -40,9 +40,9 @@ public:
     value_type normalized_value() const;
 
 private:
-    Avg<value_type, moment::with_mean> average_x;
-    Avg<value_type, moment::with_mean> average_y;
-    value_type cov = value_type(0);
+    Avg<value_type, moment::with_mean> x_moment;
+    Avg<value_type, moment::with_mean> y_moment;
+    value_type co_moment = value_type(0);
 };
 
 template <typename T>
