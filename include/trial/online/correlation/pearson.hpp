@@ -39,8 +39,8 @@ public:
 
 private:
     correlation::basic_covariance<value_type, Avg> covariance;
-    Avg<value_type, moment::with_variance> average_x;
-    Avg<value_type, moment::with_variance> average_y;
+    Avg<value_type, moment::with_variance> x_moment;
+    Avg<value_type, moment::with_variance> y_moment;
 };
 
 template <typename T>
