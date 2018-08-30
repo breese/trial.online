@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cassert>
+#include <limits>
 
 namespace trial
 {
@@ -60,10 +61,11 @@ auto basic_linear<T, Avg>::intercept() const -> value_type
 template <typename T, template <typename, moment::type> class Avg>
 auto basic_linear<T, Avg>::correlation() const -> value_type
 {
-    const auto divisor = std::sqrt(x_moment.variance() * y_moment.variance());
-    return (divisor == 0)
+    // Pearson's correlation coefficient
+    const value_type variance_product = x_moment.variance() * y_moment.variance();
+    return (variance_product < std::numeric_limits<value_type>::epsilon())
         ? value_type(1)
-        : covariance.normalized_value() / divisor;
+        : covariance.normalized_value() / std::sqrt(variance_product);
 }
 
 } // namespace regression
