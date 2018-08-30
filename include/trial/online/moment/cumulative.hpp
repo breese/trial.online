@@ -62,9 +62,8 @@ public:
     void push(value_type);
 
 private:
-    value_type mean = 0;
+    basic_cumulative<value_type, with_mean> mean;
     value_type numerator = value_type(0);
-    size_type count = 0;
 };
 
 template <typename T>
