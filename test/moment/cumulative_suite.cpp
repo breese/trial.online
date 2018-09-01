@@ -25,7 +25,7 @@ void test_empty()
 
 void test_same()
 {
-    trial::online::moment::cumulative<int> filter;
+    trial::online::moment::cumulative<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -39,7 +39,7 @@ void test_same()
 
 void test_increasing()
 {
-    trial::online::moment::cumulative<int> filter;
+    trial::online::moment::cumulative<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -53,7 +53,7 @@ void test_increasing()
 
 void test_decreasing()
 {
-    trial::online::moment::cumulative<int> filter;
+    trial::online::moment::cumulative<double> filter;
     filter.push(5.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 5.0);
