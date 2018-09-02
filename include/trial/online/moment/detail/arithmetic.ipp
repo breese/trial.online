@@ -133,22 +133,22 @@ bool basic_arithmetic<T, N, with_variance>::full() const
 }
 
 template <typename T, std::size_t N>
-void basic_arithmetic<T, N, with_variance>::push(value_type value)
+void basic_arithmetic<T, N, with_variance>::push(value_type input)
 {
-    const value_type old_mean = this->value();
+    const value_type old_mean = value();
     if (full())
     {
-        const value_type old_value = window.front();
-        sum += value - old_value;
-        window.push_back(value);
-        numerator += delta(value, old_mean);
-        numerator -= delta(old_value, old_mean);
+        const value_type old_input = window.front();
+        sum += input - old_input;
+        window.push_back(input);
+        numerator += delta(input, old_mean);
+        numerator -= delta(old_input, old_mean);
     }
     else
     {
-        sum += value;
-        window.push_back(value);
-        numerator += delta(value, old_mean);
+        sum += input;
+        window.push_back(input);
+        numerator += delta(input, old_mean);
     }
 }
 
@@ -163,16 +163,28 @@ auto basic_arithmetic<T, N, with_variance>::value() const -> value_type
 template <typename T, std::size_t N>
 auto basic_arithmetic<T, N, with_variance>::variance() const -> value_type
 {
-    if (size() < 2)
-        return value_type();
     // Rounding errors can cause the variance to become negative
-    return std::max(value_type(0), numerator / (size() - 1));
+    const auto count = size();
+    return (count > 0)
+        ? std::max(value_type(0), numerator / value_type(count))
+        : value_type(0);
 }
 
 template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, with_variance>::delta(value_type value, value_type old_mean) -> value_type
+auto basic_arithmetic<T, N, with_variance>::unbiased_variance() const -> value_type
 {
-    return (value - old_mean) * (value - this->value());
+    // With Bessel's correction
+    // Rounding errors can cause the variance to become negative
+    const auto count = size();
+    return (count > 1)
+        ? std::max(value_type(0), numerator / (count - 1))
+        : value_type(0);
+}
+
+template <typename T, std::size_t N>
+auto basic_arithmetic<T, N, with_variance>::delta(value_type input, value_type old_mean) -> value_type
+{
+    return (input - old_mean) * (input - value());
 }
 
 } // namespace moment

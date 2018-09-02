@@ -59,6 +59,7 @@ public:
     size_type size() const;
     value_type value() const;
     value_type variance() const;
+    value_type unbiased_variance() const;
     void push(value_type);
 
 private:

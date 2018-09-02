@@ -78,6 +78,15 @@ auto basic_cumulative<T, with_variance>::variance() const -> value_type
 }
 
 template <typename T>
+auto basic_cumulative<T, with_variance>::unbiased_variance() const -> value_type
+{
+    const auto count = size();
+    return (count > 1)
+        ? numerator / value_type(count - 1)
+        : value_type(0);
+}
+
+template <typename T>
 void basic_cumulative<T, with_variance>::push(value_type input)
 {
     if (size() > 0)

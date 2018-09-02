@@ -73,6 +73,7 @@ public:
     void push(value_type value);
     size_type size() const;
     value_type variance() const;
+    value_type unbiased_variance() const;
 
 private:
     value_type delta(value_type, value_type);

@@ -324,6 +324,7 @@ void test_empty()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
 
 void test_many()
@@ -336,18 +337,21 @@ void test_many()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
 
 void run()
@@ -372,6 +376,7 @@ void test_empty()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
 
 void test_one()
@@ -383,6 +388,7 @@ void test_one()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
 
 void test_same()
@@ -392,16 +398,19 @@ void test_same()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
 
 void test_two()
@@ -410,9 +419,11 @@ void test_two()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 2.0);
 }
 
 void test_three()
@@ -421,12 +432,15 @@ void test_three()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 2.0);
     filter.push(0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.5);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 4.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 2.25);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 4.5);
 }
 
 void test_clear()
