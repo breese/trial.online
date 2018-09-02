@@ -434,7 +434,7 @@ void test_same()
         TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.0, tolerance);
         TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0, tolerance);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), average.variance(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
     }
     {
         double x = 1.0;
