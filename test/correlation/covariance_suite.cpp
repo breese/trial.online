@@ -22,8 +22,8 @@ void test_empty()
 {
     trial::online::correlation::covariance<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
 }
 
 void test_clear()
@@ -40,14 +40,14 @@ void test_same_no_increment()
 {
     trial::online::correlation::covariance<double> filter;
     filter.push(2.0, 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(2.0, 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(2.0, 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
 }
 
 void test_same_increment_by_one()
@@ -55,20 +55,20 @@ void test_same_increment_by_one()
     const double tolerance = 1e-6;
     trial::online::correlation::covariance<double> filter;
     filter.push(1.0, 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.25, tolerance);
     filter.push(3.0, 3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.666667, tolerance);
     filter.push(4.0, 4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.666667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 1.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 1.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.25, tolerance);
     filter.push(5.0, 5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.0, tolerance);
 }
 
 void test_same_increment_by_half()
@@ -76,34 +76,34 @@ void test_same_increment_by_half()
     const double tolerance = 1e-6;
     trial::online::correlation::covariance<double> filter;
     filter.push(1.0, 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(1.5, 1.5);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.125, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.0625, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.125, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0625, tolerance);
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.25, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.166667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.166667, tolerance);
     filter.push(2.5, 2.5);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.416667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.3125, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.416667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.3125, tolerance);
     filter.push(3.0, 3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.625, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.625, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.5, tolerance);
 }
 
 void test_shifted_no_increment()
 {
     trial::online::correlation::covariance<double> filter;
     filter.push(1.0, 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(1.0, 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(1.0, 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
 }
 
 void test_shifted_increment_by_one()
@@ -111,20 +111,20 @@ void test_shifted_increment_by_one()
     const double tolerance = 1e-6;
     trial::online::correlation::covariance<double> filter;
     filter.push(1.0, 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(2.0, 3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.25, tolerance);
     filter.push(3.0, 4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.666667, tolerance);
     filter.push(4.0, 5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.666667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 1.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 1.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.25, tolerance);
     filter.push(5.0, 6.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.0, tolerance);
 }
 
 void test_up_down_by_one()
@@ -132,20 +132,20 @@ void test_up_down_by_one()
     const double tolerance = 1e-6;
     trial::online::correlation::covariance<double> filter;
     filter.push(0.0, 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(1.0, -1.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -0.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -0.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -0.25, tolerance);
     filter.push(2.0, -2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -0.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -0.666667, tolerance);
     filter.push(3.0, -3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -1.666667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -1.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -1.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -1.25, tolerance);
     filter.push(4.0, -4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -2.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -2.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -2.0, tolerance);
 }
 
 void test_down_up_by_one()
@@ -153,20 +153,20 @@ void test_down_up_by_one()
     const double tolerance = 1e-6;
     trial::online::correlation::covariance<double> filter;
     filter.push(0.0, 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(-1.0, 1.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -0.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -0.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -0.25, tolerance);
     filter.push(-2.0, 2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -0.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -0.666667, tolerance);
     filter.push(-3.0, 3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -1.666667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -1.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -1.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -1.25, tolerance);
     filter.push(-4.0, 4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -2.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), -2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), -2.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), -2.0, tolerance);
 }
 
 void run()
@@ -195,17 +195,17 @@ void test_constant()
     const double a = 0.0;
     trial::online::correlation::covariance<double> filter;
     filter.push(0.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(1.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(10.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
     filter.push(100.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.normalized_value(), 0.0);
 }
 
 void test_same()
@@ -217,34 +217,34 @@ void test_same()
     {
         double x = 0.0;
         filter.push(x, x);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.0, tolerance);
         TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.0, tolerance);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), average.variance(), tolerance);
     }
     {
         double x = 1.0;
         filter.push(x, x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.5, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.25, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.5, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.25, tolerance);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), average.variance(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
     }
     {
         double x = 10.0;
         filter.push(x, x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 30.333333, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 20.222222, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 30.333333, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 20.222222, tolerance);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), average.variance(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
     }
     {
         double x = 100.0;
         filter.push(x, x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2340.25, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 1755.1875, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 2340.25, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1755.1875, tolerance);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), average.variance(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
     }
 }
 
@@ -259,35 +259,35 @@ void test_commutative()
         const double y = 0.0;
         lhs.push(x, y);
         rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -1.0;
         const double y = 1.0;
         lhs.push(x, y);
         rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -2.0;
         const double y = 10.0;
         lhs.push(x, y);
         rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -3.0;
         const double y = 100.0;
         lhs.push(x, y);
         rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -4.0;
         const double y = 1000.0;
         lhs.push(x, y);
         rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
 }
 
@@ -304,35 +304,35 @@ void test_distributive()
         const double y = 0.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -1.0;
         const double y = 1.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -2.0;
         const double y = 10.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -3.0;
         const double y = 100.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -4.0;
         const double y = 1000.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
     }
 }
 
@@ -349,35 +349,35 @@ void test_shift_invariant()
         const double y = 0.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -1.0;
         const double y = 1.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -2.0;
         const double y = 10.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -3.0;
         const double y = 100.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
     {
         const double x = -4.0;
         const double y = 1000.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
     }
 }
 
@@ -398,7 +398,7 @@ namespace arithmetic_properties_suite
 {
 
 template <typename T, trial::online::moment::type Moment>
-using moment_type = trial::online::moment::basic_arithmetic<T, 64, Moment>;
+using moment_type = trial::online::moment::basic_cumulative<T, Moment>;
 
 template <typename T>
 using covariance_type = trial::online::correlation::basic_covariance<T, moment_type>;
@@ -409,12 +409,16 @@ void test_constant()
     const double a = 0.0;
     covariance_type<double> filter;
     filter.push(0.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     filter.push(1.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     filter.push(10.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     filter.push(100.0, a);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
 }
 
@@ -427,33 +431,33 @@ void test_same()
     {
         double x = 0.0;
         filter.push(x, x);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.0, tolerance);
         TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.0, tolerance);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), average.variance(), tolerance);
     }
     {
         double x = 1.0;
         filter.push(x, x);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.5, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 0.25, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.5, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.25, tolerance);
         TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
     }
     {
         double x = 10.0;
         filter.push(x, x);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 30.333333, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 20.222222, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 30.333333, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 20.222222, tolerance);
         TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
     }
     {
         double x = 100.0;
         filter.push(x, x);
         average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2340.25, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.normalized_value(), 1755.1875, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 2340.25, tolerance);
+        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1755.1875, tolerance);
         TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
     }
 }
@@ -469,6 +473,7 @@ void test_commutative()
         const double y = 0.0;
         lhs.push(x, y);
         rhs.push(y, x);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -476,6 +481,7 @@ void test_commutative()
         const double y = 1.0;
         lhs.push(x, y);
         rhs.push(y, x);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -483,6 +489,7 @@ void test_commutative()
         const double y = 10.0;
         lhs.push(x, y);
         rhs.push(y, x);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -490,6 +497,7 @@ void test_commutative()
         const double y = 100.0;
         lhs.push(x, y);
         rhs.push(y, x);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -497,6 +505,7 @@ void test_commutative()
         const double y = 1000.0;
         lhs.push(x, y);
         rhs.push(y, x);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
 }
@@ -514,6 +523,7 @@ void test_distributive()
         const double y = 0.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
     }
     {
@@ -521,6 +531,7 @@ void test_distributive()
         const double y = 1.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
     }
     {
@@ -528,6 +539,7 @@ void test_distributive()
         const double y = 10.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
     }
     {
@@ -535,6 +547,7 @@ void test_distributive()
         const double y = 100.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
     }
     {
@@ -542,6 +555,7 @@ void test_distributive()
         const double y = 1000.0;
         lhs.push(a * x, b * y);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
     }
 }
@@ -559,6 +573,7 @@ void test_shift_invariant()
         const double y = 0.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -566,6 +581,7 @@ void test_shift_invariant()
         const double y = 1.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -573,6 +589,7 @@ void test_shift_invariant()
         const double y = 10.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -580,6 +597,7 @@ void test_shift_invariant()
         const double y = 100.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
     {
@@ -587,6 +605,7 @@ void test_shift_invariant()
         const double y = 1000.0;
         lhs.push(x + a, y + b);
         rhs.push(x, y);
+        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
         TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
     }
 }

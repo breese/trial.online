@@ -49,7 +49,7 @@ auto basic_linear<T, Avg>::slope() const -> value_type
     const auto divisor = x_moment.variance();
     return (divisor == 0)
         ? value_type(0)
-        : covariance.normalized_value() / divisor;
+        : covariance.value() / divisor;
 }
 
 template <typename T, template <typename, moment::type> class Avg>
@@ -65,7 +65,7 @@ auto basic_linear<T, Avg>::correlation() const -> value_type
     const value_type variance_product = x_moment.variance() * y_moment.variance();
     return (variance_product < std::numeric_limits<value_type>::epsilon())
         ? value_type(1)
-        : covariance.normalized_value() / std::sqrt(variance_product);
+        : covariance.value() / std::sqrt(variance_product);
 }
 
 } // namespace regression

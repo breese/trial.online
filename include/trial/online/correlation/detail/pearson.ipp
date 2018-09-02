@@ -46,7 +46,7 @@ auto basic_pearson<T, Avg>::value() const -> value_type
     const value_type variance_product = x_moment.variance() * y_moment.variance();
     if (variance_product < std::numeric_limits<value_type>::epsilon())
         return value_type(1);
-    return covariance.normalized_value() / std::sqrt(variance_product);
+    return covariance.value() / std::sqrt(variance_product);
 }
 
 } // namespace correlation

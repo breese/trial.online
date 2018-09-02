@@ -37,7 +37,7 @@ public:
     void clear();
     void push(value_type first, value_type second);
     value_type value() const;
-    value_type normalized_value() const;
+    value_type unbiased_value() const;
 
 private:
     Avg<value_type, moment::with_mean> x_moment;

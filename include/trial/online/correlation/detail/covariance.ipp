@@ -41,16 +41,17 @@ void basic_covariance<T, Avg>::push(value_type x, value_type y)
 template <typename T, template <typename, moment::type> class Avg>
 auto basic_covariance<T, Avg>::value() const -> value_type
 {
-    if (size() > 1)
-        return co_moment / (size() - 1);
+    if (size() > 0)
+        return co_moment / size();
     return value_type(0);
 }
 
 template <typename T, template <typename, moment::type> class Avg>
-auto basic_covariance<T, Avg>::normalized_value() const -> value_type
+auto basic_covariance<T, Avg>::unbiased_value() const -> value_type
 {
-    if (size() > 0)
-        return co_moment / size();
+    // With Bessel's correction
+    if (size() > 1)
+        return co_moment / (size() - 1);
     return value_type(0);
 }
 
