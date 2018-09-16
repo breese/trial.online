@@ -11,8 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <ratio>
-#include <trial/online/detail/type_traits.hpp>
+#include <trial/online/moment/normalized_decay.hpp>
 
 namespace trial
 {
@@ -21,31 +20,11 @@ namespace online
 namespace moment
 {
 
-template <typename T, typename Smoothing>
-class exponential
-{
-public:
-    using value_type = T;
-
-    static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
-    static_assert(detail::is_ratio<Smoothing>::value, "Smoothing factor must be a ratio");
-
-    exponential();
-
-    void clear();
-    value_type value() const;
-    void push(value_type value);
-
-private:
-    static constexpr value_type smoothing_factor = { Smoothing::num / value_type(Smoothing::den) };
-    value_type average;
-    value_type normalization;
-};
+template <typename T, typename MeanRatio>
+using exponential = basic_normalized_decay<T, with_mean, MeanRatio>;
 
 } // namespace moment
 } // namespace online
 } // namespace trial
-
-#include <trial/online/moment/detail/exponential.ipp>
 
 #endif // TRIAL_ONLINE_MOMENT_EXPONENTIAL_HPP
