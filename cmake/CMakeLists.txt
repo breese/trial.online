@@ -19,15 +19,15 @@ set(EXECUTABLE_OUTPUT_PATH ${TRIAL_ONLINE_BUILD_DIR}/bin)
 get_filename_component(TRIAL_ONLINE_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../" ABSOLUTE)
 
 if (${CMAKE_VERSION} VERSION_LESS 3.8)
-  set(TRIAL_ONLINE_FEATURES cxx_auto_type)
+  set(TRIAL_ONLINE_FEATURES cxx_auto_type PARENT_SCOPE)
 else()
-  set(TRIAL_ONLINE_FEATURES cxx_std_11)
+  set(TRIAL_ONLINE_FEATURES cxx_std_11 PARENT_SCOPE)
 endif()
 
 if (MSVC)
-  set(TRIAL_ONLINE_WARNING_FLAGS /W3)
+  set(TRIAL_ONLINE_WARNING_FLAGS /W3 PARENT_SCOPE)
 else()
-  set(TRIAL_ONLINE_WARNING_FLAGS -Wall -Wextra -pedantic -Werror=return-type)
+  set(TRIAL_ONLINE_WARNING_FLAGS -Wall -Wextra -pedantic -Werror=return-type PARENT_SCOPE)
 endif()
 
 ###############################################################################
