@@ -70,13 +70,13 @@ public:
 
     basic_arithmetic();
 
-    using typename super::capacity;
+    using super::capacity;
     void clear();
-    using typename super::empty;
-    using typename super::full;
-    using typename super::value;
+    using super::empty;
+    using super::full;
+    using super::value;
     void push(value_type value);
-    using typename super::size;
+    using super::size;
     value_type variance() const;
     value_type unbiased_variance() const;
 

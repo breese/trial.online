@@ -61,9 +61,9 @@ public:
     using typename super::size_type;
 
     void clear();
-    using typename super::size;
-    using typename super::value;
-    using typename super::unbiased_value;
+    using super::size;
+    using super::value;
+    using super::unbiased_value;
     value_type variance() const;
     value_type unbiased_variance() const;
     void push(value_type);
@@ -86,9 +86,9 @@ public:
     using typename super::size_type;
 
     void clear();
-    using typename super::size;
-    using typename super::value;
-    using typename super::variance;
+    using super::size;
+    using super::value;
+    using super::variance;
     value_type skew() const;
     void push(value_type);
 
