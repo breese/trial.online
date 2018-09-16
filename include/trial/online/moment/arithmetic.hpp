@@ -47,42 +47,47 @@ public:
     void push(value_type value);
     size_type size() const;
 
-private:
+protected:
     using window_type = boost::circular_buffer<value_type>;
     window_type window;
-    value_type sum;
+    struct
+    {
+        value_type mean = value_type(0);
+    } sum;
 };
 
 template <typename T, std::size_t N>
 class basic_arithmetic<T, N, with_variance>
+    : protected basic_arithmetic<T, N, with_mean>
 {
-public:
-    using value_type = T;
-    using size_type = std::size_t;
+    using super = basic_arithmetic<T, N, with_mean>;
 
-    static_assert(N > 0, "N must be larger than zero");
+public:
+    using typename super::value_type;
+    using typename super::size_type;
+
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
 
     basic_arithmetic();
 
-    size_type capacity() const;
+    using typename super::capacity;
     void clear();
-    bool empty() const;
-    bool full() const;
-    value_type value() const;
+    using typename super::empty;
+    using typename super::full;
+    using typename super::value;
     void push(value_type value);
-    size_type size() const;
+    using typename super::size;
     value_type variance() const;
     value_type unbiased_variance() const;
 
-private:
+protected:
     value_type delta(value_type, value_type);
 
-private:
-    using window_type = boost::circular_buffer<value_type>;
-    window_type window;
-    value_type sum;
-    value_type numerator;
+protected:
+    struct
+    {
+        value_type variance = value_type(0);
+    } sum;
 };
 
 template <typename T, std::size_t N>

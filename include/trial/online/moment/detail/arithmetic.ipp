@@ -24,8 +24,7 @@ namespace moment
 
 template <typename T, std::size_t N>
 basic_arithmetic<T, N, with_mean>::basic_arithmetic()
-    : window(N),
-      sum()
+    : window(N)
 {
 }
 
@@ -40,7 +39,7 @@ auto basic_arithmetic<T, N, with_mean>::capacity() const -> size_type
 template <typename T, std::size_t N>
 void basic_arithmetic<T, N, with_mean>::clear()
 {
-    sum = value_type();
+    sum.mean = value_type(0);
     window.clear();
 }
 
@@ -67,7 +66,7 @@ auto basic_arithmetic<T, N, with_mean>::value() const -> value_type
 {
     if (empty())
         return value_type();
-    return sum / value_type(size());
+    return sum.mean / value_type(size());
 }
 
 template <typename T, std::size_t N>
@@ -75,14 +74,13 @@ void basic_arithmetic<T, N, with_mean>::push(value_type value)
 {
     if (full())
     {
-        sum += value - window.front();
-        window.push_back(value);
+        sum.mean += value - window.front();
     }
     else
     {
-        sum += value;
-        window.push_back(value);
+        sum.mean += value;
     }
+    window.push_back(value);
 }
 
 //-----------------------------------------------------------------------------
@@ -91,82 +89,44 @@ void basic_arithmetic<T, N, with_mean>::push(value_type value)
 
 template <typename T, std::size_t N>
 basic_arithmetic<T, N, with_variance>::basic_arithmetic()
-    : window(N),
-      sum(),
-      numerator()
+    : super()
 {
-    assert(N > 0);
-}
-
-template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, with_variance>::capacity() const -> size_type
-{
-    assert(window.capacity() == N);
-
-    return window.capacity();
 }
 
 template <typename T, std::size_t N>
 void basic_arithmetic<T, N, with_variance>::clear()
 {
-    sum = value_type();
-    numerator = value_type();
-    window.clear();
-}
-
-template <typename T, std::size_t N>
-bool basic_arithmetic<T, N, with_variance>::empty() const
-{
-    return window.empty();
-}
-
-template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, with_variance>::size() const -> size_type
-{
-    return window.size();
-}
-
-template <typename T, std::size_t N>
-bool basic_arithmetic<T, N, with_variance>::full() const
-{
-    return window.full();
+    super::clear();
+    sum.variance = value_type(0);
 }
 
 template <typename T, std::size_t N>
 void basic_arithmetic<T, N, with_variance>::push(value_type input)
 {
-    const value_type old_mean = value();
-    if (full())
+    const value_type old_mean = super::value();
+    if (super::full())
     {
-        const value_type old_input = window.front();
-        sum += input - old_input;
-        window.push_back(input);
-        numerator += delta(input, old_mean);
-        numerator -= delta(old_input, old_mean);
+        const value_type old_input = super::window.front();
+        super::sum.mean += input - old_input;
+        super::window.push_back(input);
+        sum.variance += delta(input, old_mean);
+        sum.variance -= delta(old_input, old_mean);
     }
     else
     {
-        sum += input;
-        window.push_back(input);
-        numerator += delta(input, old_mean);
+        super::sum.mean += input;
+        super::window.push_back(input);
+        sum.variance += delta(input, old_mean);
     }
-}
-
-template <typename T, std::size_t N>
-auto basic_arithmetic<T, N, with_variance>::value() const -> value_type
-{
-    if (empty())
-        return value_type();
-    return sum / value_type(size());
 }
 
 template <typename T, std::size_t N>
 auto basic_arithmetic<T, N, with_variance>::variance() const -> value_type
 {
     // Rounding errors can cause the variance to become negative
-    const auto count = size();
+    const auto count = super::size();
     return (count > 0)
-        ? std::max(value_type(0), numerator / value_type(count))
+        ? std::max(value_type(0), sum.variance / value_type(count))
         : value_type(0);
 }
 
@@ -175,16 +135,16 @@ auto basic_arithmetic<T, N, with_variance>::unbiased_variance() const -> value_t
 {
     // With Bessel's correction
     // Rounding errors can cause the variance to become negative
-    const auto count = size();
+    const auto count = super::size();
     return (count > 1)
-        ? std::max(value_type(0), numerator / (count - 1))
+        ? std::max(value_type(0), sum.variance / (count - 1))
         : value_type(0);
 }
 
 template <typename T, std::size_t N>
 auto basic_arithmetic<T, N, with_variance>::delta(value_type input, value_type old_mean) -> value_type
 {
-    return (input - old_mean) * (input - value());
+    return (input - old_mean) * (input - super::value());
 }
 
 } // namespace moment
