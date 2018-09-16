@@ -52,52 +52,40 @@ void basic_cumulative<T, with_mean>::push(value_type input)
 template <typename T>
 void basic_cumulative<T, with_variance>::clear()
 {
-    mean.clear();
-    numerator = value_type(0);
-}
-
-template <typename T>
-auto basic_cumulative<T, with_variance>::size() const -> size_type
-{
-    return mean.size();
-}
-
-template <typename T>
-auto basic_cumulative<T, with_variance>::value() const -> value_type
-{
-    return mean.value();
+    super::clear();
+    sum.variance = value_type(0);
 }
 
 template <typename T>
 auto basic_cumulative<T, with_variance>::variance() const -> value_type
 {
-    const auto count = size();
+    const auto count = super::size();
     return (count > 0)
-        ? numerator / value_type(count)
+        ? sum.variance / value_type(count)
         : value_type(0);
 }
 
 template <typename T>
 auto basic_cumulative<T, with_variance>::unbiased_variance() const -> value_type
 {
-    const auto count = size();
+    const auto count = super::size();
     return (count > 1)
-        ? numerator / value_type(count - 1)
+        ? sum.variance / value_type(count - 1)
         : value_type(0);
 }
 
 template <typename T>
 void basic_cumulative<T, with_variance>::push(value_type input)
 {
-    if (size() > 0)
+    if (super::size() > 0)
     {
-        const auto diff = input - mean.value();
-        mean.push(input);
-        numerator += diff * (input - mean.value());
+        const auto diff = input - super::value();
+        super::push(input);
+        sum.variance += diff * (input - super::value());
     }
     else
     {
-        mean.push(input);
+        super::push(input);
     }
 }
 

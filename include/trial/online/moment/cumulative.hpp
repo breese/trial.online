@@ -47,24 +47,26 @@ private:
 
 template <typename T>
 class basic_cumulative<T, with_variance>
+    : protected basic_cumulative<T, with_mean>
 {
-    static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
-    static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
+    using super = basic_cumulative<T, with_mean>;
 
 public:
-    using value_type = T;
-    using size_type = std::size_t;
+    using typename super::value_type;
+    using typename super::size_type;
 
     void clear();
-    size_type size() const;
-    value_type value() const;
+    using typename super::size;
+    using typename super::value;
     value_type variance() const;
     value_type unbiased_variance() const;
     void push(value_type);
 
 private:
-    basic_cumulative<value_type, with_mean> mean;
-    value_type numerator = value_type(0);
+    struct
+    {
+        value_type variance = value_type(0);
+    } sum;
 };
 
 template <typename T>
