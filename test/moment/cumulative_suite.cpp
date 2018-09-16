@@ -21,6 +21,7 @@ void test_empty()
     trial::online::moment::cumulative<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
 }
 
 void test_same()
@@ -29,12 +30,15 @@ void test_same()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 2.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 1.5);
 }
 
 void test_increasing()
@@ -43,12 +47,15 @@ void test_increasing()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 1.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 4.0);
     filter.push(5.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 4.5);
 }
 
 void test_decreasing()
@@ -57,12 +64,15 @@ void test_decreasing()
     filter.push(5.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 5.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 5.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 4.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 8.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 4.5);
 }
 
 void run()
@@ -134,6 +144,7 @@ void test_empty()
     trial::online::moment::cumulative_variance<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
 
 void test_same()
@@ -142,12 +153,15 @@ void test_same()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
 
 void test_increasing()
@@ -157,12 +171,15 @@ void test_increasing()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.5, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 0.5, tolerance);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.666667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 1.0, tolerance);
 }
 
 void run()

@@ -38,6 +38,7 @@ public:
     void clear();
     size_type size() const;
     value_type value() const;
+    value_type unbiased_value() const;
     void push(value_type);
 
 private:
@@ -58,6 +59,7 @@ public:
     void clear();
     using typename super::size;
     using typename super::value;
+    using typename super::unbiased_value;
     value_type variance() const;
     value_type unbiased_variance() const;
     void push(value_type);

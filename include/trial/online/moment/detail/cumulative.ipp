@@ -39,6 +39,14 @@ auto basic_cumulative<T, with_mean>::value() const -> value_type
 }
 
 template <typename T>
+auto basic_cumulative<T, with_mean>::unbiased_value() const -> value_type
+{
+    return (count > 1)
+        ? mean * count / value_type(count - 1)
+        : mean;
+}
+
+template <typename T>
 void basic_cumulative<T, with_mean>::push(value_type input)
 {
     ++count;
