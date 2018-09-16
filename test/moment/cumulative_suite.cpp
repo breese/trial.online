@@ -192,6 +192,94 @@ void run()
 } // namespace variance_double_suite
 
 //-----------------------------------------------------------------------------
+
+namespace skew_double_suite
+{
+
+void test_empty()
+{
+    trial::online::moment::cumulative_skew<double> filter;
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+}
+
+void test_same()
+{
+    trial::online::moment::cumulative_skew<double> filter;
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+}
+
+void test_increasing()
+{
+    const double tolerance = 1e-6;
+    trial::online::moment::cumulative_skew<double> filter;
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.666667, tolerance);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+    filter.push(4.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.25, tolerance);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+}
+
+void test_left_skew()
+{
+    const double tolerance = 1e-5;
+    trial::online::moment::cumulative_skew<double> filter;
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.skew(), 0.0, tolerance);
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.66667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.88889, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.skew(), 0.52800, tolerance);
+    filter.push(15.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.75, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 30.6875, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.skew(), 0.92814, tolerance);
+}
+
+void run()
+{
+    test_empty();
+    test_same();
+    test_increasing();
+    test_left_skew();
+}
+
+} // namespace skew_double_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -200,6 +288,7 @@ int main()
     average_double_suite::run();
     average_int_suite::run();
     variance_double_suite::run();
+    skew_double_suite::run();
 
     return boost::report_errors();
 }

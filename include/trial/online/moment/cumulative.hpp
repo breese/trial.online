@@ -11,6 +11,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// Philippe Pebay, "Formulas for Robust, One-Pass Parallel Computation of
+//   Covariances and Arbitrary-Order Statistical Moments", technical
+//   report SAND2008-6212, 2008.
+
 #include <cstddef> // std::size_t
 #include <type_traits>
 #include <trial/online/moment/types.hpp>
@@ -41,7 +45,7 @@ public:
     value_type unbiased_value() const;
     void push(value_type);
 
-private:
+protected:
     value_type mean = 0;
     size_type count = 0;
 };
@@ -64,7 +68,7 @@ public:
     value_type unbiased_variance() const;
     void push(value_type);
 
-private:
+protected:
     struct
     {
         value_type variance = value_type(0);
@@ -72,10 +76,37 @@ private:
 };
 
 template <typename T>
+class basic_cumulative<T, with_skew>
+    : protected basic_cumulative<T, with_variance>
+{
+    using super = basic_cumulative<T, with_variance>;
+
+public:
+    using typename super::value_type;
+    using typename super::size_type;
+
+    void clear();
+    using typename super::size;
+    using typename super::value;
+    using typename super::variance;
+    value_type skew() const;
+    void push(value_type);
+
+protected:
+    struct
+    {
+        value_type skew = 0;
+    } sum;
+};
+ 
+template <typename T>
 using cumulative = basic_cumulative<T, with_mean>;
 
 template <typename T>
 using cumulative_variance = basic_cumulative<T, with_variance>;
+
+template <typename T>
+using cumulative_skew = basic_cumulative<T, with_skew>;
 
 } // namespace moment
 } // namespace online

@@ -21,7 +21,8 @@ namespace moment
 enum type
 {
     with_mean = 1,
-    with_variance = 2
+    with_variance = 2,
+    with_skew = 3
 };
 
 } // namespace moment

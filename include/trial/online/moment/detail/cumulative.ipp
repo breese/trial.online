@@ -8,6 +8,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cmath>
+#include <limits>
+
 namespace trial
 {
 namespace online
@@ -95,6 +98,38 @@ void basic_cumulative<T, with_variance>::push(value_type input)
     {
         super::push(input);
     }
+}
+
+//-----------------------------------------------------------------------------
+// Average with variance and skewness
+//-----------------------------------------------------------------------------
+
+template <typename T>
+void basic_cumulative<T, with_skew>::clear()
+{
+    super::clear();
+    sum.skew = value_type(0);
+}
+
+template <typename T>
+auto basic_cumulative<T, with_skew>::skew() const -> value_type
+{
+    if (sum.skew < std::numeric_limits<value_type>::epsilon())
+        return value_type(0);
+    return std::sqrt(super::size()) * sum.skew / (std::sqrt(super::sum.variance) * super::sum.variance);
+}
+
+template <typename T>
+void basic_cumulative<T, with_skew>::push(value_type input)
+{
+    // Use old mean and variance
+    const auto count = super::size();
+    const auto delta = input - super::value();
+    const auto delta_over_count = delta / (count + 1);
+
+    sum.skew += ((delta * delta_over_count * count * (count - 1)) - 3 * super::sum.variance) * delta_over_count;
+
+    super::push(input);
 }
 
 } // namespace moment
