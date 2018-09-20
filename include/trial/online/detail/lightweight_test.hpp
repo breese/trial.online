@@ -23,6 +23,26 @@ namespace online
 namespace detail
 {
 
+template <class T, template <class> class BinaryPredicate>
+void test_with_impl(char const * expr1,
+                    char const * expr2,
+                    char const * predicate_text,
+                    char const * file, int line, char const * function,
+                    const T& lhs, const T& rhs, BinaryPredicate<T> predicate)
+{
+    if (predicate(lhs, rhs))
+    {
+        boost::detail::report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " == " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << lhs << "' != '" << rhs << "' (" << predicate_text << ")" << std::endl;
+    }
+}
+               
 template<class T, class U>
 inline void test_close_impl(char const * expr1,
                             char const * expr2,
@@ -186,6 +206,8 @@ void test_all_with_impl(FormattedOutputFunction& output,
 
 #define TRIAL_ONLINE_TEST BOOST_TEST
 #define TRIAL_ONLINE_TEST_EQUAL BOOST_TEST_EQ
+
+#define TRIAL_ONLINE_TEST_WITH(expr1,expr2,predicate) ( ::trial::online::detail::test_with_impl(#expr1, #expr2, #predicate, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, predicate) )
 
 #define TRIAL_ONLINE_TEST_CLOSE(LHS, RHS, TOLERANCE) ::trial::online::detail::test_close_impl(#LHS, #RHS, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, LHS, RHS, TOLERANCE)
 
