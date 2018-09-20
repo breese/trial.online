@@ -22,7 +22,7 @@ namespace moment
 template <typename T, typename MR>
 void basic_normalized_decay<T, with_mean, MR>::clear()
 {
-    super::clear();
+    mean = value_type(0);
     normalization = value_type(0);
 }
 
@@ -30,16 +30,16 @@ template <typename T, typename MR>
 auto basic_normalized_decay<T, with_mean, MR>::value() const -> value_type
 {
     return (normalization > value_type(0))
-        ? super::value() / normalization
+        ? mean / normalization
         : value_type(0);
 }
 
 template <typename T, typename MR>
 void basic_normalized_decay<T, with_mean, MR>::push(value_type input)
 {
-    super::push(input);
     const value_type one(1);
-    normalization = super::mean_factor + (one - super::mean_factor) * normalization;
+    mean = mean_factor * input + (one - mean_factor) * mean;
+    normalization = mean_factor + (one - mean_factor) * normalization;
 }
 
 //-----------------------------------------------------------------------------

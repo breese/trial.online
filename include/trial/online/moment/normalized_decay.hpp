@@ -11,7 +11,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/online/moment/decay.hpp>
+#include <ratio>
+#include <trial/online/detail/type_traits.hpp>
+#include <trial/online/moment/types.hpp>
 
 namespace trial
 {
@@ -29,19 +31,21 @@ class basic_normalized_decay;
 
 template <typename T, typename MeanRatio>
 class basic_normalized_decay<T, with_mean, MeanRatio>
-    : basic_decay<T, with_mean, MeanRatio>
 {
 protected:
-    using super = basic_decay<T, with_mean, MeanRatio>;
+    static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
+    static_assert(detail::is_ratio<MeanRatio>::value, "MeanRatio must be a ratio");
 
 public:
-    using typename super::value_type;
+    using value_type = T;
 
     void clear();
     value_type value() const;
     void push(value_type);
 
 protected:
+    static constexpr value_type mean_factor = { MeanRatio::num / value_type(MeanRatio::den) };
+    value_type mean = value_type(0);
     value_type normalization = value_type(0);
 };
 
