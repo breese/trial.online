@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_MOMENT_NORMALIZED_DECAY_HPP
-#define TRIAL_ONLINE_MOMENT_NORMALIZED_DECAY_HPP
+#ifndef TRIAL_ONLINE_MOMENT_DECAY_HPP
+#define TRIAL_ONLINE_MOMENT_DECAY_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -23,14 +23,14 @@ namespace moment
 {
 
 template <typename T, moment::type Moment, typename...>
-class basic_normalized_decay;
+class basic_decay;
 
 //! @brief Exponential smoothing with compensation for bias towards the initial value.
 //!
 //! See http://breese.github.io/2015/10/26/on-average.html
 
 template <typename T, typename MeanRatio>
-class basic_normalized_decay<T, with_mean, MeanRatio>
+class basic_decay<T, with_mean, MeanRatio>
 {
 protected:
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
@@ -50,11 +50,11 @@ protected:
 };
 
 template <typename T, typename MeanRatio, typename VarRatio>
-class basic_normalized_decay<T, with_variance, MeanRatio, VarRatio>
-    : public basic_normalized_decay<T, with_mean, MeanRatio>
+class basic_decay<T, with_variance, MeanRatio, VarRatio>
+    : public basic_decay<T, with_mean, MeanRatio>
 {
 protected:
-    using super = basic_normalized_decay<T, with_mean, MeanRatio>;
+    using super = basic_decay<T, with_mean, MeanRatio>;
 
 public:
     using typename super::value_type;
@@ -76,15 +76,15 @@ protected:
 // Convenience
 
 template <typename T, typename MeanRatio>
-using normalized_decay = basic_normalized_decay<T, with_mean, MeanRatio>;
+using decay = basic_decay<T, with_mean, MeanRatio>;
 
 template <typename T, typename MeanRatio, typename VarRatio>
-using normalized_decay_variance = basic_normalized_decay<T, with_variance, MeanRatio, VarRatio>;
+using decay_variance = basic_decay<T, with_variance, MeanRatio, VarRatio>;
 
 } // namespace moment
 } // namespace online
 } // namespace trial
 
-#include <trial/online/moment/detail/normalized_decay.ipp>
+#include <trial/online/moment/detail/decay.ipp>
 
-#endif // TRIAL_ONLINE_MOMENT_NORMALIZED_DECAY_HPP
+#endif // TRIAL_ONLINE_MOMENT_DECAY_HPP

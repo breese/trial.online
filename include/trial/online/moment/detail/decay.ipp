@@ -20,14 +20,14 @@ namespace moment
 //-----------------------------------------------------------------------------
 
 template <typename T, typename MR>
-void basic_normalized_decay<T, with_mean, MR>::clear()
+void basic_decay<T, with_mean, MR>::clear()
 {
     mean = value_type(0);
     normalization = value_type(0);
 }
 
 template <typename T, typename MR>
-auto basic_normalized_decay<T, with_mean, MR>::value() const -> value_type
+auto basic_decay<T, with_mean, MR>::value() const -> value_type
 {
     return (normalization > value_type(0))
         ? mean / normalization
@@ -35,7 +35,7 @@ auto basic_normalized_decay<T, with_mean, MR>::value() const -> value_type
 }
 
 template <typename T, typename MR>
-void basic_normalized_decay<T, with_mean, MR>::push(value_type input)
+void basic_decay<T, with_mean, MR>::push(value_type input)
 {
     const value_type one(1);
     mean = mean_factor * input + (one - mean_factor) * mean;
@@ -47,14 +47,14 @@ void basic_normalized_decay<T, with_mean, MR>::push(value_type input)
 //-----------------------------------------------------------------------------
 
 template <typename T, typename MR, typename VR>
-void basic_normalized_decay<T, with_variance, MR, VR>::clear()
+void basic_decay<T, with_variance, MR, VR>::clear()
 {
     super::clear();
     sum.variance = value_type(0);
 }
 
 template <typename T, typename MR, typename VR>
-auto basic_normalized_decay<T, with_variance, MR, VR>::variance() const -> value_type
+auto basic_decay<T, with_variance, MR, VR>::variance() const -> value_type
 {
     return (normalization > value_type(0))
         ? sum.variance / normalization
@@ -62,7 +62,7 @@ auto basic_normalized_decay<T, with_variance, MR, VR>::variance() const -> value
 }
 
 template <typename T, typename MR, typename VR>
-void basic_normalized_decay<T, with_variance, MR, VR>::push(value_type input)
+void basic_decay<T, with_variance, MR, VR>::push(value_type input)
 {
     super::push(input);
     const auto mean = super::value();
