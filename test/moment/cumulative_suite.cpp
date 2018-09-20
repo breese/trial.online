@@ -166,7 +166,7 @@ void test_same()
 
 void test_increasing()
 {
-    const double tolerance = 1e-6;
+    const double tolerance = 1e-5;
     trial::online::moment::cumulative_variance<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -180,6 +180,34 @@ void test_increasing()
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.666667, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 1.0, tolerance);
+    filter.push(4.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 1.666667, tolerance);
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 2.5, tolerance);
+    filter.push(6.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.91667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 3.5, tolerance);
+    filter.push(7.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 4.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 4.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 4.66667, tolerance);
+    filter.push(8.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 4.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 5.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 6.0, tolerance);
+    filter.push(9.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 6.66667, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 7.5, tolerance);
+    filter.push(10.0);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.5, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 8.25, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 9.16667, tolerance);
 }
 
 void run()

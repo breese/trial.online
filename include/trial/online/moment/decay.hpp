@@ -45,8 +45,38 @@ protected:
     value_type mean = value_type(0);
 };
 
+// Second moment
+
+template <typename T, typename MeanRatio, typename VarRatio>
+class basic_decay<T, with_variance, MeanRatio, VarRatio>
+    : public basic_decay<T, with_mean, MeanRatio>
+{
+protected:
+    using super = basic_decay<T, with_mean, MeanRatio>;
+
+public:
+    using typename super::value_type;
+
+    void clear();
+    using super::value;
+    value_type variance() const;
+    void push(value_type);
+
+protected:
+    static constexpr value_type var_factor = { VarRatio::num / value_type(VarRatio::den) };
+    struct
+    {
+        value_type variance = value_type(0);
+    } sum;
+};
+
+// Convenience
+
 template <typename T, typename MeanRatio>
 using decay = basic_decay<T, with_mean, MeanRatio>;
+
+template <typename T, typename MeanRatio, typename VarRatio>
+using decay_variance = basic_decay<T, with_variance, MeanRatio, VarRatio>;
 
 } // namespace moment
 } // namespace online
