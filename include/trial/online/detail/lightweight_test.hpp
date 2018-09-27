@@ -40,6 +40,7 @@ void test_with_impl(char const * expr1,
             << file << "(" << line << "): test '" << expr1 << " == " << expr2
             << "' failed in function '" << function << "': "
             << "'" << lhs << "' != '" << rhs << "' (" << predicate_text << ")" << std::endl;
+        ++boost::detail::test_errors();
     }
 }
                
