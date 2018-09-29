@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_REGRESSION_LINIEAR_HPP
-#define TRIAL_ONLINE_REGRESSION_LINIEAR_HPP
+#ifndef TRIAL_ONLINE_REGRESSION_LINEAR_HPP
+#define TRIAL_ONLINE_REGRESSION_LINEAR_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -78,4 +78,4 @@ using linear = basic_linear<T, Avg>;
 
 #include <trial/online/regression/detail/linear.ipp>
 
-#endif // TRIAL_ONLINE_REGRESSION_LINIEAR_HPP
+#endif // TRIAL_ONLINE_REGRESSION_LINEAR_HPP
