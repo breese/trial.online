@@ -170,20 +170,35 @@ psquare<T, Quantiles...>::get() const
     {
         return heights[2 * Index];
     }
-
-    if (count > 0)
+    else if (count > 1)
     {
-        const size_type nearest_rank =
-            (Index == 0)
-            ? 1
-            : ((Index == 1 + sizeof...(Quantiles))
-               ? Index + 1
-               : std::ceil(count * quantiles[Index - 1]));
-        assert(nearest_rank > 0);
-        assert(nearest_rank <= parameter_length);
-        return heights[nearest_rank - 1];
+        switch (Index)
+        {
+        case 0:
+            // minimum
+            return heights[0];
+
+        case 1 + sizeof...(Quantiles):
+            // maximum
+            return heights[count - 1];
+
+        default:
+            {
+                // Use linear interpolation because of later switch to continuous approximations
+                const auto rank = (count - 1) * quantiles[Index - 1];
+                const auto slope = rank - std::floor(rank);
+                return heights[rank] + slope * (heights[rank + 1] - heights[rank]);
+            }
+        }
     }
-    return {};
+    else if (count > 0)
+    {
+        return heights[count - 1];
+    }
+    else
+    {
+        return {};
+    }
 }
 
 template <typename T, typename... Quantiles>
