@@ -94,6 +94,32 @@ void test_linear_decrease()
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 4.43009, tolerance);
 }
 
+void test_exponential_increase()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    moment::decay<double, one_eight> filter;
+    filter.push(1e0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    filter.push(1e1);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.8, tolerance);
+    filter.push(1e2);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 41.473, tolerance);
+    filter.push(1e3);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 331.01, tolerance);
+    filter.push(1e4);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2812.32, tolerance);
+    filter.push(1e5);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 24852.2, tolerance);
+    filter.push(1e6);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 225565.0, tolerance);
+    filter.push(1e7);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.08696e6, tolerance);
+    filter.push(1e8);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.95879e7, tolerance);
+    filter.push(1e9);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.85889e8, tolerance);
+}
+
 void test_clear()
 {
     moment::decay<double, one_eight> filter;
@@ -109,6 +135,7 @@ void run()
     test_same();
     test_linear_increase();
     test_linear_decrease();
+    test_exponential_increase();
     test_clear();
 }
 
