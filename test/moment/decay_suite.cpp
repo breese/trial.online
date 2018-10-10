@@ -8,30 +8,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <limits>
 #include <trial/online/detail/lightweight_test.hpp>
+#include <trial/online/detail/functional.hpp>
 #include <trial/online/moment/decay.hpp>
 
-//-----------------------------------------------------------------------------
-
-template <typename T>
-struct close_to
-{
-    constexpr explicit close_to(T relative_tolerance = std::numeric_limits<T>::epsilon(),
-                                T absolute_tolerance = std::numeric_limits<T>::min()) noexcept
-        : relative(relative_tolerance),
-          absolute(absolute_tolerance)
-    {}
-
-    constexpr bool operator() (const T& lhs, const T& rhs) const noexcept
-    {
-        return std::abs(lhs - rhs) < std::max(relative * std::max(std::abs(lhs), std::abs(rhs)), absolute);
-    }
-
-private:
-    const T relative;
-    const T absolute;
-};
+using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
@@ -45,13 +26,13 @@ namespace mean_double_suite
 
 void test_empty()
 {
-    trial::online::moment::decay<double, one_eight> filter;
+    moment::decay<double, one_eight> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
 }
 
 void test_same()
 {
-    trial::online::moment::decay<double, one_eight> filter;
+    moment::decay<double, one_eight> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(1.0);
@@ -64,7 +45,7 @@ void test_linear_increase()
 {
     const double tolerance = 1e-5;
 
-    trial::online::moment::decay<double, one_eight> filter;
+    moment::decay<double, one_eight> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(2.0);
@@ -90,7 +71,7 @@ void test_linear_increase()
 void test_linear_decrease()
 {
     const double tolerance = 1e-5;
-    trial::online::moment::decay<double, one_eight> filter;
+    moment::decay<double, one_eight> filter;
     filter.push(10.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0);
     filter.push(9.0);
@@ -115,7 +96,7 @@ void test_linear_decrease()
 
 void test_clear()
 {
-    trial::online::moment::decay<double, one_eight> filter;
+    moment::decay<double, one_eight> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.clear();
@@ -140,13 +121,13 @@ namespace mean_float_suite
 
 void test_empty()
 {
-    trial::online::moment::decay<float, one_eight> filter;
+    moment::decay<float, one_eight> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0f);
 }
 
 void test_same()
 {
-    trial::online::moment::decay<float, one_eight> filter;
+    moment::decay<float, one_eight> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(1.0f);
@@ -158,7 +139,7 @@ void test_same()
 void test_linear_increase()
 {
     const float tolerance = 1e-5;
-    trial::online::moment::decay<float, one_eight> filter;
+    moment::decay<float, one_eight> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(2.0f);
@@ -184,7 +165,7 @@ void test_linear_increase()
 void test_linear_decrease()
 {
     const float tolerance = 1e-5;
-    trial::online::moment::decay<float, one_eight> filter;
+    moment::decay<float, one_eight> filter;
     filter.push(10.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0f);
     filter.push(9.0f);
@@ -209,7 +190,7 @@ void test_linear_decrease()
 
 void test_clear()
 {
-    trial::online::moment::decay<float, one_eight> filter;
+    moment::decay<float, one_eight> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.clear();
@@ -234,7 +215,7 @@ namespace variance_double_suite
 
 void test_empty()
 {
-    trial::online::moment::decay_variance<double, one_eight, one_four> filter;
+    moment::decay_variance<double, one_eight, one_four> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
@@ -242,7 +223,7 @@ void test_empty()
 void test_same()
 {
     const double tolerance = 1e-5;
-    trial::online::moment::decay_variance<double, one_eight, one_four> filter;
+    moment::decay_variance<double, one_eight, one_four> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
@@ -257,7 +238,7 @@ void test_same()
 void test_linear_increase()
 {
     const double tolerance = 1e-5;
-    trial::online::moment::decay_variance<double, one_eight, one_four> filter;
+    moment::decay_variance<double, one_eight, one_four> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
@@ -293,7 +274,7 @@ void test_linear_increase()
 void test_linear_decrease()
 {
     const double tolerance = 1e-5;
-    trial::online::moment::decay_variance<double, one_eight, one_four> filter;
+    moment::decay_variance<double, one_eight, one_four> filter;
     filter.push(10.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
@@ -328,8 +309,8 @@ void test_linear_decrease()
 
 void test_exponential_increase()
 {
-    const auto tolerance = close_to<double>(1e-4);
-    trial::online::moment::decay_variance<double, one_eight, one_four> filter;
+    const auto tolerance = detail::close_to<double>(1e-4);
+    moment::decay_variance<double, one_eight, one_four> filter;
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.0, tolerance);
@@ -365,7 +346,7 @@ void test_exponential_increase()
 void test_clear()
 {
     const double tolerance = 1e-5;
-    trial::online::moment::decay_variance<double, one_eight, one_four> filter;
+    moment::decay_variance<double, one_eight, one_four> filter;
     filter.push(0.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
