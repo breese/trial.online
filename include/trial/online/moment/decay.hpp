@@ -40,14 +40,17 @@ public:
     using value_type = T;
 
     void clear();
-    value_type value() const;
     void push(value_type);
+
+    value_type value() const;
 
 protected:
     static constexpr value_type mean_factor = { MeanRatio::num / value_type(MeanRatio::den) };
     value_type mean = value_type(0);
     value_type normalization = value_type(0);
 };
+
+// With variance
 
 template <typename T, typename MeanRatio, typename VarRatio>
 class basic_decay<T, with_variance, MeanRatio, VarRatio>
@@ -60,9 +63,10 @@ public:
     using typename super::value_type;
 
     void clear();
+    void push(value_type);
+
     using super::value;
     value_type variance() const;
-    void push(value_type);
 
 protected:
     static constexpr value_type var_factor = { VarRatio::num / value_type(VarRatio::den) };
@@ -73,13 +77,44 @@ protected:
     value_type normalization = value_type(0);
 };
 
+// With skew
+
+template <typename T, typename MeanRatio, typename VarRatio, typename SkewRatio>
+class basic_decay<T, with_skew, MeanRatio, VarRatio, SkewRatio>
+    : public basic_decay<T, with_variance, MeanRatio, VarRatio>
+{
+protected:
+    using super = basic_decay<T, with_variance, MeanRatio, VarRatio>;
+
+public:
+    using typename super::value_type;
+
+    void clear();
+    void push(value_type);
+
+    using super::value;
+    using super::variance;
+    value_type skew() const;
+
+protected:
+    static constexpr value_type skew_factor = { SkewRatio::num / value_type(SkewRatio::den) };
+    struct
+    {
+        value_type skew = value_type(0);
+    } sum;
+    value_type normalization = value_type(0);
+};
+
 // Convenience
 
 template <typename T, typename MeanRatio>
 using decay = basic_decay<T, with_mean, MeanRatio>;
 
-template <typename T, typename MeanRatio, typename VarRatio>
+template <typename T, typename MeanRatio, typename VarRatio = MeanRatio>
 using decay_variance = basic_decay<T, with_variance, MeanRatio, VarRatio>;
+
+template <typename T, typename MeanRatio, typename VarRatio = MeanRatio, typename SkewRatio = VarRatio>
+using decay_skew = basic_decay<T, with_skew, MeanRatio, VarRatio, SkewRatio>;
 
 } // namespace moment
 } // namespace online

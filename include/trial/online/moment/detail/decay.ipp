@@ -72,6 +72,41 @@ void basic_decay<T, with_variance, MR, VR>::push(value_type input)
     normalization = var_factor + (one - var_factor) * normalization;
 }
 
+//-----------------------------------------------------------------------------
+// Average with variance and skewness
+//-----------------------------------------------------------------------------
+
+template <typename T, typename MR, typename VR, typename SR>
+void basic_decay<T, with_skew, MR, VR, SR>::clear()
+{
+    super::clear();
+    sum.skew = value_type(0);
+}
+
+template <typename T, typename MR, typename VR, typename SR>
+auto basic_decay<T, with_skew, MR, VR, SR>::skew() const -> value_type
+{
+    if (normalization > value_type(0))
+    {
+        const auto var = super::variance();
+        return (var > std::numeric_limits<value_type>::epsilon())
+            ? sum.skew / (var * std::sqrt(var)) / normalization
+            : value_type(0);
+    }
+    return value_type(0);
+}
+
+template <typename T, typename MR, typename VR, typename SR>
+void basic_decay<T, with_skew, MR, VR, SR>::push(value_type input)
+{
+    super::push(input);
+    const auto mean = super::value();
+    const value_type one(1);
+    const value_type delta = input - mean;
+    sum.skew = skew_factor * delta * delta * delta + (one - skew_factor) * sum.skew;
+    normalization = skew_factor + (one - skew_factor) * normalization;
+}
+
 } // namespace moment
 } // namespace online
 } // namespace trial
