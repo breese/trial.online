@@ -40,10 +40,11 @@ public:
     using size_type = std::size_t;
 
     void clear();
+    void push(value_type);
+
     size_type size() const;
     value_type value() const;
     value_type unbiased_value() const;
-    void push(value_type);
 
 protected:
     value_type mean = 0;
@@ -61,12 +62,13 @@ public:
     using typename super::size_type;
 
     void clear();
+    void push(value_type);
+
     using super::size;
     using super::value;
     using super::unbiased_value;
     value_type variance() const;
     value_type unbiased_variance() const;
-    void push(value_type);
 
 protected:
     struct
@@ -86,11 +88,15 @@ public:
     using typename super::size_type;
 
     void clear();
+    void push(value_type);
+
     using super::size;
     using super::value;
+    using super::unbiased_value;
     using super::variance;
+    using super::unbiased_variance;
     value_type skew() const;
-    void push(value_type);
+    value_type unbiased_skew() const;
 
 protected:
     struct

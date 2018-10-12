@@ -120,6 +120,17 @@ auto basic_cumulative<T, with_skew>::skew() const -> value_type
 }
 
 template <typename T>
+auto basic_cumulative<T, with_skew>::unbiased_skew() const -> value_type
+{
+    const auto count = size();
+    if (count < 2)
+        return value_type(0);
+    if (sum.skew < std::numeric_limits<value_type>::epsilon())
+        return value_type(0);
+    return skew() * std::sqrt(count * (count -1 )) / value_type(count - 2);
+}
+
+template <typename T>
 void basic_cumulative<T, with_skew>::push(value_type input)
 {
     // Use old mean and variance
