@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_CORRELATION_COVARIANCE_HPP
-#define TRIAL_ONLINE_CORRELATION_COVARIANCE_HPP
+#ifndef TRIAL_ONLINE_COVARIANCE_CUMULATIVE_HPP
+#define TRIAL_ONLINE_COVARIANCE_CUMULATIVE_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -21,11 +21,11 @@ namespace trial
 {
 namespace online
 {
-namespace correlation
+namespace covariance
 {
 
-template <typename T, template <typename, moment::type> class Avg>
-class basic_covariance
+template <typename T, template <typename, moment::type> class F>
+class basic_cumulative
 {
 public:
     using value_type = T;
@@ -33,25 +33,26 @@ public:
     
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
 
-    size_type size() const;
     void clear();
     void push(value_type first, value_type second);
+
+    size_type size() const;
     value_type value() const;
     value_type unbiased_value() const;
 
 private:
-    Avg<value_type, moment::with_mean> x_moment;
-    Avg<value_type, moment::with_mean> y_moment;
+    F<value_type, moment::with_mean> x_moment;
+    F<value_type, moment::with_mean> y_moment;
     value_type co_moment = value_type(0);
 };
 
 template <typename T>
-using covariance = basic_covariance<T, moment::basic_cumulative>;
+using cumulative = basic_cumulative<T, moment::basic_cumulative>;
 
-} // namespace correlation
+} // namespace covariance
 } // namespace online
 } // namespace trial
 
-#include <trial/online/correlation/detail/covariance.ipp>
+#include <trial/online/covariance/detail/cumulative.ipp>
 
-#endif // TRIAL_ONLINE_CORRELATION_COVARIANCE_HPP
+#endif // TRIAL_ONLINE_COVARIANCE_CUMULATIVE_HPP

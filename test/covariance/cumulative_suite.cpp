@@ -10,8 +10,9 @@
 
 #include <trial/online/detail/lightweight_test.hpp>
 #include <trial/online/moment/cumulative.hpp>
-#include <trial/online/moment/arithmetic.hpp>
-#include <trial/online/correlation/covariance.hpp>
+#include <trial/online/covariance/cumulative.hpp>
+
+using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
@@ -20,7 +21,7 @@ namespace default_double_suite
 
 void test_empty()
 {
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -28,7 +29,7 @@ void test_empty()
 
 void test_clear()
 {
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
@@ -38,7 +39,7 @@ void test_clear()
 
 void test_same_no_increment()
 {
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -53,7 +54,7 @@ void test_same_no_increment()
 void test_same_increment_by_one()
 {
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -74,7 +75,7 @@ void test_same_increment_by_one()
 void test_same_increment_by_half()
 {
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -94,7 +95,7 @@ void test_same_increment_by_half()
 
 void test_shifted_no_increment()
 {
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(1.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -109,7 +110,7 @@ void test_shifted_no_increment()
 void test_shifted_increment_by_one()
 {
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(1.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -130,7 +131,7 @@ void test_shifted_increment_by_one()
 void test_up_down_by_one()
 {
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -151,7 +152,7 @@ void test_up_down_by_one()
 void test_down_up_by_one()
 {
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -193,7 +194,7 @@ void test_constant()
 {
     // Cov(X, a) = 0
     const double a = 0.0;
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     filter.push(0.0, a);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -212,7 +213,7 @@ void test_same()
 {
     // Cov(X, X) = Var(X)
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> filter;
+    covariance::cumulative<double> filter;
     trial::online::moment::cumulative_variance<double> average;
     {
         double x = 0.0;
@@ -252,8 +253,8 @@ void test_commutative()
 {
     // Cov(X, Y) = Cov(Y, X)
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> lhs;
-    trial::online::correlation::covariance<double> rhs;
+    covariance::cumulative<double> lhs;
+    covariance::cumulative<double> rhs;
     {
         const double x = 0.0;
         const double y = 0.0;
@@ -295,8 +296,8 @@ void test_distributive()
 {
     // Cov(aX, bY) = ab Cov(Y, X)
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> lhs;
-    trial::online::correlation::covariance<double> rhs;
+    covariance::cumulative<double> lhs;
+    covariance::cumulative<double> rhs;
     const double a = 0.5;
     const double b = 2.0;
     {
@@ -340,8 +341,8 @@ void test_shift_invariant()
 {
     // Cov(X + a, Y + b) = Cov(X, Y)
     const double tolerance = 1e-6;
-    trial::online::correlation::covariance<double> lhs;
-    trial::online::correlation::covariance<double> rhs;
+    covariance::cumulative<double> lhs;
+    covariance::cumulative<double> rhs;
     const double a = 0.5;
     const double b = 2.0;
     {
@@ -393,235 +394,6 @@ void run()
 } // namespace default_properties_suite
 
 //-----------------------------------------------------------------------------
-
-namespace arithmetic_properties_suite
-{
-
-template <typename T, trial::online::moment::type Moment>
-using moment_type = trial::online::moment::basic_cumulative<T, Moment>;
-
-template <typename T>
-using covariance_type = trial::online::correlation::basic_covariance<T, moment_type>;
-
-void test_constant()
-{
-    // Cov(X, a) = 0
-    const double a = 0.0;
-    covariance_type<double> filter;
-    filter.push(0.0, a);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    filter.push(1.0, a);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    filter.push(10.0, a);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-    filter.push(100.0, a);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
-}
-
-void test_same()
-{
-    // Cov(X, X) = Var(X)
-    const double tolerance = 1e-6;
-    covariance_type<double> filter;
-    moment_type<double, trial::online::moment::with_variance> average;
-    {
-        double x = 0.0;
-        filter.push(x, x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.0, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0, tolerance);
-        average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
-    }
-    {
-        double x = 1.0;
-        filter.push(x, x);
-        average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 0.5, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.25, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
-    }
-    {
-        double x = 10.0;
-        filter.push(x, x);
-        average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 30.333333, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 20.222222, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
-    }
-    {
-        double x = 100.0;
-        filter.push(x, x);
-        average.push(x);
-        TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_value(), 2340.25, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1755.1875, tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(filter.value(), average.variance(), tolerance);
-    }
-}
-
-void test_commutative()
-{
-    // Cov(X, Y) = Cov(Y, X)
-    const double tolerance = 1e-6;
-    covariance_type<double> lhs;
-    covariance_type<double> rhs;
-    {
-        const double x = 0.0;
-        const double y = 0.0;
-        lhs.push(x, y);
-        rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -1.0;
-        const double y = 1.0;
-        lhs.push(x, y);
-        rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -2.0;
-        const double y = 10.0;
-        lhs.push(x, y);
-        rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -3.0;
-        const double y = 100.0;
-        lhs.push(x, y);
-        rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -4.0;
-        const double y = 1000.0;
-        lhs.push(x, y);
-        rhs.push(y, x);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-}
-
-void test_distributive()
-{
-    // Cov(aX, bY) = ab Cov(Y, X)
-    const double tolerance = 1e-6;
-    covariance_type<double> lhs;
-    covariance_type<double> rhs;
-    const double a = 0.5;
-    const double b = 2.0;
-    {
-        const double x = 0.0;
-        const double y = 0.0;
-        lhs.push(a * x, b * y);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
-    }
-    {
-        const double x = -1.0;
-        const double y = 1.0;
-        lhs.push(a * x, b * y);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
-    }
-    {
-        const double x = -2.0;
-        const double y = 10.0;
-        lhs.push(a * x, b * y);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
-    }
-    {
-        const double x = -3.0;
-        const double y = 100.0;
-        lhs.push(a * x, b * y);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
-    }
-    {
-        const double x = -4.0;
-        const double y = 1000.0;
-        lhs.push(a * x, b * y);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), a * b * rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), a * b * rhs.value(), tolerance);
-    }
-}
-
-void test_shift_invariant()
-{
-    // Cov(X + a, Y + b) = Cov(X, Y)
-    const double tolerance = 1e-6;
-    covariance_type<double> lhs;
-    covariance_type<double> rhs;
-    const double a = 0.5;
-    const double b = 2.0;
-    {
-        const double x = 0.0;
-        const double y = 0.0;
-        lhs.push(x + a, y + b);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -1.0;
-        const double y = 1.0;
-        lhs.push(x + a, y + b);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -2.0;
-        const double y = 10.0;
-        lhs.push(x + a, y + b);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -3.0;
-        const double y = 100.0;
-        lhs.push(x + a, y + b);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-    {
-        const double x = -4.0;
-        const double y = 1000.0;
-        lhs.push(x + a, y + b);
-        rhs.push(x, y);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.unbiased_value(), rhs.unbiased_value(), tolerance);
-        TRIAL_ONLINE_TEST_CLOSE(lhs.value(), rhs.value(), tolerance);
-    }
-}
-
-void run()
-{
-    test_constant();
-    test_same();
-    test_commutative();
-    test_distributive();
-    test_shift_invariant();
-}
-
-} // namespace arithmetic_properties_suite
-
-//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -629,7 +401,6 @@ int main()
 {
     default_double_suite::run();
     default_properties_suite::run();
-    arithmetic_properties_suite::run();
 
     return boost::report_errors();
 }

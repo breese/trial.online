@@ -12,12 +12,14 @@
 trial_online_add_test(type_traits_suite detail/type_traits_suite.cpp)
 
 # moment
-trial_online_add_test(arithmetic_suite moment/arithmetic_suite.cpp)
-trial_online_add_test(cumulative_suite moment/cumulative_suite.cpp)
-trial_online_add_test(decay_suite moment/decay_suite.cpp)
+trial_online_add_test(moment_arithmetic_suite moment/arithmetic_suite.cpp)
+trial_online_add_test(moment_cumulative_suite moment/cumulative_suite.cpp)
+trial_online_add_test(moment_decay_suite moment/decay_suite.cpp)
+
+# covariance
+trial_online_add_test(covariance_cumulative_suite covariance/cumulative_suite.cpp)
 
 # correlation
-trial_online_add_test(covariance_suite correlation/covariance_suite.cpp)
 trial_online_add_test(pearson_suite correlation/pearson_suite.cpp)
 
 # regression

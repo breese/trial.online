@@ -14,7 +14,7 @@
 // https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
 
 #include <trial/online/moment/cumulative.hpp>
-#include <trial/online/correlation/covariance.hpp>
+#include <trial/online/covariance/cumulative.hpp>
 
 namespace trial
 {
@@ -23,7 +23,7 @@ namespace online
 namespace correlation
 {
 
-template <typename T, template <typename, moment::type> class Avg>
+template <typename T, template <typename, moment::type> class F>
 class basic_pearson
 {
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
@@ -38,9 +38,9 @@ public:
     value_type value() const;
 
 private:
-    correlation::basic_covariance<value_type, Avg> covariance;
-    Avg<value_type, moment::with_variance> x_moment;
-    Avg<value_type, moment::with_variance> y_moment;
+    covariance::basic_cumulative<value_type, F> covariance;
+    F<value_type, moment::with_variance> x_moment;
+    F<value_type, moment::with_variance> y_moment;
 };
 
 template <typename T>

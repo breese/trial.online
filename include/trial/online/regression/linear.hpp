@@ -16,7 +16,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <trial/online/moment/types.hpp>
-#include <trial/online/correlation/covariance.hpp>
+#include <trial/online/covariance/cumulative.hpp>
 
 namespace trial
 {
@@ -29,7 +29,7 @@ namespace regression
 //!
 //! Executes in constant time and space. No heap allocations are performed.
 
-template <typename T, template <typename, moment::type> class Avg>
+template <typename T, template <typename, moment::type> class F>
 class basic_linear
 {
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
@@ -64,13 +64,13 @@ public:
     value_type correlation() const;
 
 private:
-    correlation::basic_covariance<value_type, Avg> covariance;
-    Avg<value_type, moment::with_variance> x_moment;
-    Avg<value_type, moment::with_variance> y_moment;
+    covariance::basic_cumulative<value_type, F> covariance;
+    F<value_type, moment::with_variance> x_moment;
+    F<value_type, moment::with_variance> y_moment;
 };
 
-template <typename T, template <typename, moment::type> class Avg>
-using linear = basic_linear<T, Avg>;
+template <typename T, template <typename, moment::type> class F>
+using linear = basic_linear<T, F>;
 
 } // namespace regression
 } // namespace online
