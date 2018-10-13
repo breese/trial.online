@@ -12,5 +12,7 @@ cmake_minimum_required(VERSION 3.0)
 project(trial.online)
 
 add_subdirectory(cmake)
+add_subdirectory(example)
+
 enable_testing()
 add_subdirectory(test)
