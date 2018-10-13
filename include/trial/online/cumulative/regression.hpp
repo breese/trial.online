@@ -56,12 +56,6 @@ public:
 
     value_type intercept() const;
 
-    //! @brief Regression correlation.
-    //!
-    //! @returns Correlation between x and y.
-
-    value_type correlation() const;
-
 private:
     class covariance<value_type> covariance;
     basic_moment<value_type, with_variance> x_moment;

@@ -60,12 +60,106 @@ void run()
 } // namespace double_suite
 
 //-----------------------------------------------------------------------------
+
+namespace anscombe_quartet
+{
+
+void anscombe_I()
+{
+    const float tolerance = 5e-2;
+    cumulative::correlation<double> filter;
+
+    filter.push(10.0, 8.04);
+    filter.push(8.0, 6.95);
+    filter.push(13.0, 7.58);
+    filter.push(9.0, 8.81);
+    filter.push(11.0, 8.33);
+    filter.push(14.0, 9.96);
+    filter.push(6.0, 7.24);
+    filter.push(4.0, 4.26);
+    filter.push(12.0, 10.84);
+    filter.push(7.0, 4.82);
+    filter.push(5.0, 5.68);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+}
+
+void anscombe_II()
+{
+    const float tolerance = 5e-2;
+    cumulative::correlation<double> filter;
+
+    filter.push(10.0, 9.14);
+    filter.push(8.0, 8.14);
+    filter.push(13.0, 8.74);
+    filter.push(9.0, 8.77);
+    filter.push(11.0, 9.26);
+    filter.push(14.0, 8.10);
+    filter.push(6.0, 6.13);
+    filter.push(4.0, 3.10);
+    filter.push(12.0, 9.13);
+    filter.push(7.0, 7.26);
+    filter.push(5.0, 4.74);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+}
+
+void anscombe_III()
+{
+    const float tolerance = 5e-2;
+    cumulative::correlation<double> filter;
+
+    filter.push(10.0, 7.46);
+    filter.push(8.0, 6.77);
+    filter.push(13.0, 12.74);
+    filter.push(9.0, 7.11);
+    filter.push(11.0, 7.81);
+    filter.push(14.0, 8.84);
+    filter.push(6.0, 6.08);
+    filter.push(4.0, 5.39);
+    filter.push(12.0, 8.15);
+    filter.push(7.0, 6.42);
+    filter.push(5.0, 5.73);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+}
+
+void anscombe_IV()
+{
+    const float tolerance = 5e-2;
+    cumulative::correlation<double> filter;
+
+    filter.push(8.0, 6.58);
+    filter.push(8.0, 5.76);
+    filter.push(8.0, 7.71);
+    filter.push(8.0, 8.84);
+    filter.push(8.0, 8.47);
+    filter.push(8.0, 7.04);
+    filter.push(8.0, 5.25);
+    filter.push(19.0, 12.50);
+    filter.push(8.0, 5.56);
+    filter.push(8.0, 7.91);
+    filter.push(8.0, 6.89);
+    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+}
+
+void run()
+{
+    // https://en.wikipedia.org/wiki/Anscombe%27s_quartet
+
+    anscombe_I();
+    anscombe_II();
+    anscombe_III();
+    anscombe_IV();
+}
+
+} // namespace anscombe_quartet
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
 int main()
 {
     double_suite::run();
+    anscombe_quartet::run();
 
     return boost::report_errors();
 }

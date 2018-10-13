@@ -27,7 +27,6 @@ void test_empty()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.slope(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.intercept(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.correlation(), 1.0);
 }
 
 void test_same()
@@ -39,19 +38,16 @@ void test_same()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 }
 
 void test_straight()
@@ -63,31 +59,26 @@ void test_straight()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(3.0, 3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 4);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(4.0, 4.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 }
 
 void test_straight_offset()
@@ -98,17 +89,14 @@ void test_straight_offset()
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 2.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(3.0, 3.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(4.0, 4.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 }
 
 void test_reversed_straight()
@@ -119,27 +107,22 @@ void test_reversed_straight()
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 2.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(-1.0, -1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(-2.0, -2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 }
 
 void test_scatter()
@@ -150,27 +133,22 @@ void test_scatter()
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 1.0, tolerance);
 
     filter.push(3.0, 1.3);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.15, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.13333, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 0.292306, tolerance);
 
     filter.push(4.0, 3.75);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.755, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.125, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 0.791292, tolerance);
 
     filter.push(5.0, 2.25);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.425, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.785, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 0.626833, tolerance);
 }
 
 void run()
@@ -208,7 +186,6 @@ void anscombe_I()
     filter.push(5.0, 5.68);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 0.816, tolerance);
 }
 
 void anscombe_II()
@@ -229,7 +206,6 @@ void anscombe_II()
     filter.push(5.0, 4.74);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 0.816, tolerance);
 }
 
 void anscombe_III()
@@ -250,7 +226,6 @@ void anscombe_III()
     filter.push(5.0, 5.73);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 0.816, tolerance);
 }
 
 void anscombe_IV()
@@ -271,7 +246,6 @@ void anscombe_IV()
     filter.push(8.0, 6.89);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.correlation(), 0.816, tolerance);
 }
 
 void run()

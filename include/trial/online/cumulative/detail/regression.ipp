@@ -57,16 +57,6 @@ auto regression<T>::intercept() const -> value_type
     return y_moment.value() - slope() * x_moment.value();
 }
 
-template <typename T>
-auto regression<T>::correlation() const -> value_type
-{
-    // Pearson's correlation coefficient
-    const value_type variance_product = x_moment.variance() * y_moment.variance();
-    return (variance_product < std::numeric_limits<value_type>::epsilon())
-        ? value_type(1)
-        : covariance.value() / std::sqrt(variance_product);
-}
-
 } // namespace cumulative
 } // namespace online
 } // namespace trial
