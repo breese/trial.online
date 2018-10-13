@@ -12,15 +12,5 @@ cmake_minimum_required(VERSION 3.0)
 project(trial.online)
 
 add_subdirectory(cmake)
-
-function(trial_online_add_test name)
-  add_executable(${name} ${ARGN})
-  target_link_libraries(${name} trial-online)
-  add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
-  target_compile_options(${name} PRIVATE ${TRIAL_ONLINE_WARNING_FLAGS})
-  target_compile_features(${name} PRIVATE ${TRIAL_ONLINE_FEATURES})
-endfunction()
-
 enable_testing()
-
 add_subdirectory(test)

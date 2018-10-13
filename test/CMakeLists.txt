@@ -8,6 +8,14 @@
 #
 ###############################################################################
 
+function(trial_online_add_test name)
+  add_executable(${name} ${ARGN})
+  target_link_libraries(${name} trial-online)
+  add_test(${name} ${EXECUTABLE_OUTPUT_PATH}/${name})
+  target_compile_options(${name} PRIVATE ${TRIAL_ONLINE_WARNING_FLAGS})
+  target_compile_features(${name} PRIVATE ${TRIAL_ONLINE_FEATURES})
+endfunction()
+
 # detail
 trial_online_add_test(type_traits_suite detail/type_traits_suite.cpp)
 
