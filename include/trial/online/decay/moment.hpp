@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_MOMENT_DECAY_HPP
-#define TRIAL_ONLINE_MOMENT_DECAY_HPP
+#ifndef TRIAL_ONLINE_DECAY_MOMENT_HPP
+#define TRIAL_ONLINE_DECAY_MOMENT_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,24 +13,30 @@
 
 #include <ratio>
 #include <trial/online/detail/type_traits.hpp>
-#include <trial/online/moment/types.hpp>
 
 namespace trial
 {
 namespace online
 {
-namespace moment
+namespace decay
 {
 
-template <typename T, moment::type Moment, typename...>
-class basic_decay;
+enum type
+{
+    with_mean = 1,
+    with_variance = 2,
+    with_skew = 3
+};
+
+template <typename T, decay::type Moment, typename...>
+class basic_moment;
 
 //! @brief Exponential smoothing with compensation for bias towards the initial value.
 //!
 //! See http://breese.github.io/2015/10/26/on-average.html
 
 template <typename T, typename MeanRatio>
-class basic_decay<T, with_mean, MeanRatio>
+class basic_moment<T, with_mean, MeanRatio>
 {
 protected:
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
@@ -53,11 +59,11 @@ protected:
 // With variance
 
 template <typename T, typename MeanRatio, typename VarRatio>
-class basic_decay<T, with_variance, MeanRatio, VarRatio>
-    : public basic_decay<T, with_mean, MeanRatio>
+class basic_moment<T, with_variance, MeanRatio, VarRatio>
+    : public basic_moment<T, with_mean, MeanRatio>
 {
 protected:
-    using super = basic_decay<T, with_mean, MeanRatio>;
+    using super = basic_moment<T, with_mean, MeanRatio>;
 
 public:
     using typename super::value_type;
@@ -80,11 +86,11 @@ protected:
 // With skew
 
 template <typename T, typename MeanRatio, typename VarRatio, typename SkewRatio>
-class basic_decay<T, with_skew, MeanRatio, VarRatio, SkewRatio>
-    : public basic_decay<T, with_variance, MeanRatio, VarRatio>
+class basic_moment<T, with_skew, MeanRatio, VarRatio, SkewRatio>
+    : public basic_moment<T, with_variance, MeanRatio, VarRatio>
 {
 protected:
-    using super = basic_decay<T, with_variance, MeanRatio, VarRatio>;
+    using super = basic_moment<T, with_variance, MeanRatio, VarRatio>;
 
 public:
     using typename super::value_type;
@@ -108,18 +114,18 @@ protected:
 // Convenience
 
 template <typename T, typename MeanRatio>
-using decay = basic_decay<T, with_mean, MeanRatio>;
+using moment = basic_moment<T, with_mean, MeanRatio>;
 
 template <typename T, typename MeanRatio, typename VarRatio = MeanRatio>
-using decay_variance = basic_decay<T, with_variance, MeanRatio, VarRatio>;
+using moment_variance = basic_moment<T, with_variance, MeanRatio, VarRatio>;
 
 template <typename T, typename MeanRatio, typename VarRatio = MeanRatio, typename SkewRatio = VarRatio>
-using decay_skew = basic_decay<T, with_skew, MeanRatio, VarRatio, SkewRatio>;
+using moment_skew = basic_moment<T, with_skew, MeanRatio, VarRatio, SkewRatio>;
 
-} // namespace moment
+} // namespace decay
 } // namespace online
 } // namespace trial
 
-#include <trial/online/moment/detail/decay.ipp>
+#include <trial/online/decay/detail/moment.ipp>
 
-#endif // TRIAL_ONLINE_MOMENT_DECAY_HPP
+#endif // TRIAL_ONLINE_DECAY_MOMENT_HPP

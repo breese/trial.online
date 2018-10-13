@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_COVARIANCE_CUMULATIVE_HPP
-#define TRIAL_ONLINE_COVARIANCE_CUMULATIVE_HPP
+#ifndef TRIAL_ONLINE_CUMULATIVE_COVARIANCE_HPP
+#define TRIAL_ONLINE_CUMULATIVE_COVARIANCE_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,7 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
-#include <trial/online/moment/cumulative.hpp>
+#include <trial/online/cumulative/moment.hpp>
 
 // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
 
@@ -21,11 +21,11 @@ namespace trial
 {
 namespace online
 {
-namespace covariance
+namespace cumulative
 {
 
-template <typename T, template <typename, moment::type> class F>
-class basic_cumulative
+template <typename T>
+class covariance
 {
 public:
     using value_type = T;
@@ -41,18 +41,15 @@ public:
     value_type unbiased_value() const;
 
 private:
-    F<value_type, moment::with_mean> x_moment;
-    F<value_type, moment::with_mean> y_moment;
+    basic_moment<value_type, with_mean> x_moment;
+    basic_moment<value_type, with_mean> y_moment;
     value_type co_moment = value_type(0);
 };
 
-template <typename T>
-using cumulative = basic_cumulative<T, moment::basic_cumulative>;
-
-} // namespace covariance
+} // namespace cumulative
 } // namespace online
 } // namespace trial
 
-#include <trial/online/covariance/detail/cumulative.ipp>
+#include <trial/online/cumulative/detail/covariance.ipp>
 
-#endif // TRIAL_ONLINE_COVARIANCE_CUMULATIVE_HPP
+#endif // TRIAL_ONLINE_CUMULATIVE_COVARIANCE_HPP

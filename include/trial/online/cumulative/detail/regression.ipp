@@ -15,36 +15,35 @@ namespace trial
 {
 namespace online
 {
-namespace regression
+namespace cumulative
 {
 
-template <typename T, template <typename, moment::type> class F>
-void basic_linear<T, F>::clear()
+template <typename T>
+void regression<T>::clear()
 {
     covariance.clear();
     x_moment.clear();
     y_moment.clear();
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_linear<T, F>::size() const -> size_type
+template <typename T>
+auto regression<T>::size() const -> size_type
 {
     assert(x_moment.size() == y_moment.size());
 
     return x_moment.size();
 }
 
-template <typename T, template <typename, moment::type> class F>
-void basic_linear<T, F>::push(value_type x,
-                              value_type y)
+template <typename T>
+void regression<T>::push(value_type x, value_type y)
 {
     covariance.push(x, y);
     x_moment.push(x);
     y_moment.push(y);
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_linear<T, F>::slope() const -> value_type
+template <typename T>
+auto regression<T>::slope() const -> value_type
 {
     const auto divisor = x_moment.variance();
     return (divisor == 0)
@@ -52,14 +51,14 @@ auto basic_linear<T, F>::slope() const -> value_type
         : covariance.value() / divisor;
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_linear<T, F>::intercept() const -> value_type
+template <typename T>
+auto regression<T>::intercept() const -> value_type
 {
     return y_moment.value() - slope() * x_moment.value();
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_linear<T, F>::correlation() const -> value_type
+template <typename T>
+auto regression<T>::correlation() const -> value_type
 {
     // Pearson's correlation coefficient
     const value_type variance_product = x_moment.variance() * y_moment.variance();
@@ -68,6 +67,6 @@ auto basic_linear<T, F>::correlation() const -> value_type
         : covariance.value() / std::sqrt(variance_product);
 }
 
-} // namespace regression
+} // namespace cumulative
 } // namespace online
 } // namespace trial

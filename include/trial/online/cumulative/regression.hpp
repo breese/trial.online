@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_REGRESSION_LINEAR_HPP
-#define TRIAL_ONLINE_REGRESSION_LINEAR_HPP
+#ifndef TRIAL_ONLINE_CUMULATIVE_REGRESSION_HPP
+#define TRIAL_ONLINE_CUMULATIVE_REGRESSION_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -15,22 +15,21 @@
 
 #include <cstddef>
 #include <type_traits>
-#include <trial/online/moment/types.hpp>
-#include <trial/online/covariance/cumulative.hpp>
+#include <trial/online/cumulative/covariance.hpp>
 
 namespace trial
 {
 namespace online
 {
-namespace regression
+namespace cumulative
 {
 
 //! @brief Online approximation of simple linear regression.
 //!
 //! Executes in constant time and space. No heap allocations are performed.
 
-template <typename T, template <typename, moment::type> class F>
-class basic_linear
+template <typename T>
+class regression
 {
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
 
@@ -64,18 +63,15 @@ public:
     value_type correlation() const;
 
 private:
-    covariance::basic_cumulative<value_type, F> covariance;
-    F<value_type, moment::with_variance> x_moment;
-    F<value_type, moment::with_variance> y_moment;
+    class covariance<value_type> covariance;
+    basic_moment<value_type, with_variance> x_moment;
+    basic_moment<value_type, with_variance> y_moment;
 };
 
-template <typename T, template <typename, moment::type> class F>
-using linear = basic_linear<T, F>;
-
-} // namespace regression
+} // namespace cumulative
 } // namespace online
 } // namespace trial
 
-#include <trial/online/regression/detail/linear.ipp>
+#include <trial/online/cumulative/detail/regression.ipp>
 
-#endif // TRIAL_ONLINE_REGRESSION_LINEAR_HPP
+#endif // TRIAL_ONLINE_CUMULATIVE_REGRESSION_HPP

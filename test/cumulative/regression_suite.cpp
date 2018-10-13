@@ -9,15 +9,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/moment/cumulative.hpp>
-#include <trial/online/regression/linear.hpp>
+#include <trial/online/cumulative/regression.hpp>
 
 using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
 template <typename T>
-using cumulative_linear = regression::basic_linear<T, moment::basic_cumulative>;
+using cumulative_linear = cumulative::regression<T>;
 
 namespace cumulative_double
 {

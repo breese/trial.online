@@ -10,7 +10,7 @@
 
 #include <trial/online/detail/lightweight_test.hpp>
 #include <trial/online/detail/functional.hpp>
-#include <trial/online/moment/cumulative.hpp>
+#include <trial/online/cumulative/moment.hpp>
 
 using namespace trial::online;
 
@@ -21,7 +21,7 @@ namespace average_double_suite
 
 void test_empty()
 {
-    moment::cumulative<double> filter;
+    cumulative::moment<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
@@ -29,7 +29,7 @@ void test_empty()
 
 void test_same()
 {
-    moment::cumulative<double> filter;
+    cumulative::moment<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -46,7 +46,7 @@ void test_same()
 
 void test_linear_increase()
 {
-    moment::cumulative<double> filter;
+    cumulative::moment<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -63,7 +63,7 @@ void test_linear_increase()
 
 void test_linear_decrease()
 {
-    moment::cumulative<double> filter;
+    cumulative::moment<double> filter;
     filter.push(5.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 5.0);
@@ -81,7 +81,7 @@ void test_linear_decrease()
 void test_exponential_increase()
 {
     const auto tolerance = detail::close_to<double>(1e-5);
-    moment::cumulative<double> filter;
+    cumulative::moment<double> filter;
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 1.0);
@@ -132,14 +132,14 @@ namespace average_int_suite
 
 void test_empty()
 {
-    moment::cumulative<int> filter;
+    cumulative::moment<int> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0);
 }
 
 void test_same()
 {
-    moment::cumulative<int> filter;
+    cumulative::moment<int> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
@@ -153,7 +153,7 @@ void test_same()
 
 void test_linear_increase()
 {
-    moment::cumulative<int> filter;
+    cumulative::moment<int> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
@@ -181,7 +181,7 @@ namespace variance_double_suite
 
 void test_empty()
 {
-    moment::cumulative_variance<double> filter;
+    cumulative::moment_variance<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
@@ -189,7 +189,7 @@ void test_empty()
 
 void test_same()
 {
-    moment::cumulative_variance<double> filter;
+    cumulative::moment_variance<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -207,7 +207,7 @@ void test_same()
 void test_linear_increase()
 {
     const double tolerance = 1e-5;
-    moment::cumulative_variance<double> filter;
+    cumulative::moment_variance<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -253,7 +253,7 @@ void test_linear_increase()
 void test_exponential_increase()
 {
     const auto tolerance = detail::close_to<double>(1e-5);
-    moment::cumulative_variance<double> filter;
+    cumulative::moment_variance<double> filter;
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -313,7 +313,7 @@ namespace skew_double_suite
 
 void test_empty()
 {
-    moment::cumulative_skew<double> filter;
+    cumulative::moment_skew<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -324,7 +324,7 @@ void test_empty()
 
 void test_same()
 {
-    moment::cumulative_skew<double> filter;
+    cumulative::moment_skew<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -345,7 +345,7 @@ void test_same()
 void test_linear_increase()
 {
     const double tolerance = 1e-6;
-    moment::cumulative_skew<double> filter;
+    cumulative::moment_skew<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -375,7 +375,7 @@ void test_linear_increase()
 void test_exponential_increase()
 {
     const auto tolerance = detail::close_to<double>(1e-5);
-    moment::cumulative_skew<double> filter;
+    cumulative::moment_skew<double> filter;
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -431,7 +431,7 @@ void test_exponential_increase()
 void test_left_skew()
 {
     const double tolerance = 1e-5;
-    moment::cumulative_skew<double> filter;
+    cumulative::moment_skew<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);

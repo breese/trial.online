@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_MOMENT_CUMULATIVE_HPP
-#define TRIAL_ONLINE_MOMENT_CUMULATIVE_HPP
+#ifndef TRIAL_ONLINE_CUMULATIVE_MOMENT_HPP
+#define TRIAL_ONLINE_CUMULATIVE_MOMENT_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -17,20 +17,26 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
-#include <trial/online/moment/types.hpp>
 
 namespace trial
 {
 namespace online
 {
-namespace moment
+namespace cumulative
 {
 
-template <typename T, moment::type Moment>
-class basic_cumulative;
+enum type
+{
+    with_mean = 1,
+    with_variance = 2,
+    with_skew = 3
+};
+
+template <typename T, cumulative::type Moment>
+class basic_moment;
 
 template <typename T>
-class basic_cumulative<T, with_mean>
+class basic_moment<T, with_mean>
 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
@@ -52,10 +58,10 @@ protected:
 };
 
 template <typename T>
-class basic_cumulative<T, with_variance>
-    : protected basic_cumulative<T, with_mean>
+class basic_moment<T, with_variance>
+    : protected basic_moment<T, with_mean>
 {
-    using super = basic_cumulative<T, with_mean>;
+    using super = basic_moment<T, with_mean>;
 
 public:
     using typename super::value_type;
@@ -78,10 +84,10 @@ protected:
 };
 
 template <typename T>
-class basic_cumulative<T, with_skew>
-    : protected basic_cumulative<T, with_variance>
+class basic_moment<T, with_skew>
+    : protected basic_moment<T, with_variance>
 {
-    using super = basic_cumulative<T, with_variance>;
+    using super = basic_moment<T, with_variance>;
 
 public:
     using typename super::value_type;
@@ -106,18 +112,18 @@ protected:
 };
  
 template <typename T>
-using cumulative = basic_cumulative<T, with_mean>;
+using moment = basic_moment<T, with_mean>;
 
 template <typename T>
-using cumulative_variance = basic_cumulative<T, with_variance>;
+using moment_variance = basic_moment<T, with_variance>;
 
 template <typename T>
-using cumulative_skew = basic_cumulative<T, with_skew>;
+using moment_skew = basic_moment<T, with_skew>;
 
-} // namespace moment
+} // namespace cumulative
 } // namespace online
 } // namespace trial
 
-#include <trial/online/moment/detail/cumulative.ipp>
+#include <trial/online/cumulative/detail/moment.ipp>
 
-#endif // TRIAL_ONLINE_MOMENT_CUMULATIVE_HPP
+#endif // TRIAL_ONLINE_CUMULATIVE_MOMENT_HPP

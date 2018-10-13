@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_CORRELATION_PEARSON_HPP
-#define TRIAL_ONLINE_CORRELATION_PEARSON_HPP
+#ifndef TRIAL_ONLINE_CUMULATIVE_CORRELATION_HPP
+#define TRIAL_ONLINE_CUMULATIVE_CORRELATION_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -13,18 +13,17 @@
 
 // https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
 
-#include <trial/online/moment/cumulative.hpp>
-#include <trial/online/covariance/cumulative.hpp>
+#include <trial/online/cumulative/covariance.hpp>
 
 namespace trial
 {
 namespace online
 {
-namespace correlation
+namespace cumulative
 {
 
-template <typename T, template <typename, moment::type> class F>
-class basic_pearson
+template <typename T>
+class correlation
 {
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
 
@@ -33,23 +32,21 @@ public:
     using size_type = std::size_t;
 
     void clear();
-    size_type size() const;
     void push(value_type, value_type);
+
+    size_type size() const;
     value_type value() const;
 
 private:
-    covariance::basic_cumulative<value_type, F> covariance;
-    F<value_type, moment::with_variance> x_moment;
-    F<value_type, moment::with_variance> y_moment;
+    class covariance<value_type> covariance;
+    basic_moment<value_type, with_variance> x_moment;
+    basic_moment<value_type, with_variance> y_moment;
 };
 
-template <typename T>
-using pearson = basic_pearson<T, moment::basic_cumulative>;
-
-} // namespace correlation
+} // namespace cumulative
 } // namespace online
 } // namespace trial
 
-#include <trial/online/correlation/detail/pearson.ipp>
+#include <trial/online/cumulative/detail/correlation.ipp>
 
-#endif // TRIAL_ONLINE_CORRELATION_PEARSON_HPP
+#endif // TRIAL_ONLINE_CUMULATIVE_CORRELATION_HPP

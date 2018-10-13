@@ -9,8 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/moment/cumulative.hpp>
-#include <trial/online/covariance/cumulative.hpp>
+#include <trial/online/cumulative/covariance.hpp>
 
 using namespace trial::online;
 
@@ -21,7 +20,7 @@ namespace default_double_suite
 
 void test_empty()
 {
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -29,7 +28,7 @@ void test_empty()
 
 void test_clear()
 {
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
@@ -39,7 +38,7 @@ void test_clear()
 
 void test_same_no_increment()
 {
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -54,7 +53,7 @@ void test_same_no_increment()
 void test_same_increment_by_one()
 {
     const double tolerance = 1e-6;
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -75,7 +74,7 @@ void test_same_increment_by_one()
 void test_same_increment_by_half()
 {
     const double tolerance = 1e-6;
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -95,7 +94,7 @@ void test_same_increment_by_half()
 
 void test_shifted_no_increment()
 {
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(1.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -110,7 +109,7 @@ void test_shifted_no_increment()
 void test_shifted_increment_by_one()
 {
     const double tolerance = 1e-6;
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(1.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -131,7 +130,7 @@ void test_shifted_increment_by_one()
 void test_up_down_by_one()
 {
     const double tolerance = 1e-6;
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -152,7 +151,7 @@ void test_up_down_by_one()
 void test_down_up_by_one()
 {
     const double tolerance = 1e-6;
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -194,7 +193,7 @@ void test_constant()
 {
     // Cov(X, a) = 0
     const double a = 0.0;
-    covariance::cumulative<double> filter;
+    cumulative::covariance<double> filter;
     filter.push(0.0, a);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
@@ -213,8 +212,8 @@ void test_same()
 {
     // Cov(X, X) = Var(X)
     const double tolerance = 1e-6;
-    covariance::cumulative<double> filter;
-    trial::online::moment::cumulative_variance<double> average;
+    cumulative::covariance<double> filter;
+    cumulative::moment_variance<double> average;
     {
         double x = 0.0;
         filter.push(x, x);
@@ -253,8 +252,8 @@ void test_commutative()
 {
     // Cov(X, Y) = Cov(Y, X)
     const double tolerance = 1e-6;
-    covariance::cumulative<double> lhs;
-    covariance::cumulative<double> rhs;
+    cumulative::covariance<double> lhs;
+    cumulative::covariance<double> rhs;
     {
         const double x = 0.0;
         const double y = 0.0;
@@ -296,8 +295,8 @@ void test_distributive()
 {
     // Cov(aX, bY) = ab Cov(Y, X)
     const double tolerance = 1e-6;
-    covariance::cumulative<double> lhs;
-    covariance::cumulative<double> rhs;
+    cumulative::covariance<double> lhs;
+    cumulative::covariance<double> rhs;
     const double a = 0.5;
     const double b = 2.0;
     {
@@ -341,8 +340,8 @@ void test_shift_invariant()
 {
     // Cov(X + a, Y + b) = Cov(X, Y)
     const double tolerance = 1e-6;
-    covariance::cumulative<double> lhs;
-    covariance::cumulative<double> rhs;
+    cumulative::covariance<double> lhs;
+    cumulative::covariance<double> rhs;
     const double a = 0.5;
     const double b = 2.0;
     {

@@ -15,33 +15,33 @@ namespace trial
 {
 namespace online
 {
-namespace correlation
+namespace cumulative
 {
 
-template <typename T, template <typename, moment::type> class F>
-void basic_pearson<T, F>::clear()
+template <typename T>
+void correlation<T>::clear()
 {
     covariance.clear();
     x_moment.clear();
     y_moment.clear();
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_pearson<T, F>::size() const -> size_type
+template <typename T>
+auto correlation<T>::size() const -> size_type
 {
     return covariance.size();
 }
 
-template <typename T, template <typename, moment::type> class F>
-void basic_pearson<T, F>::push(value_type x, value_type y)
+template <typename T>
+void correlation<T>::push(value_type x, value_type y)
 {
     covariance.push(x, y);
     x_moment.push(x);
     y_moment.push(y);
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_pearson<T, F>::value() const -> value_type
+template <typename T>
+auto correlation<T>::value() const -> value_type
 {
     const value_type variance_product = x_moment.variance() * y_moment.variance();
     if (variance_product < std::numeric_limits<value_type>::epsilon())
@@ -49,6 +49,6 @@ auto basic_pearson<T, F>::value() const -> value_type
     return covariance.value() / std::sqrt(variance_product);
 }
 
-} // namespace correlation
+} // namespace cumulative
 } // namespace online
 } // namespace trial

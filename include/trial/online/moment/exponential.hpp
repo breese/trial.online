@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/online/moment/decay.hpp>
+#include <trial/online/decay/moment.hpp>
 
 namespace trial
 {
@@ -21,7 +21,7 @@ namespace moment
 {
 
 template <typename T, typename MeanRatio>
-using exponential = basic_decay<T, with_mean, MeanRatio>;
+using exponential = decay::basic_moment<T, with_mean, MeanRatio>;
 
 } // namespace moment
 } // namespace online

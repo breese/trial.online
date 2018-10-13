@@ -12,25 +12,25 @@ namespace trial
 {
 namespace online
 {
-namespace covariance
+namespace cumulative
 {
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_cumulative<T, F>::size() const -> size_type
+template <typename T>
+auto covariance<T>::size() const -> size_type
 {
     return x_moment.size();
 }
 
-template <typename T, template <typename, moment::type> class F>
-void basic_cumulative<T, F>::clear()
+template <typename T>
+void covariance<T>::clear()
 {
     x_moment.clear();
     y_moment.clear();
     co_moment = value_type(0);
 }
 
-template <typename T, template <typename, moment::type> class F>
-void basic_cumulative<T, F>::push(value_type x, value_type y)
+template <typename T>
+void covariance<T>::push(value_type x, value_type y)
 {
     x_moment.push(x);
     // Using new x moment and old y moment
@@ -38,16 +38,16 @@ void basic_cumulative<T, F>::push(value_type x, value_type y)
     y_moment.push(y);
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_cumulative<T, F>::value() const -> value_type
+template <typename T>
+auto covariance<T>::value() const -> value_type
 {
     if (size() > 0)
         return co_moment / size();
     return value_type(0);
 }
 
-template <typename T, template <typename, moment::type> class F>
-auto basic_cumulative<T, F>::unbiased_value() const -> value_type
+template <typename T>
+auto covariance<T>::unbiased_value() const -> value_type
 {
     // With Bessel's correction
     if (size() > 1)
@@ -55,6 +55,6 @@ auto basic_cumulative<T, F>::unbiased_value() const -> value_type
     return value_type(0);
 }
 
-} // namespace covariance
+} // namespace cumulative
 } // namespace online
 } // namespace trial

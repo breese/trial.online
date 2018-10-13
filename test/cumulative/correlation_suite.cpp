@@ -9,7 +9,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
-#include <trial/online/correlation/pearson.hpp>
+#include <trial/online/cumulative/correlation.hpp>
+
+using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
@@ -18,7 +20,7 @@ namespace double_suite
 
 void test_empty()
 {
-    trial::online::correlation::pearson<double> filter;
+    cumulative::correlation<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
 }
@@ -26,7 +28,7 @@ void test_empty()
 void test_hinton()
 {
     const double tolerance = 1e-5;
-    trial::online::correlation::pearson<double> filter;
+    cumulative::correlation<double> filter;
     filter.push(40.0, 58.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.0, tolerance);
     filter.push(43.0, 73.0);
