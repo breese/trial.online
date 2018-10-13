@@ -31,6 +31,7 @@ trial_online_add_test(decay_moment_suite decay/moment_suite.cpp)
 # window
 trial_online_add_test(window_moment_suite window/moment_suite.cpp)
 trial_online_add_test(window_covariance_suite window/covariance_suite.cpp)
+trial_online_add_test(window_regression_suite window/regression_suite.cpp)
 
 # quantile
 trial_online_add_test(psquare_suite quantile/psquare_suite.cpp)
