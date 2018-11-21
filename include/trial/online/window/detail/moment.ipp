@@ -24,7 +24,7 @@ namespace window
 
 template <typename T, std::size_t N>
 basic_moment<T, N, with_mean>::basic_moment()
-    : window(N)
+    : window(storage)
 {
 }
 

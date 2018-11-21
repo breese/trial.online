@@ -13,7 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
-#include <boost/circular_buffer.hpp>
+#include <trial/online/circular_span.hpp>
 
 namespace trial
 {
@@ -53,8 +53,8 @@ public:
     size_type size() const;
 
 protected:
-    using window_type = boost::circular_buffer<value_type>;
-    window_type window;
+    value_type storage[N];
+    circular_span<decltype(storage)> window;
     struct
     {
         value_type mean = value_type(0);

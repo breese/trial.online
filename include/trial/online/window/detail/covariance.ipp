@@ -17,7 +17,7 @@ namespace window
 
 template <typename T, std::size_t W>
 covariance<T, W>::covariance()
-    : window(W)
+    : window(storage)
 {
 }
 

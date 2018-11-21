@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <trial/online/circular_span.hpp>
 #include <trial/online/window/moment.hpp>
 
 namespace trial
@@ -45,7 +46,8 @@ private:
 private:
     basic_moment<value_type, Window, with_mean> x_moment;
     basic_moment<value_type, Window, with_mean> y_moment;
-    boost::circular_buffer<std::pair<value_type, value_type>> window;
+    std::pair<value_type, value_type> storage[Window];
+    circular_span<decltype(storage)> window;
 };
 
 } // namespace window
