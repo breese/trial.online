@@ -132,11 +132,11 @@ class circular_span<T[N]>
     using super = circular_span<T>;
 
 public:
-    using super::value_type;
-    using super::size_type;
-    using super::pointer;
-    using super::reference;
-    using super::const_reference;
+    using typename super::value_type;
+    using typename super::size_type;
+    using typename super::pointer;
+    using typename super::reference;
+    using typename super::const_reference;
 
     circular_span(T (&array)[N]) noexcept;
 
@@ -150,8 +150,8 @@ public:
     using super::clear;
     using super::push_back;
 
-    using super::iterator;
-    using super::const_iterator;
+    using typename super::iterator;
+    using typename super::const_iterator;
     using super::begin;
     using super::end;
 };
