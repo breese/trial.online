@@ -8,6 +8,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cassert>
+
 namespace trial
 {
 namespace online
@@ -52,12 +54,16 @@ auto circular_span<T>::size() const noexcept -> size_type
 template <typename T>
 auto circular_span<T>::front() const noexcept -> const_reference
 {
+    assert(!empty());
+
     return at(index(member.next) - member.size);
 }
 
 template <typename T>
 auto circular_span<T>::back() const noexcept -> const_reference
 {
+    assert(!empty());
+
     return at(index(member.next) - 1);
 }
 
@@ -69,23 +75,46 @@ void circular_span<T>::clear() noexcept
 }
 
 template <typename T>
+void circular_span<T>::push_front(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value)
+{
+    if (full())
+    {
+        member.next = vindex(member.next) - 1;
+    }
+    else
+    {
+        ++member.size;
+    }
+    at(index(member.next) - member.size) = input;
+}
+
+template <typename T>
 void circular_span<T>::push_back(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value)
 {
     at(member.next) = input;
     member.next = vindex(member.next) + 1;
-    member.size = std::min(member.size + 1, member.capacity);
+    if (!full())
+    {
+        ++member.size;
+    }
 }
 
 template <typename T>
 auto circular_span<T>::begin() -> iterator
 {
-    return iterator(*this, index(index(member.next) - member.size));
+    return iterator(*this, vindex(member.next - member.size));
 }
 
 template <typename T>
 auto circular_span<T>::begin() const -> const_iterator
 {
-    return const_iterator(*this, index(index(member.next) - member.size));
+    return const_iterator(*this, vindex(member.next - member.size));
+}
+
+template <typename T>
+auto circular_span<T>::cbegin() const -> const_iterator
+{
+    return const_iterator(*this, vindex(member.next - member.size));
 }
 
 template <typename T>
@@ -96,6 +125,12 @@ auto circular_span<T>::end() -> iterator
 
 template <typename T>
 auto circular_span<T>::end() const -> const_iterator
+{
+    return const_iterator(*this, vindex(member.next));
+}
+
+template <typename T>
+auto circular_span<T>::cend() const -> const_iterator
 {
     return const_iterator(*this, vindex(member.next));
 }
@@ -143,7 +178,7 @@ template <typename T>
 template <typename U>
 auto circular_span<T>::basic_iterator<U>::operator++ () noexcept -> iterator_type&
 {
-    current = parent.vindex(current) + 1;
+    current = parent.vindex(current + 1);
     return *this;
 }
 
@@ -158,6 +193,8 @@ template <typename T>
 template <typename U>
 bool circular_span<T>::basic_iterator<U>::operator== (const iterator_type& other) const noexcept
 {
+    assert(std::addressof(parent) == std::addressof(other.parent));
+
     return current == other.current;
 }
 

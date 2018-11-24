@@ -20,7 +20,7 @@ namespace trial
 namespace online
 {
 
-// FIXME: Partly inspired by http://wg21.link/p0059
+// FIXME: Partly inspired by boost::circular_buffer and http://wg21.link/p0059
 
 template <typename T>
 class circular_span
@@ -63,6 +63,9 @@ public:
     //! The content of the underlying storage is not modified.
     void clear() noexcept;
 
+    //! @brief Inserts element at the beginning of the span.
+    void push_front(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
+
     //! @brief Inserts element at the end of the span.
     void push_back(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
@@ -104,10 +107,12 @@ public:
     //! @brief Returns iterator to the beginning of the span.
     iterator begin();
     const_iterator begin() const;
+    const_iterator cbegin() const;
 
     //! @brief Returns iterator to the ending of the span.
     iterator end();
     const_iterator end() const;
+    const_iterator cend() const;
 
 private:
     size_type index(size_type) const noexcept;
@@ -148,12 +153,15 @@ public:
     using super::back;
 
     using super::clear;
+    using super::push_front;
     using super::push_back;
 
     using typename super::iterator;
     using typename super::const_iterator;
     using super::begin;
+    using super::cbegin;
     using super::end;
+    using super::cend;
 };
 
 } // namespace online
