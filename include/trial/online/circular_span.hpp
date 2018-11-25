@@ -81,6 +81,12 @@ private:
         using const_reference = typename std::add_const<reference>::type;
         using iterator_type = basic_iterator<value_type>;
 
+        basic_iterator() = default;
+        basic_iterator(const basic_iterator&) = default;
+        basic_iterator(basic_iterator&&) = default;
+        basic_iterator& operator= (const basic_iterator&) = default;
+        basic_iterator& operator= (basic_iterator&&) = default;
+
         iterator_type& operator++ () noexcept;
         iterator_type operator++ (int) noexcept;
 
@@ -93,10 +99,10 @@ private:
     private:
         friend class circular_span<T>;
 
-        basic_iterator(const circular_span<T>& parent, const size_type index);
+        basic_iterator(const circular_span<T> *parent, const size_type index);
 
     private:
-        const circular_span<T>& parent;
+        const circular_span<T> *parent;
         size_type current;
     };
 

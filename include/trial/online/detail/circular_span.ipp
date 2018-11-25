@@ -102,37 +102,37 @@ void circular_span<T>::push_back(const value_type& input) noexcept(std::is_nothr
 template <typename T>
 auto circular_span<T>::begin() -> iterator
 {
-    return iterator(*this, vindex(member.next - member.size));
+    return iterator(this, vindex(member.next - member.size));
 }
 
 template <typename T>
 auto circular_span<T>::begin() const -> const_iterator
 {
-    return const_iterator(*this, vindex(member.next - member.size));
+    return const_iterator(this, vindex(member.next - member.size));
 }
 
 template <typename T>
 auto circular_span<T>::cbegin() const -> const_iterator
 {
-    return const_iterator(*this, vindex(member.next - member.size));
+    return const_iterator(this, vindex(member.next - member.size));
 }
 
 template <typename T>
 auto circular_span<T>::end() -> iterator
 {
-    return iterator(*this, vindex(member.next));
+    return iterator(this, vindex(member.next));
 }
 
 template <typename T>
 auto circular_span<T>::end() const -> const_iterator
 {
-    return const_iterator(*this, vindex(member.next));
+    return const_iterator(this, vindex(member.next));
 }
 
 template <typename T>
 auto circular_span<T>::cend() const -> const_iterator
 {
-    return const_iterator(*this, vindex(member.next));
+    return const_iterator(this, vindex(member.next));
 }
 
 //-----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ auto circular_span<T>::at(size_type position) const noexcept -> const_reference
 
 template <typename T>
 template <typename U>
-circular_span<T>::basic_iterator<U>::basic_iterator(const circular_span<T>& parent,
+circular_span<T>::basic_iterator<U>::basic_iterator(const circular_span<T> *parent,
                                                     size_type position)
     : parent(parent),
       current(position)
@@ -178,7 +178,9 @@ template <typename T>
 template <typename U>
 auto circular_span<T>::basic_iterator<U>::operator++ () noexcept -> iterator_type&
 {
-    current = parent.vindex(current + 1);
+    assert(parent);
+
+    current = parent->vindex(current + 1);
     return *this;
 }
 
@@ -186,14 +188,17 @@ template <typename T>
 template <typename U>
 auto circular_span<T>::basic_iterator<U>::operator* () const noexcept -> const_reference
 {
-    return parent.at(current);
+    assert(parent);
+
+    return parent->at(current);
 }
 
 template <typename T>
 template <typename U>
 bool circular_span<T>::basic_iterator<U>::operator== (const iterator_type& other) const noexcept
 {
-    assert(std::addressof(parent) == std::addressof(other.parent));
+    assert(parent);
+    assert(parent == other.parent);
 
     return current == other.current;
 }
