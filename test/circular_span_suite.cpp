@@ -10,6 +10,8 @@
 
 #include <array>
 #include <vector>
+#include <algorithm>
+#include <numeric>
 #include <trial/online/detail/lightweight_test.hpp>
 #include <trial/online/circular_span.hpp>
 
@@ -499,6 +501,18 @@ void test_iterator()
     }
 }
 
+void test_iterator_constructible()
+{
+    std::array<int, 4> array;
+    circular_span<int> span(array.begin(), array.end());
+    span.push_back(1);
+    decltype(span)::iterator alpha; // DefaultConstructible
+    alpha = span.begin();
+    TRIAL_ONLINE_TEST(alpha == span.begin());
+    decltype(span)::iterator bravo(alpha); // CopyConstructible
+    TRIAL_ONLINE_TEST(bravo == span.begin());
+}
+
 void test_const_iterator()
 {
     std::array<int, 4> array;
@@ -643,6 +657,7 @@ void run()
 {
     test_empty();
     test_iterator();
+    test_iterator_constructible();
     test_const_iterator();
     test_push_front();
     test_push_back();
@@ -715,6 +730,124 @@ void run()
 } // namespace clear_suite
 
 //-----------------------------------------------------------------------------
+
+namespace std_algorithm_suite
+{
+
+void test_any_of()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span = { 1, 2, 3, 4 };
+    TRIAL_ONLINE_TEST(std::any_of(span.begin(), span.end(), [] (int current) { return current == 1; }));
+    span.push_back(5);
+    TRIAL_ONLINE_TEST(!std::any_of(span.begin(), span.end(), [] (int current) { return current == 1; }));
+}
+
+void test_fill_n()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    std::fill_n(std::back_inserter(span), 2 * span.capacity(), 42);
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), span.capacity());
+    {
+        std::vector<int> expect = { 42, 42, 42, 42 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+}
+
+void test_lower_bound()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span = { 1, 2, 3, 4 };
+    auto lower = std::lower_bound(span.begin(), span.end(), 3);
+    {
+        std::vector<int> expect = { 3, 4 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(lower, span.end(),
+                                    expect.begin(), expect.end());
+    }
+}
+
+void test_minmax_element()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span = { 1, 2, 3, 4 };
+    auto where = std::minmax_element(span.begin(), span.end());
+    TRIAL_ONLINE_TEST_EQUAL(*where.first, 1);
+    TRIAL_ONLINE_TEST_EQUAL(*where.second, 4);
+}
+
+void test_unique()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span = { 1, 1, 1, 4 };
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    auto where = std::unique(span.begin(), span.end());
+    {
+        std::vector<int> expect = { 1, 4 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), where,
+                                    expect.begin(), expect.end());
+    }
+    // span.end() still points to the last undeterminate entry
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    while (where != span.end())
+    {
+        span.pop_back();
+    }
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 2);
+}
+
+void run()
+{
+    test_any_of();
+    test_fill_n();
+    test_lower_bound();
+    test_minmax_element();
+    test_unique();
+}
+
+} // namespace std_algorithm_suite
+
+//-----------------------------------------------------------------------------
+
+namespace std_numeric_suite
+{
+
+void test_accumulate()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span = { 1, 2, 3, 4 };
+    TRIAL_ONLINE_TEST_EQUAL(std::accumulate(span.begin(), span.end(), 0), 1 + 2 + 3 + 4);
+    span.push_back(5);
+    TRIAL_ONLINE_TEST_EQUAL(std::accumulate(span.begin(), span.end(), 0), 2 + 3 + 4 + 5);
+}
+
+void test_inner_product()
+{
+    std::array<int, 4> array;
+    circular_span<int> span(array.begin(), array.end());
+    span = { 1, 2, 3, 4 };
+    TRIAL_ONLINE_TEST_EQUAL(std::inner_product(span.begin(), span.end(), array.begin(), 0),
+                            1 * 1 + 2 * 2 + 3 * 3 + 4 * 4);
+    span = { 1, 2, 3, 4, 5 };
+    TRIAL_ONLINE_TEST_EQUAL(std::inner_product(span.begin(), span.end(), array.begin(), 0),
+                            2 * 5 + 3 * 2 + 4 * 3 + 5 * 4);
+}
+
+void run()
+{
+    test_accumulate();
+    test_inner_product();
+}
+
+} // namespace std_numeric_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -725,6 +858,8 @@ int main()
     std_vector_suite::run();
     iterator_suite::run();
     clear_suite::run();
+    std_algorithm_suite::run();
+    std_numeric_suite::run();
 
     return boost::report_errors();
 }
