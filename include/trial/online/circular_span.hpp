@@ -69,6 +69,12 @@ public:
     //! @brief Inserts element at the end of the span.
     void push_back(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
+    //! @brief Erases element from the beginning of the span
+    void pop_front();
+
+    //! @brief Erases element from the end of the span
+    void pop_back();
+
 private:
     template <typename U>
     struct basic_iterator
@@ -161,6 +167,8 @@ public:
     using super::clear;
     using super::push_front;
     using super::push_back;
+    using super::pop_front;
+    using super::pop_back;
 
     using typename super::iterator;
     using typename super::const_iterator;

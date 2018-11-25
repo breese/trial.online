@@ -146,12 +146,76 @@ void test_push_alternating()
     TRIAL_ONLINE_TEST_EQUAL(span.back(), 3); // 5 was pushed out
 }
 
+void test_pop_front()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span.push_back(1);
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 1);
+    span.pop_front();
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 0);
+    span.push_back(1);
+    span.push_back(2);
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 2);
+    span.pop_front();
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 2);
+    span.push_back(3);
+    span.push_back(4);
+    span.push_back(5);
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 5);
+    span.pop_front();
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 3);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 3);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 5);
+}
+
+void test_pop_back()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span.push_back(1);
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 1);
+    span.pop_back();
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 0);
+    span.push_back(1);
+    span.push_back(2);
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 2);
+    span.pop_back();
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 1);
+    span.push_back(3);
+    span.push_back(4);
+    span.push_back(5);
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 5);
+    span.pop_back();
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 3);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 4);
+}
+
 void run()
 {
     test_empty();
     test_push_front();
     test_push_back();
     test_push_alternating();
+    test_pop_front();
+    test_pop_back();
 }
 
 } // namespace plain_array_suite

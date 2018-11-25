@@ -100,6 +100,23 @@ void circular_span<T>::push_back(const value_type& input) noexcept(std::is_nothr
 }
 
 template <typename T>
+void circular_span<T>::pop_front()
+{
+    assert(!empty());
+
+    --member.size;
+}
+
+template <typename T>
+void circular_span<T>::pop_back()
+{
+    assert(!empty());
+
+    member.next = vindex(member.next - 1);
+    --member.size;
+}
+
+template <typename T>
 auto circular_span<T>::begin() -> iterator
 {
     return iterator(this, vindex(member.next - member.size));
