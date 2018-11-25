@@ -208,6 +208,99 @@ void test_pop_back()
     TRIAL_ONLINE_TEST_EQUAL(span.back(), 4);
 }
 
+void test_assign_operator()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span = { 11 };
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 11);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 11);
+    span = { 21, 22 };
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 21);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 22);
+    span = { 31, 32, 33 };
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 3);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 31);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 33);
+    span = { 41, 42, 43, 44 };
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 41);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 44);
+    span = { 51, 52, 53, 54, 55 };
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 52);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 55);
+}
+
+void test_assign_iterator()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    {
+        std::vector<int> input = { 11 };
+        span.assign(input.begin(), input.end());
+    }
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 11);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 11);
+    {
+        std::vector<int> input = { 21, 22 };
+        span.assign(input.begin(), input.end());
+    }
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 21);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 22);
+    {
+        std::vector<int> input = { 31, 32, 33 };
+        span.assign(input.begin(), input.end());
+    }
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 3);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 31);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 33);
+    {
+        std::vector<int> input = { 41, 42, 43, 44 };
+        span.assign(input.begin(), input.end());
+    }
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 41);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 44);
+    {
+        std::vector<int> input = { 51, 52, 53, 54, 55 };
+        span.assign(input.begin(), input.end());
+    }
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 52);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 55);
+}
+
+void test_assign_initializer_list()
+{
+    int array[4];
+    circular_span<decltype(array)> span(array);
+    span.assign({ 11 });
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 11);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 11);
+    span.assign({ 21, 22 });
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 21);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 22);
+    span.assign({ 31, 32, 33 });
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 3);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 31);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 33);
+    span.assign({ 41, 42, 43, 44 });
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 41);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 44);
+    span.assign({ 51, 52, 53, 54, 55 });
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
+    TRIAL_ONLINE_TEST_EQUAL(span.front(), 52);
+    TRIAL_ONLINE_TEST_EQUAL(span.back(), 55);
+}
+
 void run()
 {
     test_empty();
@@ -216,6 +309,9 @@ void run()
     test_push_alternating();
     test_pop_front();
     test_pop_back();
+    test_assign_operator();
+    test_assign_iterator();
+    test_assign_initializer_list();
 }
 
 } // namespace plain_array_suite

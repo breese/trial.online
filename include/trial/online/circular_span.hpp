@@ -13,6 +13,7 @@
 
 #include <cstddef>
 #include <type_traits>
+#include <initializer_list>
 #include <iterator>
 
 namespace trial
@@ -36,6 +37,8 @@ public:
     circular_span(circular_span&&) noexcept = default;
     circular_span& operator= (const circular_span&) noexcept = default;
     circular_span& operator= (circular_span&&) noexcept = default;
+    //! @brief Clears span and inserts elements at end of span.
+    circular_span& operator= (std::initializer_list<value_type>) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
     template <typename ContiguousIterator>
     circular_span(ContiguousIterator begin, ContiguousIterator end) noexcept;
@@ -63,16 +66,23 @@ public:
     //! The content of the underlying storage is not modified.
     void clear() noexcept;
 
-    //! @brief Inserts element at the beginning of the span.
+    //! @brief Clears span and inserts elements at end of span.
+    template <typename InputIterator>
+    void assign(InputIterator first, InputIterator last) noexcept(std::is_nothrow_copy_assignable<T>::value);
+
+    //! @brief Clears span and inserts elements at end of span.
+    void assign(std::initializer_list<value_type> input) noexcept(std::is_nothrow_copy_assignable<T>::value);
+
+    //! @brief Inserts element at beginning of span.
     void push_front(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
-    //! @brief Inserts element at the end of the span.
+    //! @brief Inserts element at end of span.
     void push_back(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
-    //! @brief Erases element from the beginning of the span
+    //! @brief Erases element from beginning of span
     void pop_front();
 
-    //! @brief Erases element from the end of the span
+    //! @brief Erases element from end of span
     void pop_back();
 
 private:
@@ -157,6 +167,8 @@ public:
 
     circular_span(T (&array)[N]) noexcept;
 
+    using super::operator=;
+
     using super::empty;
     using super::full;
     using super::size;
@@ -165,6 +177,7 @@ public:
     using super::back;
 
     using super::clear;
+    using super::assign;
     using super::push_front;
     using super::push_back;
     using super::pop_front;

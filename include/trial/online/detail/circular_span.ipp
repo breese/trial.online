@@ -28,6 +28,13 @@ circular_span<T>::circular_span(ContiguousIterator begin,
 }
 
 template <typename T>
+auto circular_span<T>::operator= (std::initializer_list<value_type> input) noexcept(std::is_nothrow_copy_assignable<T>::value) -> circular_span&
+{
+    assign(std::move(input));
+    return *this;
+}
+
+template <typename T>
 bool circular_span<T>::empty() const noexcept
 {
     return size() == 0;
@@ -72,6 +79,28 @@ void circular_span<T>::clear() noexcept
 {
     member.size = 0;
     member.next = 0;
+}
+
+template <typename T>
+template <typename InputIterator>
+void circular_span<T>::assign(InputIterator first, InputIterator last) noexcept(std::is_nothrow_copy_assignable<T>::value)
+{
+    clear();
+    while (first != last)
+    {
+        push_back(*first);
+        ++first;
+    }
+}
+
+template <typename T>
+void circular_span<T>::assign(std::initializer_list<value_type> input) noexcept(std::is_nothrow_copy_assignable<T>::value)
+{
+    clear();
+    for (const auto& value : input)
+    {
+        push_back(value);
+    }
 }
 
 template <typename T>
