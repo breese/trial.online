@@ -71,13 +71,13 @@ public:
     void assign(InputIterator first, InputIterator last) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
     //! @brief Clears span and inserts elements at end of span.
-    void assign(std::initializer_list<value_type> input) noexcept(std::is_nothrow_copy_assignable<T>::value);
+    void assign(std::initializer_list<value_type> input) noexcept(std::is_nothrow_move_assignable<T>::value);
 
     //! @brief Inserts element at beginning of span.
-    void push_front(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
+    void push_front(value_type input) noexcept(std::is_nothrow_move_assignable<T>::value);
 
     //! @brief Inserts element at end of span.
-    void push_back(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
+    void push_back(value_type input) noexcept(std::is_nothrow_move_assignable<T>::value);
 
     //! @brief Erases element from beginning of span
     void pop_front() noexcept;

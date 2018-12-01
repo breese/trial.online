@@ -94,17 +94,17 @@ void circular_span<T>::assign(InputIterator first, InputIterator last) noexcept(
 }
 
 template <typename T>
-void circular_span<T>::assign(std::initializer_list<value_type> input) noexcept(std::is_nothrow_copy_assignable<T>::value)
+void circular_span<T>::assign(std::initializer_list<value_type> input) noexcept(std::is_nothrow_move_assignable<T>::value)
 {
     clear();
     for (const auto& value : input)
     {
-        push_back(value);
+        push_back(std::move(value));
     }
 }
 
 template <typename T>
-void circular_span<T>::push_front(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value)
+void circular_span<T>::push_front(value_type input) noexcept(std::is_nothrow_move_assignable<T>::value)
 {
     if (full())
     {
@@ -114,13 +114,13 @@ void circular_span<T>::push_front(const value_type& input) noexcept(std::is_noth
     {
         ++member.size;
     }
-    at(index(member.next) - member.size) = input;
+    at(index(member.next) - member.size) = std::move(input);
 }
 
 template <typename T>
-void circular_span<T>::push_back(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value)
+void circular_span<T>::push_back(value_type input) noexcept(std::is_nothrow_move_assignable<T>::value)
 {
-    at(member.next) = input;
+    at(member.next) = std::move(input);
     member.next = vindex(member.next) + 1;
     if (!full())
     {
