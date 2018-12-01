@@ -129,7 +129,7 @@ void circular_span<T>::push_back(const value_type& input) noexcept(std::is_nothr
 }
 
 template <typename T>
-void circular_span<T>::pop_front()
+void circular_span<T>::pop_front() noexcept
 {
     assert(!empty());
 
@@ -137,7 +137,7 @@ void circular_span<T>::pop_front()
 }
 
 template <typename T>
-void circular_span<T>::pop_back()
+void circular_span<T>::pop_back() noexcept
 {
     assert(!empty());
 

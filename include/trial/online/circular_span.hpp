@@ -80,10 +80,10 @@ public:
     void push_back(const value_type& input) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
     //! @brief Erases element from beginning of span
-    void pop_front();
+    void pop_front() noexcept;
 
     //! @brief Erases element from end of span
-    void pop_back();
+    void pop_back() noexcept;
 
 private:
     template <typename U>
