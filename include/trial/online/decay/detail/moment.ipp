@@ -38,8 +38,8 @@ template <typename T, typename MR>
 void basic_moment<T, with_mean, MR>::push(value_type input)
 {
     const value_type one(1);
-    mean = mean_factor * input + (one - mean_factor) * mean;
-    normalization = mean_factor + (one - mean_factor) * normalization;
+    mean += mean_factor * (input - mean);
+    normalization += mean_factor * (one - normalization);
 }
 
 //-----------------------------------------------------------------------------
@@ -68,8 +68,8 @@ void basic_moment<T, with_variance, MR, VR>::push(value_type input)
     const auto mean = super::value();
     const value_type one(1);
     const value_type delta = input - mean;
-    sum.variance = var_factor * delta * delta + (one - var_factor) * sum.variance;
-    normalization = var_factor + (one - var_factor) * normalization;
+    sum.variance += var_factor * (delta * delta - sum.variance);
+    normalization += var_factor * (one - normalization);
 }
 
 //-----------------------------------------------------------------------------
@@ -103,8 +103,8 @@ void basic_moment<T, with_skew, MR, VR, SR>::push(value_type input)
     const auto mean = super::value();
     const value_type one(1);
     const value_type delta = input - mean;
-    sum.skew = skew_factor * delta * delta * delta + (one - skew_factor) * sum.skew;
-    normalization = skew_factor + (one - skew_factor) * normalization;
+    sum.skew += skew_factor * (delta * delta * delta - sum.skew);
+    normalization += skew_factor * (one - normalization);
 }
 
 } // namespace decay
