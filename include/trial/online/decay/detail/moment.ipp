@@ -8,6 +8,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cassert>
+#include <cmath>
+
 namespace trial
 {
 namespace online
@@ -16,26 +19,34 @@ namespace decay
 {
 
 //-----------------------------------------------------------------------------
-// Average
+// Mean
 //-----------------------------------------------------------------------------
 
-template <typename T, typename MR>
-void basic_moment<T, with_mean, MR>::clear()
+template <typename T>
+basic_moment<T, with_mean>::basic_moment(value_type mean_factor) noexcept
+    : mean_factor(mean_factor)
+{
+    assert(mean_factor > 0.0);
+    assert(mean_factor <= 1.0);
+}
+
+template <typename T>
+void basic_moment<T, with_mean>::clear() noexcept
 {
     mean = value_type(0);
     normalization = value_type(0);
 }
 
-template <typename T, typename MR>
-auto basic_moment<T, with_mean, MR>::value() const -> value_type
+template <typename T>
+auto basic_moment<T, with_mean>::value() const noexcept -> value_type
 {
     return (normalization > value_type(0))
         ? mean / normalization
         : value_type(0);
 }
 
-template <typename T, typename MR>
-void basic_moment<T, with_mean, MR>::push(value_type input)
+template <typename T>
+void basic_moment<T, with_mean>::push(value_type input) noexcept
 {
     const value_type one(1);
     mean += mean_factor * (input - mean);
@@ -43,26 +54,36 @@ void basic_moment<T, with_mean, MR>::push(value_type input)
 }
 
 //-----------------------------------------------------------------------------
-// Average with variance
+// Mean with variance
 //-----------------------------------------------------------------------------
 
-template <typename T, typename MR, typename VR>
-void basic_moment<T, with_variance, MR, VR>::clear()
+template <typename T>
+basic_moment<T, with_variance>::basic_moment(value_type mean_factor,
+                                             value_type var_factor) noexcept
+    : super(mean_factor),
+      var_factor(var_factor)
+{
+    assert(var_factor > 0.0);
+    assert(var_factor <= 1.0);
+}
+
+template <typename T>
+void basic_moment<T, with_variance>::clear() noexcept
 {
     super::clear();
     sum.variance = value_type(0);
 }
 
-template <typename T, typename MR, typename VR>
-auto basic_moment<T, with_variance, MR, VR>::variance() const -> value_type
+template <typename T>
+auto basic_moment<T, with_variance>::variance() const noexcept -> value_type
 {
     return (normalization > value_type(0))
         ? sum.variance / normalization
         : value_type(0);
 }
 
-template <typename T, typename MR, typename VR>
-void basic_moment<T, with_variance, MR, VR>::push(value_type input)
+template <typename T>
+void basic_moment<T, with_variance>::push(value_type input) noexcept
 {
     super::push(input);
     const auto mean = super::value();
@@ -73,18 +94,29 @@ void basic_moment<T, with_variance, MR, VR>::push(value_type input)
 }
 
 //-----------------------------------------------------------------------------
-// Average with variance and skewness
+// Mean with variance and skewness
 //-----------------------------------------------------------------------------
 
-template <typename T, typename MR, typename VR, typename SR>
-void basic_moment<T, with_skew, MR, VR, SR>::clear()
+template <typename T>
+basic_moment<T, with_skew>::basic_moment(value_type mean_factor,
+                                         value_type var_factor,
+                                         value_type skew_factor) noexcept
+    : super(mean_factor, var_factor),
+      skew_factor(skew_factor)
+{
+    assert(skew_factor > 0.0);
+    assert(skew_factor <= 1.0);
+}
+
+template <typename T>
+void basic_moment<T, with_skew>::clear() noexcept
 {
     super::clear();
     sum.skew = value_type(0);
 }
 
-template <typename T, typename MR, typename VR, typename SR>
-auto basic_moment<T, with_skew, MR, VR, SR>::skew() const -> value_type
+template <typename T>
+auto basic_moment<T, with_skew>::skew() const noexcept -> value_type
 {
     if (normalization > value_type(0))
     {
@@ -96,8 +128,8 @@ auto basic_moment<T, with_skew, MR, VR, SR>::skew() const -> value_type
     return value_type(0);
 }
 
-template <typename T, typename MR, typename VR, typename SR>
-void basic_moment<T, with_skew, MR, VR, SR>::push(value_type input)
+template <typename T>
+void basic_moment<T, with_skew>::push(value_type input) noexcept
 {
     super::push(input);
     const auto mean = super::value();

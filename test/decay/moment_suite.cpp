@@ -16,88 +16,165 @@ using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
-using one_four = std::ratio<1, 4>;
-using one_eight = std::ratio<1, 8>;
+const auto one_over_eight = 1.0 / 8.0;
+const auto one_over_four = 1.0 / 4.0;
 
 //-----------------------------------------------------------------------------
 
 namespace mean_double_suite
 {
 
-void test_empty()
+void test_ctor()
 {
-    decay::moment<double, one_eight> filter;
+    decay::moment<double> filter(one_over_eight);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+
+    // Copy constructor
+    decay::moment<double> copy(filter);
+    TRIAL_ONLINE_TEST_EQUAL(copy.value(), 0.0);
+
+    // Move constructor
+    decay::moment<double> mover(std::move(copy));
+    TRIAL_ONLINE_TEST_EQUAL(mover.value(), 0.0);
 }
 
 void test_same()
 {
-    decay::moment<double, one_eight> filter;
+    decay::moment<double> filter(one_over_eight);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+}
+
+void test_alternating()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    decay::moment<double> filter(one_over_eight);
+
+    // Convergence towards 1.5
+
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.0, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.33136, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.39647, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.42356, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.43801, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.44673, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.4524, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.45627, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.45899, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.46094, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
+
+    // Outlier
+
+    filter.push(1000.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 134.387, tolerance);
+
+    // Slow recovery
+
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 116.913, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 101.719, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 88.7272, tolerance);
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 77.3577, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 67.636, tolerance);
 }
 
 void test_linear_increase()
 {
-    const double tolerance = 1e-5;
+    const auto tolerance = detail::close_to<double>(1e-5);
+    decay::moment<double> filter(one_over_eight);
 
-    decay::moment<double, one_eight> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.0, tolerance);
     filter.push(2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.53333, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.53333, tolerance);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.08876, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.08876, tolerance);
     filter.push(4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.66608, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.66608, tolerance);
     filter.push(5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.26502, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 3.26502, tolerance);
     filter.push(6.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.88525, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 3.88525, tolerance);
     filter.push(7.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 4.52635, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 4.52635, tolerance);
     filter.push(8.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.18786, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.18786, tolerance);
     filter.push(9.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.86924, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.86924, tolerance);
     filter.push(10.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 6.56991, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 6.56991, tolerance);
 }
 
 void test_linear_decrease()
 {
-    const double tolerance = 1e-5;
-    decay::moment<double, one_eight> filter;
+    const auto tolerance = detail::close_to<double>(1e-5);
+    decay::moment<double> filter(one_over_eight);
+
     filter.push(10.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 10.0, tolerance);
     filter.push(9.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 9.46667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 9.46667, tolerance);
     filter.push(8.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 8.91124, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 8.91124, tolerance);
     filter.push(7.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 8.33392, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 8.33392, tolerance);
     filter.push(6.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 7.73498, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 7.73498, tolerance);
     filter.push(5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 7.11475, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 7.11475, tolerance);
     filter.push(4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 6.47365, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 6.47365, tolerance);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.81214, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.81214, tolerance);
     filter.push(2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.13076, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.13076, tolerance);
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 4.43009, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 4.43009, tolerance);
 }
 
 void test_exponential_increase()
 {
     const auto tolerance = detail::close_to<double>(1e-5);
-    decay::moment<double, one_eight> filter;
+    decay::moment<double> filter(one_over_eight);
+
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.push(1e1);
@@ -122,7 +199,7 @@ void test_exponential_increase()
 
 void test_clear()
 {
-    decay::moment<double, one_eight> filter;
+    decay::moment<double> filter(one_over_eight);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     filter.clear();
@@ -131,8 +208,9 @@ void test_clear()
 
 void run()
 {
-    test_empty();
+    test_ctor();
     test_same();
+    test_alternating();
     test_linear_increase();
     test_linear_decrease();
     test_exponential_increase();
@@ -146,15 +224,15 @@ void run()
 namespace mean_float_suite
 {
 
-void test_empty()
+void test_ctor()
 {
-    decay::moment<float, one_eight> filter;
+    decay::moment<float> filter(one_over_eight);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0f);
 }
 
 void test_same()
 {
-    decay::moment<float, one_eight> filter;
+    decay::moment<float> filter(one_over_eight);
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(1.0f);
@@ -166,7 +244,7 @@ void test_same()
 void test_linear_increase()
 {
     const float tolerance = 1e-5;
-    decay::moment<float, one_eight> filter;
+    decay::moment<float> filter(one_over_eight);
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.push(2.0f);
@@ -192,7 +270,7 @@ void test_linear_increase()
 void test_linear_decrease()
 {
     const float tolerance = 1e-5;
-    decay::moment<float, one_eight> filter;
+    decay::moment<float> filter(one_over_eight);
     filter.push(10.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0f);
     filter.push(9.0f);
@@ -217,7 +295,7 @@ void test_linear_decrease()
 
 void test_clear()
 {
-    decay::moment<float, one_eight> filter;
+    decay::moment<float> filter(one_over_eight);
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
     filter.clear();
@@ -226,7 +304,7 @@ void test_clear()
 
 void run()
 {
-    test_empty();
+    test_ctor();
     test_same();
     test_linear_increase();
     test_linear_decrease();
@@ -240,9 +318,9 @@ void run()
 namespace variance_double_suite
 {
 
-void test_empty()
+void test_ctor()
 {
-    decay::moment_variance<double, one_eight, one_four> filter;
+    decay::moment_variance<double> filter(one_over_eight, one_over_four);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
 }
@@ -250,7 +328,7 @@ void test_empty()
 void test_same()
 {
     const double tolerance = 1e-5;
-    decay::moment_variance<double, one_eight, one_four> filter;
+    decay::moment_variance<double> filter(one_over_eight, one_over_four);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
@@ -265,7 +343,7 @@ void test_same()
 void test_linear_increase()
 {
     const double tolerance = 1e-5;
-    decay::moment_variance<double, one_eight, one_four> filter;
+    decay::moment_variance<double> filter(one_over_eight, one_over_four);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
@@ -301,7 +379,7 @@ void test_linear_increase()
 void test_linear_decrease()
 {
     const double tolerance = 1e-5;
-    decay::moment_variance<double, one_eight, one_four> filter;
+    decay::moment_variance<double> filter(one_over_eight, one_over_four);
     filter.push(10.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
@@ -337,7 +415,7 @@ void test_linear_decrease()
 void test_exponential_increase()
 {
     const auto tolerance = detail::close_to<double>(1e-4);
-    decay::moment_variance<double, one_eight, one_four> filter;
+    decay::moment_variance<double> filter(one_over_eight, one_over_four);
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.0, tolerance);
@@ -373,7 +451,7 @@ void test_exponential_increase()
 void test_clear()
 {
     const double tolerance = 1e-5;
-    decay::moment_variance<double, one_eight, one_four> filter;
+    decay::moment_variance<double> filter(one_over_eight, one_over_four);
     filter.push(0.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0, tolerance);
     TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0, tolerance);
@@ -387,7 +465,7 @@ void test_clear()
 
 void run()
 {
-    test_empty();
+    test_ctor();
     test_same();
     test_linear_increase();
     test_linear_decrease();
@@ -402,9 +480,9 @@ void run()
 namespace skew_double_suite
 {
 
-void test_empty()
+void test_ctor()
 {
-    decay::moment_skew<double, one_eight, one_four, one_four> filter;
+    decay::moment_skew<double> filter(one_over_eight, one_over_four, one_over_four);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
@@ -412,7 +490,7 @@ void test_empty()
 
 void test_same()
 {
-    decay::moment_skew<double, one_eight, one_four, one_four> filter;
+    decay::moment_skew<double> filter(one_over_eight, one_over_four, one_over_four);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -435,7 +513,7 @@ void test_linear_increase()
 {
     // Results are inherently skewed because of the weights of exponential smoothing
     const auto tolerance = detail::close_to<double>(1e-4);
-    decay::moment_skew<double, one_eight, one_four, one_four> filter;
+    decay::moment_skew<double> filter(one_over_eight, one_over_four, one_over_four);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -481,7 +559,7 @@ void test_linear_increase()
 void test_exponential_increase()
 {
     const auto tolerance = detail::close_to<double>(1e-4);
-    decay::moment_skew<double, one_eight, one_four, one_four> filter;
+    decay::moment_skew<double> filter(one_over_eight, one_over_four, one_over_four);
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.0, tolerance);
@@ -527,7 +605,7 @@ void test_exponential_increase()
 void test_left_skew()
 {
     const auto tolerance = detail::close_to<double>(1e-4);
-    decay::moment_skew<double, one_eight, one_four, one_four> filter;
+    decay::moment_skew<double> filter(one_over_eight, one_over_four, one_over_four);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -548,7 +626,7 @@ void test_left_skew()
 
 void run()
 {
-    test_empty();
+    test_ctor();
     test_same();
     test_linear_increase();
     test_exponential_increase();

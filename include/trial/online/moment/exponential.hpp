@@ -11,6 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <ratio>
 #include <trial/online/decay/moment.hpp>
 
 namespace trial
@@ -21,7 +22,22 @@ namespace moment
 {
 
 template <typename T, typename MeanRatio>
-using exponential = decay::basic_moment<T, with_mean, MeanRatio>;
+class exponential
+    : public decay::basic_moment<T, decay::with_mean>
+{
+    using super = decay::basic_moment<T, decay::with_mean>;
+
+public:
+    using typename super::value_type;
+
+    exponential()
+        : super(MeanRatio::num / value_type(MeanRatio::den))
+    {}
+
+    using super::clear;
+    using super::push;
+    using super::value;
+};
 
 } // namespace moment
 } // namespace online

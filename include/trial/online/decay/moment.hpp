@@ -11,7 +11,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <ratio>
 #include <trial/online/detail/type_traits.hpp>
 
 namespace trial
@@ -35,47 +34,60 @@ class basic_moment;
 //!
 //! See http://breese.github.io/2015/10/26/on-average.html
 
-template <typename T, typename MeanRatio>
-class basic_moment<T, with_mean, MeanRatio>
+template <typename T>
+class basic_moment<T, with_mean>
 {
 protected:
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
-    static_assert(detail::is_ratio<MeanRatio>::value, "MeanRatio must be a ratio");
 
 public:
     using value_type = T;
 
-    void clear();
-    void push(value_type);
+    basic_moment(value_type mean_factor) noexcept;
 
-    value_type value() const;
+    basic_moment(const basic_moment&) = default;
+    basic_moment(basic_moment&&) = default;
+    basic_moment& operator= (const basic_moment&) = default;
+    basic_moment& operator= (basic_moment&&) = default;
+
+    void clear() noexcept;
+    void push(value_type) noexcept;
+
+    value_type value() const noexcept;
 
 protected:
-    static constexpr value_type mean_factor = { MeanRatio::num / value_type(MeanRatio::den) };
+    const value_type mean_factor;
     value_type mean = value_type(0);
     value_type normalization = value_type(0);
 };
 
 // With variance
 
-template <typename T, typename MeanRatio, typename VarRatio>
-class basic_moment<T, with_variance, MeanRatio, VarRatio>
-    : public basic_moment<T, with_mean, MeanRatio>
+template <typename T>
+class basic_moment<T, with_variance>
+    : public basic_moment<T, with_mean>
 {
 protected:
-    using super = basic_moment<T, with_mean, MeanRatio>;
+    using super = basic_moment<T, with_mean>;
 
 public:
     using typename super::value_type;
 
-    void clear();
-    void push(value_type);
+    basic_moment(value_type mean_factor, value_type var_factor) noexcept;
+
+    basic_moment(const basic_moment&) = default;
+    basic_moment(basic_moment&&) = default;
+    basic_moment& operator= (const basic_moment&) = default;
+    basic_moment& operator= (basic_moment&&) = default;
+
+    void clear() noexcept;
+    void push(value_type) noexcept;
 
     using super::value;
-    value_type variance() const;
+    value_type variance() const noexcept;
 
 protected:
-    static constexpr value_type var_factor = { VarRatio::num / value_type(VarRatio::den) };
+    const value_type var_factor;
     struct
     {
         value_type variance = value_type(0);
@@ -83,27 +95,34 @@ protected:
     value_type normalization = value_type(0);
 };
 
-// With skew
+// With skewness
 
-template <typename T, typename MeanRatio, typename VarRatio, typename SkewRatio>
-class basic_moment<T, with_skew, MeanRatio, VarRatio, SkewRatio>
-    : public basic_moment<T, with_variance, MeanRatio, VarRatio>
+template <typename T>
+class basic_moment<T, with_skew>
+    : public basic_moment<T, with_variance>
 {
 protected:
-    using super = basic_moment<T, with_variance, MeanRatio, VarRatio>;
+    using super = basic_moment<T, with_variance>;
 
 public:
     using typename super::value_type;
 
-    void clear();
-    void push(value_type);
+    basic_moment(value_type mean_factor, value_type var_factor, value_type skew_factor) noexcept;
+
+    basic_moment(const basic_moment&) = default;
+    basic_moment(basic_moment&&) = default;
+    basic_moment& operator= (const basic_moment&) = default;
+    basic_moment& operator= (basic_moment&&) = default;
+
+    void clear() noexcept;
+    void push(value_type) noexcept;
 
     using super::value;
     using super::variance;
-    value_type skew() const;
+    value_type skew() const noexcept;
 
 protected:
-    static constexpr value_type skew_factor = { SkewRatio::num / value_type(SkewRatio::den) };
+    const value_type skew_factor;
     struct
     {
         value_type skew = value_type(0);
@@ -113,14 +132,14 @@ protected:
 
 // Convenience
 
-template <typename T, typename MeanRatio>
-using moment = basic_moment<T, with_mean, MeanRatio>;
+template <typename T>
+using moment = basic_moment<T, with_mean>;
 
-template <typename T, typename MeanRatio, typename VarRatio = MeanRatio>
-using moment_variance = basic_moment<T, with_variance, MeanRatio, VarRatio>;
+template <typename T>
+using moment_variance = basic_moment<T, with_variance>;
 
-template <typename T, typename MeanRatio, typename VarRatio = MeanRatio, typename SkewRatio = VarRatio>
-using moment_skew = basic_moment<T, with_skew, MeanRatio, VarRatio, SkewRatio>;
+template <typename T>
+using moment_skew = basic_moment<T, with_skew>;
 
 } // namespace decay
 } // namespace online
