@@ -44,8 +44,8 @@ private:
     value_type sum() const;
 
 private:
-    basic_moment<value_type, Window, with_mean> x_moment;
-    basic_moment<value_type, Window, with_mean> y_moment;
+    basic_moment<value_type, Window, with::mean> x_moment;
+    basic_moment<value_type, Window, with::mean> y_moment;
     std::pair<value_type, value_type> storage[Window];
     circular_span<decltype(storage)> window;
 };

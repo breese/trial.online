@@ -41,8 +41,8 @@ public:
     value_type unbiased_value() const;
 
 private:
-    basic_moment<value_type, with_mean> x_moment;
-    basic_moment<value_type, with_mean> y_moment;
+    basic_moment<value_type, with::mean> x_moment;
+    basic_moment<value_type, with::mean> y_moment;
     value_type co_moment = value_type(0);
 };
 

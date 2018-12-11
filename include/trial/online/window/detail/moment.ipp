@@ -23,13 +23,13 @@ namespace window
 //-----------------------------------------------------------------------------
 
 template <typename T, std::size_t N>
-basic_moment<T, N, with_mean>::basic_moment()
+basic_moment<T, N, with::mean>::basic_moment()
     : window(storage)
 {
 }
 
 template <typename T, std::size_t N>
-auto basic_moment<T, N, with_mean>::capacity() const -> size_type
+auto basic_moment<T, N, with::mean>::capacity() const -> size_type
 {
     assert(window.capacity() == N);
 
@@ -37,32 +37,32 @@ auto basic_moment<T, N, with_mean>::capacity() const -> size_type
 }
 
 template <typename T, std::size_t N>
-void basic_moment<T, N, with_mean>::clear()
+void basic_moment<T, N, with::mean>::clear()
 {
     sum.mean = value_type(0);
     window.clear();
 }
 
 template <typename T, std::size_t N>
-bool basic_moment<T, N, with_mean>::empty() const
+bool basic_moment<T, N, with::mean>::empty() const
 {
     return window.empty();
 }
 
 template <typename T, std::size_t N>
-auto basic_moment<T, N, with_mean>::size() const -> size_type
+auto basic_moment<T, N, with::mean>::size() const -> size_type
 {
     return window.size();
 }
 
 template <typename T, std::size_t N>
-bool basic_moment<T, N, with_mean>::full() const
+bool basic_moment<T, N, with::mean>::full() const
 {
     return window.full();
 }
 
 template <typename T, std::size_t N>
-auto basic_moment<T, N, with_mean>::value() const -> value_type
+auto basic_moment<T, N, with::mean>::value() const -> value_type
 {
     if (empty())
         return value_type();
@@ -70,7 +70,7 @@ auto basic_moment<T, N, with_mean>::value() const -> value_type
 }
 
 template <typename T, std::size_t N>
-void basic_moment<T, N, with_mean>::push(value_type value)
+void basic_moment<T, N, with::mean>::push(value_type value)
 {
     if (full())
     {
@@ -88,20 +88,20 @@ void basic_moment<T, N, with_mean>::push(value_type value)
 //-----------------------------------------------------------------------------
 
 template <typename T, std::size_t N>
-basic_moment<T, N, with_variance>::basic_moment()
+basic_moment<T, N, with::variance>::basic_moment()
     : super()
 {
 }
 
 template <typename T, std::size_t N>
-void basic_moment<T, N, with_variance>::clear()
+void basic_moment<T, N, with::variance>::clear()
 {
     super::clear();
     sum.variance = value_type(0);
 }
 
 template <typename T, std::size_t N>
-void basic_moment<T, N, with_variance>::push(value_type input)
+void basic_moment<T, N, with::variance>::push(value_type input)
 {
     const value_type old_mean = super::value();
     if (super::full())
@@ -121,7 +121,7 @@ void basic_moment<T, N, with_variance>::push(value_type input)
 }
 
 template <typename T, std::size_t N>
-auto basic_moment<T, N, with_variance>::variance() const -> value_type
+auto basic_moment<T, N, with::variance>::variance() const -> value_type
 {
     // Rounding errors can cause the variance to become negative
     const auto count = super::size();
@@ -131,7 +131,7 @@ auto basic_moment<T, N, with_variance>::variance() const -> value_type
 }
 
 template <typename T, std::size_t N>
-auto basic_moment<T, N, with_variance>::unbiased_variance() const -> value_type
+auto basic_moment<T, N, with::variance>::unbiased_variance() const -> value_type
 {
     // With Bessel's correction
     // Rounding errors can cause the variance to become negative
@@ -142,7 +142,7 @@ auto basic_moment<T, N, with_variance>::unbiased_variance() const -> value_type
 }
 
 template <typename T, std::size_t N>
-auto basic_moment<T, N, with_variance>::delta(value_type input, value_type old_mean) -> value_type
+auto basic_moment<T, N, with::variance>::delta(value_type input, value_type old_mean) -> value_type
 {
     return (input - old_mean) * (input - super::value());
 }

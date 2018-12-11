@@ -21,10 +21,10 @@ namespace moment
 {
 
 template <typename T, std::size_t N>
-using arithmetic = window::basic_moment<T, N, with_mean>;
+using arithmetic = window::basic_moment<T, N, with::mean>;
 
 template <typename T, std::size_t N>
-using arithmetic_variance = window::basic_moment<T, N, with_variance>;
+using arithmetic_variance = window::basic_moment<T, N, with::variance>;
 
 } // namespace moment
 } // namespace online

@@ -52,8 +52,8 @@ public:
 
 private:
     class covariance<value_type, Window> covariance;
-    basic_moment<value_type, Window, with_variance> x_moment;
-    basic_moment<value_type, Window, with_variance> y_moment;
+    basic_moment<value_type, Window, with::variance> x_moment;
+    basic_moment<value_type, Window, with::variance> y_moment;
 };
 
 } // namespace window

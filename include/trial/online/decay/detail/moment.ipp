@@ -23,7 +23,7 @@ namespace decay
 //-----------------------------------------------------------------------------
 
 template <typename T>
-basic_moment<T, with_mean>::basic_moment(value_type mean_factor) noexcept
+basic_moment<T, with::mean>::basic_moment(value_type mean_factor) noexcept
     : mean_factor(mean_factor)
 {
     assert(mean_factor > 0.0);
@@ -31,14 +31,14 @@ basic_moment<T, with_mean>::basic_moment(value_type mean_factor) noexcept
 }
 
 template <typename T>
-void basic_moment<T, with_mean>::clear() noexcept
+void basic_moment<T, with::mean>::clear() noexcept
 {
     mean = value_type(0);
     normalization = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with_mean>::value() const noexcept -> value_type
+auto basic_moment<T, with::mean>::value() const noexcept -> value_type
 {
     return (normalization > value_type(0))
         ? mean / normalization
@@ -46,7 +46,7 @@ auto basic_moment<T, with_mean>::value() const noexcept -> value_type
 }
 
 template <typename T>
-void basic_moment<T, with_mean>::push(value_type input) noexcept
+void basic_moment<T, with::mean>::push(value_type input) noexcept
 {
     const value_type one(1);
     mean += mean_factor * (input - mean);
@@ -58,8 +58,8 @@ void basic_moment<T, with_mean>::push(value_type input) noexcept
 //-----------------------------------------------------------------------------
 
 template <typename T>
-basic_moment<T, with_variance>::basic_moment(value_type mean_factor,
-                                             value_type var_factor) noexcept
+basic_moment<T, with::variance>::basic_moment(value_type mean_factor,
+                                              value_type var_factor) noexcept
     : super(mean_factor),
       var_factor(var_factor)
 {
@@ -68,14 +68,14 @@ basic_moment<T, with_variance>::basic_moment(value_type mean_factor,
 }
 
 template <typename T>
-void basic_moment<T, with_variance>::clear() noexcept
+void basic_moment<T, with::variance>::clear() noexcept
 {
     super::clear();
     sum.variance = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with_variance>::variance() const noexcept -> value_type
+auto basic_moment<T, with::variance>::variance() const noexcept -> value_type
 {
     return (normalization > value_type(0))
         ? sum.variance / normalization
@@ -83,7 +83,7 @@ auto basic_moment<T, with_variance>::variance() const noexcept -> value_type
 }
 
 template <typename T>
-void basic_moment<T, with_variance>::push(value_type input) noexcept
+void basic_moment<T, with::variance>::push(value_type input) noexcept
 {
     super::push(input);
     const auto mean = super::value();
@@ -98,9 +98,9 @@ void basic_moment<T, with_variance>::push(value_type input) noexcept
 //-----------------------------------------------------------------------------
 
 template <typename T>
-basic_moment<T, with_skew>::basic_moment(value_type mean_factor,
-                                         value_type var_factor,
-                                         value_type skew_factor) noexcept
+basic_moment<T, with::skew>::basic_moment(value_type mean_factor,
+                                          value_type var_factor,
+                                          value_type skew_factor) noexcept
     : super(mean_factor, var_factor),
       skew_factor(skew_factor)
 {
@@ -109,14 +109,14 @@ basic_moment<T, with_skew>::basic_moment(value_type mean_factor,
 }
 
 template <typename T>
-void basic_moment<T, with_skew>::clear() noexcept
+void basic_moment<T, with::skew>::clear() noexcept
 {
     super::clear();
     sum.skew = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with_skew>::skew() const noexcept -> value_type
+auto basic_moment<T, with::skew>::skew() const noexcept -> value_type
 {
     if (normalization > value_type(0))
     {
@@ -129,7 +129,7 @@ auto basic_moment<T, with_skew>::skew() const noexcept -> value_type
 }
 
 template <typename T>
-void basic_moment<T, with_skew>::push(value_type input) noexcept
+void basic_moment<T, with::skew>::push(value_type input) noexcept
 {
     super::push(input);
     const auto mean = super::value();

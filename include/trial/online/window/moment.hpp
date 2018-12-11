@@ -13,6 +13,7 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
+#include <trial/online/with.hpp>
 #include <trial/online/circular_span.hpp>
 
 namespace trial
@@ -22,17 +23,11 @@ namespace online
 namespace window
 {
 
-enum type
-{
-    with_mean = 1,
-    with_variance = 2
-};
-
-template <typename T, std::size_t N, window::type Moment>
+template <typename T, std::size_t N, online::with Moment>
 class basic_moment;
 
 template <typename T, std::size_t N>
-class basic_moment<T, N, with_mean>
+class basic_moment<T, N, with::mean>
 {
 public:
     using value_type = T;
@@ -62,10 +57,10 @@ protected:
 };
 
 template <typename T, std::size_t N>
-class basic_moment<T, N, with_variance>
-    : protected basic_moment<T, N, with_mean>
+class basic_moment<T, N, with::variance>
+    : protected basic_moment<T, N, with::mean>
 {
-    using super = basic_moment<T, N, with_mean>;
+    using super = basic_moment<T, N, with::mean>;
 
 public:
     using typename super::value_type;
@@ -96,10 +91,10 @@ protected:
 };
 
 template <typename T, std::size_t N>
-using moment = basic_moment<T, N, with_mean>;
+using moment = basic_moment<T, N, with::mean>;
 
 template <typename T, std::size_t N>
-using moment_variance = basic_moment<T, N, with_variance>;
+using moment_variance = basic_moment<T, N, with::variance>;
 
 } // namespace window
 } // namespace online

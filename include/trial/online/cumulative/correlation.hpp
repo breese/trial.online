@@ -39,8 +39,8 @@ public:
 
 private:
     class covariance<value_type> covariance;
-    basic_moment<value_type, with_variance> x_moment;
-    basic_moment<value_type, with_variance> y_moment;
+    basic_moment<value_type, with::variance> x_moment;
+    basic_moment<value_type, with::variance> y_moment;
 };
 
 } // namespace cumulative

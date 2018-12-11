@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/type_traits.hpp>
+#include <trial/online/with.hpp>
 
 namespace trial
 {
@@ -20,14 +21,7 @@ namespace online
 namespace decay
 {
 
-enum type
-{
-    with_mean = 1,
-    with_variance = 2,
-    with_skew = 3
-};
-
-template <typename T, decay::type Moment>
+template <typename T, online::with Moment>
 class basic_moment;
 
 //! @brief Exponential smoothing with compensation for bias towards the initial value.
@@ -35,7 +29,7 @@ class basic_moment;
 //! See http://breese.github.io/2015/10/26/on-average.html
 
 template <typename T>
-class basic_moment<T, with_mean>
+class basic_moment<T, with::mean>
 {
 protected:
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
@@ -64,11 +58,11 @@ protected:
 // With variance
 
 template <typename T>
-class basic_moment<T, with_variance>
-    : public basic_moment<T, with_mean>
+class basic_moment<T, with::variance>
+    : public basic_moment<T, with::mean>
 {
 protected:
-    using super = basic_moment<T, with_mean>;
+    using super = basic_moment<T, with::mean>;
 
 public:
     using typename super::value_type;
@@ -98,11 +92,11 @@ protected:
 // With skewness
 
 template <typename T>
-class basic_moment<T, with_skew>
-    : public basic_moment<T, with_variance>
+class basic_moment<T, with::skew>
+    : public basic_moment<T, with::variance>
 {
 protected:
-    using super = basic_moment<T, with_variance>;
+    using super = basic_moment<T, with::variance>;
 
 public:
     using typename super::value_type;
@@ -133,13 +127,13 @@ protected:
 // Convenience
 
 template <typename T>
-using moment = basic_moment<T, with_mean>;
+using moment = basic_moment<T, with::mean>;
 
 template <typename T>
-using moment_variance = basic_moment<T, with_variance>;
+using moment_variance = basic_moment<T, with::variance>;
 
 template <typename T>
-using moment_skew = basic_moment<T, with_skew>;
+using moment_skew = basic_moment<T, with::skew>;
 
 } // namespace decay
 } // namespace online

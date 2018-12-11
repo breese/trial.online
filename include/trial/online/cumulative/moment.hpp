@@ -17,6 +17,7 @@
 
 #include <cstddef> // std::size_t
 #include <type_traits>
+#include <trial/online/with.hpp>
 
 namespace trial
 {
@@ -25,18 +26,11 @@ namespace online
 namespace cumulative
 {
 
-enum type
-{
-    with_mean = 1,
-    with_variance = 2,
-    with_skew = 3
-};
-
-template <typename T, cumulative::type Moment>
+template <typename T, online::with Moment>
 class basic_moment;
 
 template <typename T>
-class basic_moment<T, with_mean>
+class basic_moment<T, with::mean>
 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
@@ -58,10 +52,10 @@ protected:
 };
 
 template <typename T>
-class basic_moment<T, with_variance>
-    : protected basic_moment<T, with_mean>
+class basic_moment<T, with::variance>
+    : protected basic_moment<T, with::mean>
 {
-    using super = basic_moment<T, with_mean>;
+    using super = basic_moment<T, with::mean>;
 
 public:
     using typename super::value_type;
@@ -84,10 +78,10 @@ protected:
 };
 
 template <typename T>
-class basic_moment<T, with_skew>
-    : protected basic_moment<T, with_variance>
+class basic_moment<T, with::skew>
+    : protected basic_moment<T, with::variance>
 {
-    using super = basic_moment<T, with_variance>;
+    using super = basic_moment<T, with::variance>;
 
 public:
     using typename super::value_type;
@@ -112,13 +106,13 @@ protected:
 };
  
 template <typename T>
-using moment = basic_moment<T, with_mean>;
+using moment = basic_moment<T, with::mean>;
 
 template <typename T>
-using moment_variance = basic_moment<T, with_variance>;
+using moment_variance = basic_moment<T, with::variance>;
 
 template <typename T>
-using moment_skew = basic_moment<T, with_skew>;
+using moment_skew = basic_moment<T, with::skew>;
 
 } // namespace cumulative
 } // namespace online
