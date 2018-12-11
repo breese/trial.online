@@ -27,7 +27,7 @@ enum type
     with_skew = 3
 };
 
-template <typename T, decay::type Moment, typename...>
+template <typename T, decay::type Moment>
 class basic_moment;
 
 //! @brief Exponential smoothing with compensation for bias towards the initial value.
