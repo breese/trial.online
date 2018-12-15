@@ -43,18 +43,18 @@ void regression<T>::push(value_type x, value_type y)
 }
 
 template <typename T>
+auto regression<T>::at(value_type position) const -> value_type
+{
+    return y_moment.value() - slope() * (x_moment.value() - position);
+}
+
+template <typename T>
 auto regression<T>::slope() const -> value_type
 {
     const auto divisor = x_moment.variance();
     return (divisor == 0)
         ? value_type(0)
         : covariance.value() / divisor;
-}
-
-template <typename T>
-auto regression<T>::intercept() const -> value_type
-{
-    return y_moment.value() - slope() * x_moment.value();
 }
 
 } // namespace cumulative

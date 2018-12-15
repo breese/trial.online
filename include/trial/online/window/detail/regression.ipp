@@ -40,18 +40,18 @@ void regression<T, W>::push(value_type x, value_type y)
 }
 
 template <typename T, std::size_t W>
+auto regression<T, W>::at(value_type position) const -> value_type
+{
+    return y_moment.value() - slope() * (x_moment.value() - position);
+}
+
+template <typename T, std::size_t W>
 auto regression<T, W>::slope() const -> value_type
 {
     const auto divisor = x_moment.variance();
     return (divisor == 0)
         ? value_type(0)
         : covariance.value() / divisor;
-}
-
-template <typename T, std::size_t W>
-auto regression<T, W>::intercept() const -> value_type
-{
-    return y_moment.value() - slope() * x_moment.value();
 }
 
 } // namespace window

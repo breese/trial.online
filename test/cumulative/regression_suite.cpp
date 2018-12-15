@@ -21,12 +21,12 @@ using cumulative_linear = cumulative::regression<T>;
 namespace cumulative_double
 {
 
-void test_empty()
+void test_ctor()
 {
     cumulative_linear<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     TRIAL_ONLINE_TEST_EQUAL(filter.slope(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.intercept(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.at(0), 0.0);
 }
 
 void test_same()
@@ -37,20 +37,20 @@ void test_same()
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 1.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 1.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 1.0, tolerance);
 }
 
-void test_straight()
+void test_linear_increase()
 {
     const double tolerance = 1e-5;
     cumulative_linear<double> filter;
@@ -58,71 +58,75 @@ void test_straight()
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(1.0), 1.0, tolerance);
 
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(2.0), 2.0, tolerance);
 
     filter.push(3.0, 3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 4);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(3.0), 3.0, tolerance);
 
     filter.push(4.0, 4.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(4.0), 4.0, tolerance);
 }
 
-void test_straight_offset()
+void test_linear_increase__offset()
 {
     const double tolerance = 1e-5;
     cumulative_linear<double> filter;
 
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 2.0, tolerance);
 
     filter.push(3.0, 3.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 
     filter.push(4.0, 4.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 }
 
-void test_reversed_straight()
+void test_linear_decrease()
 {
     const double tolerance = 1e-5;
     cumulative_linear<double> filter;
 
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 2.0, tolerance);
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 
     filter.push(0.0, 0.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 
     filter.push(-1.0, -1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 
     filter.push(-2.0, -2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 }
 
 void test_scatter()
@@ -132,32 +136,32 @@ void test_scatter()
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 1.0, tolerance);
 
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.0, tolerance);
 
     filter.push(3.0, 1.3);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.15, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 1.13333, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 1.13333, tolerance);
 
     filter.push(4.0, 3.75);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.755, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.125, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.125, tolerance);
 
     filter.push(5.0, 2.25);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.425, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 0.785, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 0.785, tolerance);
 }
 
 void run()
 {
-    test_empty();
+    test_ctor();
     test_same();
-    test_straight();
-    test_straight_offset();
-    test_reversed_straight();
+    test_linear_increase();
+    test_linear_increase__offset();
+    test_linear_decrease();
     test_scatter();
 }
 
@@ -185,7 +189,7 @@ void anscombe_I()
     filter.push(7.0, 4.82);
     filter.push(5.0, 5.68);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 3.0, tolerance);
 }
 
 void anscombe_II()
@@ -205,7 +209,7 @@ void anscombe_II()
     filter.push(7.0, 7.26);
     filter.push(5.0, 4.74);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 3.0, tolerance);
 }
 
 void anscombe_III()
@@ -225,7 +229,7 @@ void anscombe_III()
     filter.push(7.0, 6.42);
     filter.push(5.0, 5.73);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 3.0, tolerance);
 }
 
 void anscombe_IV()
@@ -245,7 +249,7 @@ void anscombe_IV()
     filter.push(8.0, 7.91);
     filter.push(8.0, 6.89);
     TRIAL_ONLINE_TEST_CLOSE(filter.slope(), 0.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.intercept(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_CLOSE(filter.at(0), 3.0, tolerance);
 }
 
 void run()

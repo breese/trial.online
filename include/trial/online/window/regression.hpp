@@ -38,17 +38,19 @@ public:
 
     void push(value_type x, value_type y);
 
+    //! @brief Predicts value at postion.
+    //!
+    //! at(0) is the intercept where the regression line crosses the y axis.
+    //!
+    //! @returns Predicted value at given position.
+
+    value_type at(value_type position) const;
+
     //! @brief Regression slope.
     //!
     //! @returns Slope of the regression line.
 
     value_type slope() const;
-
-    //! @brief Regression intercept.
-    //!
-    //! @returns Where regression line crosses the y axis.
-
-    value_type intercept() const;
 
 private:
     class covariance<value_type, Window> covariance;

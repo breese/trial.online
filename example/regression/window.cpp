@@ -25,7 +25,7 @@ int main(int argc, const char *argv[])
     {
         file >> x >> separator >> y;
         filter.push(x, y);
-        std::cout << x << ',' << y << ',' << filter.slope() << ',' << filter.intercept() << '\n';
+        std::cout << x << ',' << y << ',' << filter.slope() << ',' << filter.at(0) << '\n';
     }
     return 0;
 }
