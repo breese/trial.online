@@ -31,12 +31,12 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
-    void clear();
-    size_type size() const;
+    void clear() noexcept;
+    size_type size() const noexcept;
 
     //! @brief Append data point.
 
-    void push(value_type x, value_type y);
+    void push(value_type x, value_type y) noexcept;
 
     //! @brief Predicts value at postion.
     //!
@@ -44,13 +44,13 @@ public:
     //!
     //! @returns Predicted value at given position.
 
-    value_type at(value_type position) const;
+    value_type at(value_type position) const noexcept;
 
     //! @brief Regression slope.
     //!
     //! @returns Slope of the regression line.
 
-    value_type slope() const;
+    value_type slope() const noexcept;
 
 private:
     class covariance<value_type, Window> covariance;

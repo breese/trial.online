@@ -16,19 +16,19 @@ namespace window
 {
 
 template <typename T, std::size_t W>
-covariance<T, W>::covariance()
+covariance<T, W>::covariance() noexcept
     : window(storage)
 {
 }
 
 template <typename T, std::size_t W>
-auto covariance<T, W>::size() const -> size_type
+auto covariance<T, W>::size() const noexcept -> size_type
 {
     return window.size();
 }
 
 template <typename T, std::size_t W>
-void covariance<T, W>::clear()
+void covariance<T, W>::clear() noexcept
 {
     x_moment.clear();
     y_moment.clear();
@@ -36,7 +36,7 @@ void covariance<T, W>::clear()
 }
 
 template <typename T, std::size_t W>
-void covariance<T, W>::push(value_type x, value_type y)
+void covariance<T, W>::push(value_type x, value_type y) noexcept
 {
     x_moment.push(x);
     y_moment.push(y);
@@ -44,7 +44,7 @@ void covariance<T, W>::push(value_type x, value_type y)
 }
 
 template <typename T, std::size_t W>
-auto covariance<T, W>::sum() const -> value_type
+auto covariance<T, W>::sum() const noexcept -> value_type
 {
     value_type sum(0);
     const auto x_mean = x_moment.value();
@@ -57,7 +57,7 @@ auto covariance<T, W>::sum() const -> value_type
 }
 
 template <typename T, std::size_t W>
-auto covariance<T, W>::value() const -> value_type
+auto covariance<T, W>::value() const noexcept -> value_type
 {
     if (size() > 0)
         return sum() / size();
@@ -65,7 +65,7 @@ auto covariance<T, W>::value() const -> value_type
 }
 
 template <typename T, std::size_t W>
-auto covariance<T, W>::unbiased_value() const -> value_type
+auto covariance<T, W>::unbiased_value() const noexcept -> value_type
 {
     if (size() > 1)
         return sum() / (size() - 1);

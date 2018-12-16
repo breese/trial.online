@@ -37,15 +37,15 @@ public:
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
 
-    basic_moment();
+    basic_moment() noexcept;
 
-    size_type capacity() const;
-    void clear();
-    bool empty() const;
-    bool full() const;
-    value_type value() const;
-    void push(value_type value);
-    size_type size() const;
+    size_type capacity() const noexcept;
+    void clear() noexcept;
+    bool empty() const noexcept;
+    bool full() const noexcept;
+    value_type value() const noexcept;
+    void push(value_type value) noexcept;
+    size_type size() const noexcept;
 
 protected:
     value_type storage[N];
@@ -68,20 +68,20 @@ public:
 
     static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
 
-    basic_moment();
+    basic_moment() noexcept;
 
     using super::capacity;
-    void clear();
+    void clear() noexcept;
     using super::empty;
     using super::full;
     using super::value;
-    void push(value_type value);
+    void push(value_type value) noexcept;
     using super::size;
-    value_type variance() const;
-    value_type unbiased_variance() const;
+    value_type variance() const noexcept;
+    value_type unbiased_variance() const noexcept;
 
 protected:
-    value_type delta(value_type, value_type);
+    value_type delta(value_type, value_type) noexcept;
 
 protected:
     struct
