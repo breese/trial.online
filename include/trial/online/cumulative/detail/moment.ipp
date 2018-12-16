@@ -23,26 +23,26 @@ namespace cumulative
 //-----------------------------------------------------------------------------
 
 template <typename T>
-void basic_moment<T, with::mean>::clear()
+void basic_moment<T, with::mean>::clear() noexcept
 {
     mean = value_type(0);
     count = size_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with::mean>::size() const -> size_type
+auto basic_moment<T, with::mean>::size() const noexcept -> size_type
 {
     return count;
 }
 
 template <typename T>
-auto basic_moment<T, with::mean>::value() const -> value_type
+auto basic_moment<T, with::mean>::value() const noexcept -> value_type
 {
     return mean;
 }
 
 template <typename T>
-auto basic_moment<T, with::mean>::unbiased_value() const -> value_type
+auto basic_moment<T, with::mean>::unbiased_value() const noexcept -> value_type
 {
     return (count > 1)
         ? mean * count / value_type(count - 1)
@@ -50,7 +50,7 @@ auto basic_moment<T, with::mean>::unbiased_value() const -> value_type
 }
 
 template <typename T>
-void basic_moment<T, with::mean>::push(value_type input)
+void basic_moment<T, with::mean>::push(value_type input) noexcept
 {
     ++count;
     mean += (input - mean) / value_type(count);
@@ -61,14 +61,14 @@ void basic_moment<T, with::mean>::push(value_type input)
 //-----------------------------------------------------------------------------
 
 template <typename T>
-void basic_moment<T, with::variance>::clear()
+void basic_moment<T, with::variance>::clear() noexcept
 {
     super::clear();
     sum.variance = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with::variance>::variance() const -> value_type
+auto basic_moment<T, with::variance>::variance() const noexcept -> value_type
 {
     const auto count = super::size();
     return (count > 0)
@@ -77,7 +77,7 @@ auto basic_moment<T, with::variance>::variance() const -> value_type
 }
 
 template <typename T>
-auto basic_moment<T, with::variance>::unbiased_variance() const -> value_type
+auto basic_moment<T, with::variance>::unbiased_variance() const noexcept -> value_type
 {
     const auto count = super::size();
     return (count > 1)
@@ -86,7 +86,7 @@ auto basic_moment<T, with::variance>::unbiased_variance() const -> value_type
 }
 
 template <typename T>
-void basic_moment<T, with::variance>::push(value_type input)
+void basic_moment<T, with::variance>::push(value_type input) noexcept
 {
     if (super::size() > 0)
     {
@@ -105,14 +105,14 @@ void basic_moment<T, with::variance>::push(value_type input)
 //-----------------------------------------------------------------------------
 
 template <typename T>
-void basic_moment<T, with::skew>::clear()
+void basic_moment<T, with::skew>::clear() noexcept
 {
     super::clear();
     sum.skew = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with::skew>::skew() const -> value_type
+auto basic_moment<T, with::skew>::skew() const noexcept -> value_type
 {
     if (sum.skew < std::numeric_limits<value_type>::epsilon())
         return value_type(0);
@@ -120,7 +120,7 @@ auto basic_moment<T, with::skew>::skew() const -> value_type
 }
 
 template <typename T>
-auto basic_moment<T, with::skew>::unbiased_skew() const -> value_type
+auto basic_moment<T, with::skew>::unbiased_skew() const noexcept -> value_type
 {
     const auto count = size();
     if (count < 2)
@@ -131,7 +131,7 @@ auto basic_moment<T, with::skew>::unbiased_skew() const -> value_type
 }
 
 template <typename T>
-void basic_moment<T, with::skew>::push(value_type input)
+void basic_moment<T, with::skew>::push(value_type input) noexcept
 {
     // Use old mean and variance
     const auto count = super::size();

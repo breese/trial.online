@@ -19,7 +19,7 @@ namespace cumulative
 {
 
 template <typename T>
-void correlation<T>::clear()
+void correlation<T>::clear() noexcept
 {
     covariance.clear();
     x_moment.clear();
@@ -27,13 +27,13 @@ void correlation<T>::clear()
 }
 
 template <typename T>
-auto correlation<T>::size() const -> size_type
+auto correlation<T>::size() const noexcept -> size_type
 {
     return covariance.size();
 }
 
 template <typename T>
-void correlation<T>::push(value_type x, value_type y)
+void correlation<T>::push(value_type x, value_type y) noexcept
 {
     covariance.push(x, y);
     x_moment.push(x);
@@ -41,7 +41,7 @@ void correlation<T>::push(value_type x, value_type y)
 }
 
 template <typename T>
-auto correlation<T>::value() const -> value_type
+auto correlation<T>::value() const noexcept -> value_type
 {
     const value_type variance_product = x_moment.variance() * y_moment.variance();
     if (variance_product < std::numeric_limits<value_type>::epsilon())

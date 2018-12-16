@@ -39,12 +39,12 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
-    void clear();
-    void push(value_type);
+    void clear() noexcept;
+    void push(value_type) noexcept;
 
-    size_type size() const;
-    value_type value() const;
-    value_type unbiased_value() const;
+    size_type size() const noexcept;
+    value_type value() const noexcept;
+    value_type unbiased_value() const noexcept;
 
 protected:
     value_type mean = 0;
@@ -61,14 +61,14 @@ public:
     using typename super::value_type;
     using typename super::size_type;
 
-    void clear();
-    void push(value_type);
+    void clear() noexcept;
+    void push(value_type) noexcept;
 
     using super::size;
     using super::value;
     using super::unbiased_value;
-    value_type variance() const;
-    value_type unbiased_variance() const;
+    value_type variance() const noexcept;
+    value_type unbiased_variance() const noexcept;
 
 protected:
     struct
@@ -87,16 +87,16 @@ public:
     using typename super::value_type;
     using typename super::size_type;
 
-    void clear();
-    void push(value_type);
+    void clear() noexcept;
+    void push(value_type) noexcept;
 
     using super::size;
     using super::value;
     using super::unbiased_value;
     using super::variance;
     using super::unbiased_variance;
-    value_type skew() const;
-    value_type unbiased_skew() const;
+    value_type skew() const noexcept;
+    value_type unbiased_skew() const noexcept;
 
 protected:
     struct

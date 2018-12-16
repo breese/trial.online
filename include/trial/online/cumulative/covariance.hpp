@@ -33,12 +33,12 @@ public:
     
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
 
-    void clear();
-    void push(value_type first, value_type second);
+    void clear() noexcept;
+    void push(value_type first, value_type second) noexcept;
 
-    size_type size() const;
-    value_type value() const;
-    value_type unbiased_value() const;
+    size_type size() const noexcept;
+    value_type value() const noexcept;
+    value_type unbiased_value() const noexcept;
 
 private:
     basic_moment<value_type, with::mean> x_moment;

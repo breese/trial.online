@@ -16,13 +16,13 @@ namespace cumulative
 {
 
 template <typename T>
-auto covariance<T>::size() const -> size_type
+auto covariance<T>::size() const noexcept -> size_type
 {
     return x_moment.size();
 }
 
 template <typename T>
-void covariance<T>::clear()
+void covariance<T>::clear() noexcept
 {
     x_moment.clear();
     y_moment.clear();
@@ -30,7 +30,7 @@ void covariance<T>::clear()
 }
 
 template <typename T>
-void covariance<T>::push(value_type x, value_type y)
+void covariance<T>::push(value_type x, value_type y) noexcept
 {
     x_moment.push(x);
     // Using new x moment and old y moment
@@ -39,7 +39,7 @@ void covariance<T>::push(value_type x, value_type y)
 }
 
 template <typename T>
-auto covariance<T>::value() const -> value_type
+auto covariance<T>::value() const noexcept -> value_type
 {
     if (size() > 0)
         return co_moment / size();
@@ -47,7 +47,7 @@ auto covariance<T>::value() const -> value_type
 }
 
 template <typename T>
-auto covariance<T>::unbiased_value() const -> value_type
+auto covariance<T>::unbiased_value() const noexcept -> value_type
 {
     // With Bessel's correction
     if (size() > 1)

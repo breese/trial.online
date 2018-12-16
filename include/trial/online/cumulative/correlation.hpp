@@ -31,11 +31,11 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
-    void clear();
-    void push(value_type, value_type);
+    void clear() noexcept;
+    void push(value_type, value_type) noexcept;
 
-    size_type size() const;
-    value_type value() const;
+    size_type size() const noexcept;
+    value_type value() const noexcept;
 
 private:
     class covariance<value_type> covariance;
