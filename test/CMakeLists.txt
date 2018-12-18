@@ -27,6 +27,7 @@ trial_online_add_test(cumulative_moment_suite cumulative/moment_suite.cpp)
 trial_online_add_test(cumulative_covariance_suite cumulative/covariance_suite.cpp)
 trial_online_add_test(cumulative_correlation_suite cumulative/correlation_suite.cpp)
 trial_online_add_test(cumulative_regression_suite cumulative/regression_suite.cpp)
+trial_online_add_test(cumulative_trend_suite cumulative/trend_suite.cpp)
 
 # decay
 trial_online_add_test(decay_moment_suite decay/moment_suite.cpp)
