@@ -21,6 +21,10 @@ namespace online
 namespace moment
 {
 
+// Deprecated.
+//
+// Use decay::moment instead.
+
 template <typename T, typename MeanRatio>
 class exponential
     : public decay::basic_moment<T, with::mean>
@@ -36,7 +40,7 @@ public:
 
     using super::clear;
     using super::push;
-    using super::value;
+    value_type value() const noexcept { return super::mean(); }
 };
 
 } // namespace moment

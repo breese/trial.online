@@ -20,6 +20,10 @@ namespace online
 namespace moment
 {
 
+// Deprecated.
+//
+// Use window::moment instead.
+
 template <typename T, std::size_t N>
 using arithmetic = window::basic_moment<T, N, with::mean>;
 
