@@ -16,7 +16,7 @@ using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
-namespace average_double_suite
+namespace mean_double_suite
 {
 
 void test_empty()
@@ -123,11 +123,11 @@ void run()
     test_exponential_increase();
 }
 
-} // namespace average_double_suite
+} // namespace mean_double_suite
 
 //-----------------------------------------------------------------------------
 
-namespace average_int_suite
+namespace mean_int_suite
 {
 
 void test_empty()
@@ -172,7 +172,7 @@ void run()
     test_linear_increase();
 }
 
-} // namespace average_int_suite
+} // namespace mean_int_suite
 
 //-----------------------------------------------------------------------------
 
@@ -206,48 +206,48 @@ void test_same()
 
 void test_linear_increase()
 {
-    const double tolerance = 1e-5;
+    const auto tolerance = detail::close_to<double>(1e-5);
     cumulative::moment_variance<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.25, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 0.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 0.5, tolerance);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.666667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.666667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 1.0, tolerance);
     filter.push(4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.25, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 1.666667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 1.666667, tolerance);
     filter.push(5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 2.5, tolerance);
     filter.push(6.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.91667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 3.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 3.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.91667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 3.5, tolerance);
     filter.push(7.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 4.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 4.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 4.66667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 4.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 4.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 4.66667, tolerance);
     filter.push(8.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 4.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 5.25, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 6.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 4.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 5.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 6.0, tolerance);
     filter.push(9.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 6.66667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 7.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 6.66667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 7.5, tolerance);
     filter.push(10.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 8.25, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_variance(), 9.16667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 8.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 9.16667, tolerance);
 }
 
 void test_exponential_increase()
@@ -344,7 +344,7 @@ void test_same()
 
 void test_linear_increase()
 {
-    const double tolerance = 1e-6;
+    const auto tolerance = detail::close_to<double>(1e-5);
     cumulative::moment_skew<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -352,22 +352,22 @@ void test_linear_increase()
     TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_skew(), 0.0);
     filter.push(2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.25, tolerance);
     TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.666667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.666667, tolerance);
     TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_skew(), 0.0);
     filter.push(4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
     TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_skew(), 0.0);
     filter.push(5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 3.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.0, tolerance);
     TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_skew(), 0.0);
 }
@@ -430,7 +430,7 @@ void test_exponential_increase()
 
 void test_left_skew()
 {
-    const double tolerance = 1e-5;
+    const auto tolerance = detail::close_to<double>(1e-5);
     cumulative::moment_skew<double> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
@@ -438,20 +438,20 @@ void test_left_skew()
     TRIAL_ONLINE_TEST_EQUAL(filter.skew(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_skew(), 0.0);
     filter.push(2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.5, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.25, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.skew(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_skew(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 1.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.skew(), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_skew(), 0.0, tolerance);
     filter.push(5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2.66667, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 2.88889, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.skew(), 0.52800, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_skew(), 1.29334, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 2.66667, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.88889, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.skew(), 0.52800, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_skew(), 1.29334, tolerance);
     filter.push(15.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5.75, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 30.6875, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.skew(), 0.92814, tolerance);
-    TRIAL_ONLINE_TEST_CLOSE(filter.unbiased_skew(), 1.60758, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.value(), 5.75, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 30.6875, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.skew(), 0.92814, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.unbiased_skew(), 1.60758, tolerance);
 }
 
 void run()
@@ -471,8 +471,8 @@ void run()
 
 int main()
 {
-    average_double_suite::run();
-    average_int_suite::run();
+    mean_double_suite::run();
+    mean_int_suite::run();
     variance_double_suite::run();
     skew_double_suite::run();
 
