@@ -19,7 +19,7 @@ namespace cumulative
 {
 
 //-----------------------------------------------------------------------------
-// Average without variance
+// Mean
 //-----------------------------------------------------------------------------
 
 template <typename T>
@@ -57,7 +57,7 @@ void basic_moment<T, with::mean>::push(value_type input) noexcept
 }
 
 //-----------------------------------------------------------------------------
-// Average with variance
+// Mean with variance
 //-----------------------------------------------------------------------------
 
 template <typename T>
@@ -101,7 +101,7 @@ void basic_moment<T, with::variance>::push(value_type input) noexcept
 }
 
 //-----------------------------------------------------------------------------
-// Average with variance and skewness
+// Mean with variance and skewness
 //-----------------------------------------------------------------------------
 
 template <typename T>
@@ -127,18 +127,68 @@ auto basic_moment<T, with::skew>::unbiased_skew() const noexcept -> value_type
         return value_type(0);
     if (sum.skew < std::numeric_limits<value_type>::epsilon())
         return value_type(0);
-    return skew() * std::sqrt(count * (count -1 )) / value_type(count - 2);
+    // Bias-correction from Octave manual
+    return skew() * std::sqrt(count * (count - 1)) / value_type(count - 2);
 }
 
 template <typename T>
 void basic_moment<T, with::skew>::push(value_type input) noexcept
 {
-    // Use old mean and variance
+    // Use old sums
     const auto count = super::size();
     const auto delta = input - super::value();
-    const auto delta_over_count = delta / (count + 1);
+    const auto n = count + 1;
+    const auto delta_over_n = delta / n;
 
-    sum.skew += ((delta * delta_over_count * count * (count - 1)) - 3 * super::sum.variance) * delta_over_count;
+    sum.skew += ((delta * delta_over_n * (n - 1) * (n - 2)) - 3 * super::sum.variance) * delta_over_n;
+
+    super::push(input);
+}
+
+//-----------------------------------------------------------------------------
+// Mean with variance, skewness, and kurtosis
+//-----------------------------------------------------------------------------
+
+template <typename T>
+void basic_moment<T, with::kurtosis>::clear() noexcept
+{
+    super::clear();
+    sum.kurtosis = value_type(0);
+}
+
+template <typename T>
+auto basic_moment<T, with::kurtosis>::kurtosis() const noexcept -> value_type
+{
+    if (sum.kurtosis < std::numeric_limits<value_type>::epsilon())
+        return value_type(0);
+    return super::size() * sum.kurtosis / (super::super::sum.variance * super::super::sum.variance);
+}
+
+template <typename T>
+auto basic_moment<T, with::kurtosis>::unbiased_kurtosis() const noexcept -> value_type
+{
+    const auto count = super::size();
+    if (count < 4)
+        return value_type(0);
+    if (sum.kurtosis < std::numeric_limits<value_type>::epsilon())
+        return value_type(0);
+    // Bias-correction from Octave manual
+    return value_type(3) + (count - 1) / value_type((count - 2) * (count - 3)) * ((count + 1) * kurtosis() - value_type(3) * (count - 1));
+}
+
+template <typename T>
+void basic_moment<T, with::kurtosis>::push(value_type input) noexcept
+{
+    // Use old sums
+    const auto count = super::size();
+    const auto delta = input - super::value();
+    const auto n = count + 1;
+    const auto delta_over_n = delta / n;
+
+    const auto expr = delta * delta_over_n * (n - 1) * (n * (n - 3) + 3);
+    const auto var_expr = value_type(6) * super::super::sum.variance;
+    const auto skew_expr = value_type(4) * super::sum.skew;
+    sum.kurtosis += ((expr + var_expr) * delta_over_n - skew_expr) * delta_over_n;
 
     super::push(input);
 }

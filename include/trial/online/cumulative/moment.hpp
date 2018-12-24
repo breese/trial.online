@@ -51,10 +51,13 @@ protected:
     size_type count = 0;
 };
 
+// With variance
+
 template <typename T>
 class basic_moment<T, with::variance>
     : protected basic_moment<T, with::mean>
 {
+protected:
     using super = basic_moment<T, with::mean>;
 
 public:
@@ -77,10 +80,13 @@ protected:
     } sum;
 };
 
+// With skewness
+
 template <typename T>
 class basic_moment<T, with::skew>
     : protected basic_moment<T, with::variance>
 {
+protected:
     using super = basic_moment<T, with::variance>;
 
 public:
@@ -104,7 +110,41 @@ protected:
         value_type skew = 0;
     } sum;
 };
- 
+
+// With kurtosis
+
+template <typename T>
+class basic_moment<T, with::kurtosis>
+    : public basic_moment<T, with::skew>
+{
+protected:
+    using super = basic_moment<T, with::skew>;
+
+public:
+    using typename super::value_type;
+    using typename super::size_type;
+
+    void clear() noexcept;
+    void push(value_type) noexcept;
+
+    using super::value;
+    using super::unbiased_value;
+    using super::variance;
+    using super::unbiased_variance;
+    using super::skew;
+    using super::unbiased_skew;
+    value_type kurtosis() const noexcept;
+    value_type unbiased_kurtosis() const noexcept;
+
+protected:
+    struct
+    {
+        value_type kurtosis = value_type(0);
+    } sum;
+};
+
+// Convenience
+
 template <typename T>
 using moment = basic_moment<T, with::mean>;
 
@@ -113,6 +153,9 @@ using moment_variance = basic_moment<T, with::variance>;
 
 template <typename T>
 using moment_skew = basic_moment<T, with::skew>;
+
+template <typename T>
+using moment_kurtosis = basic_moment<T, with::kurtosis>;
 
 } // namespace cumulative
 } // namespace online
