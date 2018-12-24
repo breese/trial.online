@@ -25,35 +25,35 @@ namespace cumulative
 template <typename T>
 void basic_moment<T, with::mean>::clear() noexcept
 {
-    mean = value_type(0);
-    count = size_type(0);
+    member.mean = value_type(0);
+    member.count = size_type(0);
 }
 
 template <typename T>
 auto basic_moment<T, with::mean>::size() const noexcept -> size_type
 {
-    return count;
+    return member.count;
 }
 
 template <typename T>
-auto basic_moment<T, with::mean>::value() const noexcept -> value_type
+auto basic_moment<T, with::mean>::mean() const noexcept -> value_type
 {
-    return mean;
+    return member.mean;
 }
 
 template <typename T>
-auto basic_moment<T, with::mean>::unbiased_value() const noexcept -> value_type
+auto basic_moment<T, with::mean>::unbiased_mean() const noexcept -> value_type
 {
-    return (count > 1)
-        ? mean * count / value_type(count - 1)
-        : mean;
+    return (member.count > 1)
+        ? member.mean * member.count / value_type(member.count - 1)
+        : member.mean;
 }
 
 template <typename T>
 void basic_moment<T, with::mean>::push(value_type input) noexcept
 {
-    ++count;
-    mean += (input - mean) / value_type(count);
+    ++member.count;
+    member.mean += (input - member.mean) / value_type(member.count);
 }
 
 //-----------------------------------------------------------------------------
@@ -90,9 +90,9 @@ void basic_moment<T, with::variance>::push(value_type input) noexcept
 {
     if (super::size() > 0)
     {
-        const auto diff = input - super::value();
+        const auto diff = input - super::mean();
         super::push(input);
-        sum.variance += diff * (input - super::value());
+        sum.variance += diff * (input - super::mean());
     }
     else
     {
@@ -136,7 +136,7 @@ void basic_moment<T, with::skew>::push(value_type input) noexcept
 {
     // Use old sums
     const auto count = super::size();
-    const auto delta = input - super::value();
+    const auto delta = input - super::mean();
     const auto n = count + 1;
     const auto delta_over_n = delta / n;
 
@@ -181,7 +181,7 @@ void basic_moment<T, with::kurtosis>::push(value_type input) noexcept
 {
     // Use old sums
     const auto count = super::size();
-    const auto delta = input - super::value();
+    const auto delta = input - super::mean();
     const auto n = count + 1;
     const auto delta_over_n = delta / n;
 

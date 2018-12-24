@@ -18,21 +18,21 @@ namespace cumulative
 template <typename T>
 void basic_trend<T, with::mean>::clear() noexcept
 {
-    mean.clear();
+    center.clear();
     grand.clear();
 }
 
 template <typename T>
 void basic_trend<T, with::mean>::push(value_type input) noexcept
 {
-    mean.push(input);
-    grand.push(mean.value());
+    center.push(input);
+    grand.push(center.mean());
 }
 
 template <typename T>
 auto basic_trend<T, with::mean>::size() const noexcept -> size_type
 {
-    return mean.size();
+    return center.size();
 }
 
 template <typename T>
@@ -43,7 +43,7 @@ auto basic_trend<T, with::mean>::value() const noexcept -> value_type
     // behind mean by half, which gives us the points (mean, N/2) and
     // (grand mean, N/4) to extrapolate the point (prediction, N) from.
 
-    return mean.value() + value_type(2) * (mean.value() - grand.value());
+    return center.mean() + value_type(2) * (center.mean() - grand.mean());
 }
 
 } // namespace cumulative

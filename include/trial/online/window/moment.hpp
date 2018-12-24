@@ -39,12 +39,13 @@ public:
 
     basic_moment() noexcept;
 
-    size_type capacity() const noexcept;
     void clear() noexcept;
+    void push(value_type value) noexcept;
+
+    size_type capacity() const noexcept;
     bool empty() const noexcept;
     bool full() const noexcept;
-    value_type value() const noexcept;
-    void push(value_type value) noexcept;
+    value_type mean() const noexcept;
     size_type size() const noexcept;
 
 protected:
@@ -70,12 +71,13 @@ public:
 
     basic_moment() noexcept;
 
-    using super::capacity;
     void clear() noexcept;
+    void push(value_type value) noexcept;
+
+    using super::capacity;
     using super::empty;
     using super::full;
-    using super::value;
-    void push(value_type value) noexcept;
+    using super::mean;
     using super::size;
     value_type variance() const noexcept;
     value_type unbiased_variance() const noexcept;

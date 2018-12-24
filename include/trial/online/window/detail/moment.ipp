@@ -62,7 +62,7 @@ bool basic_moment<T, N, with::mean>::full() const noexcept
 }
 
 template <typename T, std::size_t N>
-auto basic_moment<T, N, with::mean>::value() const noexcept -> value_type
+auto basic_moment<T, N, with::mean>::mean() const noexcept -> value_type
 {
     if (empty())
         return value_type();
@@ -103,7 +103,7 @@ void basic_moment<T, N, with::variance>::clear() noexcept
 template <typename T, std::size_t N>
 void basic_moment<T, N, with::variance>::push(value_type input) noexcept
 {
-    const value_type old_mean = super::value();
+    const value_type old_mean = super::mean();
     if (super::full())
     {
         const value_type old_input = super::window.front();
@@ -144,7 +144,7 @@ auto basic_moment<T, N, with::variance>::unbiased_variance() const noexcept -> v
 template <typename T, std::size_t N>
 auto basic_moment<T, N, with::variance>::delta(value_type input, value_type old_mean) noexcept -> value_type
 {
-    return (input - old_mean) * (input - super::value());
+    return (input - old_mean) * (input - super::mean());
 }
 
 } // namespace window

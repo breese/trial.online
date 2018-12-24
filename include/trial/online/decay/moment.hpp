@@ -47,12 +47,15 @@ public:
     void clear() noexcept;
     void push(value_type) noexcept;
 
-    value_type value() const noexcept;
+    value_type mean() const noexcept;
 
 protected:
     const value_type mean_factor;
-    value_type mean = value_type(0);
     value_type normalization = value_type(0);
+    struct
+    {
+        value_type mean = value_type(0);
+    } sum;
 };
 
 // With variance
@@ -77,16 +80,16 @@ public:
     void clear() noexcept;
     void push(value_type) noexcept;
 
-    using super::value;
+    using super::mean;
     value_type variance() const noexcept;
 
 protected:
     const value_type var_factor;
+    value_type normalization = value_type(0);
     struct
     {
         value_type variance = value_type(0);
     } sum;
-    value_type normalization = value_type(0);
 };
 
 // With skewness
@@ -111,17 +114,17 @@ public:
     void clear() noexcept;
     void push(value_type) noexcept;
 
-    using super::value;
+    using super::mean;
     using super::variance;
     value_type skew() const noexcept;
 
 protected:
     const value_type skew_factor;
+    value_type normalization = value_type(0);
     struct
     {
         value_type skew = value_type(0);
     } sum;
-    value_type normalization = value_type(0);
 };
 
 // Convenience

@@ -43,12 +43,15 @@ public:
     void push(value_type) noexcept;
 
     size_type size() const noexcept;
-    value_type value() const noexcept;
-    value_type unbiased_value() const noexcept;
+    value_type mean() const noexcept;
+    value_type unbiased_mean() const noexcept;
 
 protected:
-    value_type mean = 0;
-    size_type count = 0;
+    struct
+    {
+        value_type mean = 0;
+        size_type count = 0;
+    } member;
 };
 
 // With variance
@@ -68,8 +71,8 @@ public:
     void push(value_type) noexcept;
 
     using super::size;
-    using super::value;
-    using super::unbiased_value;
+    using super::mean;
+    using super::unbiased_mean;
     value_type variance() const noexcept;
     value_type unbiased_variance() const noexcept;
 
@@ -97,8 +100,8 @@ public:
     void push(value_type) noexcept;
 
     using super::size;
-    using super::value;
-    using super::unbiased_value;
+    using super::mean;
+    using super::unbiased_mean;
     using super::variance;
     using super::unbiased_variance;
     value_type skew() const noexcept;
@@ -127,8 +130,8 @@ public:
     void clear() noexcept;
     void push(value_type) noexcept;
 
-    using super::value;
-    using super::unbiased_value;
+    using super::mean;
+    using super::unbiased_mean;
     using super::variance;
     using super::unbiased_variance;
     using super::skew;

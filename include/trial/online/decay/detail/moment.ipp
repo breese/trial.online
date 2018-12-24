@@ -34,15 +34,15 @@ basic_moment<T, with::mean>::basic_moment(value_type mean_factor) noexcept
 template <typename T>
 void basic_moment<T, with::mean>::clear() noexcept
 {
-    mean = value_type(0);
+    sum.mean = value_type(0);
     normalization = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with::mean>::value() const noexcept -> value_type
+auto basic_moment<T, with::mean>::mean() const noexcept -> value_type
 {
     return (normalization > value_type(0))
-        ? mean / normalization
+        ? sum.mean / normalization
         : value_type(0);
 }
 
@@ -50,7 +50,7 @@ template <typename T>
 void basic_moment<T, with::mean>::push(value_type input) noexcept
 {
     const value_type one(1);
-    mean += mean_factor * (input - mean);
+    sum.mean += mean_factor * (input - sum.mean);
     normalization += mean_factor * (one - normalization);
 }
 
@@ -87,7 +87,7 @@ template <typename T>
 void basic_moment<T, with::variance>::push(value_type input) noexcept
 {
     super::push(input);
-    const auto mean = super::value();
+    const auto mean = super::mean();
     const value_type one(1);
     const value_type delta = input - mean;
     sum.variance += var_factor * (delta * delta - sum.variance);
@@ -133,7 +133,7 @@ template <typename T>
 void basic_moment<T, with::skew>::push(value_type input) noexcept
 {
     super::push(input);
-    const auto mean = super::value();
+    const auto mean = super::mean();
     const value_type one(1);
     const value_type delta = input - mean;
     sum.skew += skew_factor * (delta * delta * delta - sum.skew);

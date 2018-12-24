@@ -37,7 +37,7 @@ public:
     value_type value() const noexcept;
 
 private:
-    cumulative::basic_moment<value_type, with::mean> mean;
+    cumulative::basic_moment<value_type, with::mean> center;
     cumulative::basic_moment<value_type, with::mean> grand;
 };
 

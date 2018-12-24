@@ -47,8 +47,8 @@ template <typename T, std::size_t W>
 auto covariance<T, W>::sum() const noexcept -> value_type
 {
     value_type sum(0);
-    const auto x_mean = x_moment.value();
-    const auto y_mean = y_moment.value();
+    const auto x_mean = x_moment.mean();
+    const auto y_mean = y_moment.mean();
     for (const auto& item : window)
     {
         sum += (item.first - x_mean) * (item.second - y_mean);

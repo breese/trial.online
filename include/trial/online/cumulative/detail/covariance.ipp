@@ -34,7 +34,7 @@ void covariance<T>::push(value_type x, value_type y) noexcept
 {
     x_moment.push(x);
     // Using new x moment and old y moment
-    co_moment += (x - x_moment.value()) * (y - y_moment.value());
+    co_moment += (x - x_moment.mean()) * (y - y_moment.mean());
     y_moment.push(y);
 }
 

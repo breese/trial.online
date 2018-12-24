@@ -42,7 +42,7 @@ void regression<T, W>::push(value_type x, value_type y) noexcept
 template <typename T, std::size_t W>
 auto regression<T, W>::at(value_type position) const noexcept -> value_type
 {
-    return y_moment.value() - slope() * (x_moment.value() - position);
+    return y_moment.mean() - slope() * (x_moment.mean() - position);
 }
 
 template <typename T, std::size_t W>

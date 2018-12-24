@@ -25,7 +25,7 @@ void test_ctor()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
 }
 
 void test_many()
@@ -36,17 +36,17 @@ void test_many()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.0);
 }
 
 void run()
@@ -69,7 +69,7 @@ void test_ctor()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
 }
 
 void test_one()
@@ -79,7 +79,7 @@ void test_one()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
 }
 
 void test_same()
@@ -87,35 +87,35 @@ void test_same()
     window::moment<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
 }
 
 void test_two()
 {
     window::moment<double, 2> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
 }
 
 void test_three()
 {
     window::moment<double, 2> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
 }
 
 void test_clear()
@@ -127,7 +127,7 @@ void test_clear()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     filter.push(2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
 }
 
 void run()
@@ -154,7 +154,7 @@ void test_ctor()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
 }
 
 void test_same()
@@ -162,72 +162,72 @@ void test_same()
     window::moment<double, 4> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 4);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 4);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
 }
 
 void test_linear_increase()
 {
     window::moment<double, 4> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
     filter.push(4.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.5);
     filter.push(5.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 3.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.5);
     filter.push(6.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 4.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 4.5);
 }
 
 void test_linear_increase_from_offset()
 {
     window::moment<double, 4> filter;
     filter.push(10.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 10.0);
     filter.push(11.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 10.5);
     filter.push(12.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 11.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 11.0);
     filter.push(13.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 11.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 11.5);
     filter.push(14.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 12.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 12.5);
     filter.push(15.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 13.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 13.5);
 }
 
 void test_linear_decrease()
 {
     window::moment<double, 4> filter;
     filter.push(10.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 10.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 10.0);
     filter.push(9.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 9.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 9.5);
     filter.push(8.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 9.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 9.0);
     filter.push(7.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 8.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 8.5);
     filter.push(6.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 7.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 7.5);
     filter.push(5.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 6.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 6.5);
 }
 
 void run()
@@ -253,7 +253,7 @@ void test_ctor()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0f);
 }
 
 void test_one()
@@ -263,7 +263,7 @@ void test_one()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0f);
 }
 
 void test_same()
@@ -271,35 +271,35 @@ void test_same()
     window::moment<float, 2> filter;
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0f);
     filter.push(1.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0f);
 }
 
 void test_two()
 {
     window::moment<float, 2> filter;
     filter.push(1.0f);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0f);
     filter.push(3.0f);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0f);
 }
 
 void test_three()
 {
     window::moment<float, 2> filter;
     filter.push(1.0f);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0f);
     filter.push(3.0f);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0f);
     filter.push(0.0f);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.5f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5f);
 }
 
 void test_clear()
@@ -311,7 +311,7 @@ void test_clear()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     filter.push(2.0f);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0f);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0f);
 }
 
 void run()
@@ -338,7 +338,7 @@ void test_ctor()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0);
 }
 
 void test_one()
@@ -348,7 +348,7 @@ void test_one()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1);
 }
 
 void test_same()
@@ -356,35 +356,35 @@ void test_same()
     window::moment<int, 2> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1);
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1);
     filter.push(1);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1);
 }
 
 void test_two()
 {
     window::moment<int, 2> filter;
     filter.push(1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1);
     filter.push(3);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2);
 }
 
 void test_three()
 {
     window::moment<int, 2> filter;
     filter.push(1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1);
     filter.push(3);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2);
     filter.push(0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1); // Rounded down
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1); // Rounded down
 }
 
 void test_clear()
@@ -396,7 +396,7 @@ void test_clear()
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
     filter.push(2);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2);
 }
 
 void run()
@@ -423,7 +423,7 @@ void test_ctor()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
@@ -436,21 +436,21 @@ void test_many()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
@@ -475,7 +475,7 @@ void test_ctor()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
@@ -487,7 +487,7 @@ void test_one()
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
@@ -497,19 +497,19 @@ void test_same()
     window::moment_variance<double, 2> filter;
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.empty(), false);
     TRIAL_ONLINE_TEST_EQUAL(filter.full(), true);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
 }
@@ -518,11 +518,11 @@ void test_two()
 {
     window::moment_variance<double, 2> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 2.0);
 }
@@ -531,15 +531,15 @@ void test_three()
 {
     window::moment_variance<double, 2> filter;
     filter.push(1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
     filter.push(3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 2.0);
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 2.25);
     TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 4.5);
 }
