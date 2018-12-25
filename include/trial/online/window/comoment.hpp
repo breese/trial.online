@@ -1,5 +1,5 @@
-#ifndef TRIAL_ONLINE_WINDOW_COVARIANCE_HPP
-#define TRIAL_ONLINE_WINDOW_COVARIANCE_HPP
+#ifndef TRIAL_ONLINE_WINDOW_COMOMENT_HPP
+#define TRIAL_ONLINE_WINDOW_COMOMENT_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -21,8 +21,11 @@ namespace online
 namespace window
 {
 
+template <typename T, std::size_t Window, online::with Moment>
+class basic_comoment;
+
 template <typename T, std::size_t Window>
-class covariance
+class basic_comoment<T, Window, with::variance>
 {
 public:
     using value_type = T;
@@ -30,7 +33,7 @@ public:
     
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
 
-    covariance() noexcept;
+    basic_comoment() noexcept;
 
     void clear() noexcept;
     void push(value_type first, value_type second) noexcept;
@@ -50,10 +53,15 @@ private:
     circular_span<decltype(storage)> window;
 };
 
+// Convenience
+
+template <typename T, std::size_t Window>
+using covariance = basic_comoment<T, Window, with::variance>;
+
 } // namespace window
 } // namespace online
 } // namespace trial
 
-#include <trial/online/window/detail/covariance.ipp>
+#include <trial/online/window/detail/comoment.ipp>
 
-#endif // TRIAL_ONLINE_WINDOW_COVARIANCE_HPP
+#endif // TRIAL_ONLINE_WINDOW_COMOMENT_HPP
