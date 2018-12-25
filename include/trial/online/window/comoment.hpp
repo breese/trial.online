@@ -40,8 +40,8 @@ public:
 
     size_type size() const noexcept;
     // O(W)
-    value_type value() const noexcept;
-    value_type unbiased_value() const noexcept;
+    value_type variance() const noexcept;
+    value_type unbiased_variance() const noexcept;
 
 private:
     value_type sum() const noexcept;

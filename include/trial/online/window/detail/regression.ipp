@@ -51,7 +51,7 @@ auto regression<T, W>::slope() const noexcept -> value_type
     const auto divisor = x_moment.variance();
     return (divisor == 0)
         ? value_type(0)
-        : covariance.value() / divisor;
+        : covariance.variance() / divisor;
 }
 
 } // namespace window

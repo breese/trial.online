@@ -57,7 +57,7 @@ auto basic_comoment<T, W, with::variance>::sum() const noexcept -> value_type
 }
 
 template <typename T, std::size_t W>
-auto basic_comoment<T, W, with::variance>::value() const noexcept -> value_type
+auto basic_comoment<T, W, with::variance>::variance() const noexcept -> value_type
 {
     if (size() > 0)
         return sum() / size();
@@ -65,7 +65,7 @@ auto basic_comoment<T, W, with::variance>::value() const noexcept -> value_type
 }
 
 template <typename T, std::size_t W>
-auto basic_comoment<T, W, with::variance>::unbiased_value() const noexcept -> value_type
+auto basic_comoment<T, W, with::variance>::unbiased_variance() const noexcept -> value_type
 {
     if (size() > 1)
         return sum() / (size() - 1);
