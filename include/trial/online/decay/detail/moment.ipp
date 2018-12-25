@@ -134,10 +134,55 @@ void basic_moment<T, with::skew>::push(value_type input) noexcept
 {
     super::push(input);
     const auto mean = super::mean();
-    const value_type one(1);
     const value_type delta = input - mean;
     sum.skew += skew_factor * (delta * delta * delta - sum.skew);
-    normalization += skew_factor * (one - normalization);
+    normalization += skew_factor * (value_type(1) - normalization);
+}
+
+//-----------------------------------------------------------------------------
+// Mean with variance, skewness, and kurtosis
+//-----------------------------------------------------------------------------
+
+template <typename T>
+basic_moment<T, with::kurtosis>::basic_moment(value_type mean_factor,
+                                              value_type var_factor,
+                                              value_type skew_factor,
+                                              value_type kurtosis_factor) noexcept
+    : super(mean_factor, var_factor, skew_factor),
+      kurtosis_factor(kurtosis_factor)
+{
+    assert(kurtosis_factor > 0.0);
+    assert(kurtosis_factor <= 1.0);
+}
+
+template <typename T>
+void basic_moment<T, with::kurtosis>::clear() noexcept
+{
+    super::clear();
+    sum.kurtosis = value_type(0);
+}
+
+template <typename T>
+auto basic_moment<T, with::kurtosis>::kurtosis() const noexcept -> value_type
+{
+    if (normalization > value_type(0))
+    {
+        const auto var = super::variance();
+        return (var > std::numeric_limits<value_type>::epsilon())
+            ? sum.kurtosis / (var * var) / normalization
+            : value_type(0);
+    }
+    return value_type(0);
+}
+
+template <typename T>
+void basic_moment<T, with::kurtosis>::push(value_type input) noexcept
+{
+    super::push(input);
+    const auto mean = super::mean();
+    const value_type delta = input - mean;
+    sum.kurtosis += kurtosis_factor * (delta * delta * delta * delta - sum.kurtosis);
+    normalization += kurtosis_factor * (value_type(1) - normalization);
 }
 
 } // namespace decay

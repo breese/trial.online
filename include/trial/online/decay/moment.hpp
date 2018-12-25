@@ -127,6 +127,42 @@ protected:
     } sum;
 };
 
+// With kurtosis
+
+template <typename T>
+class basic_moment<T, with::kurtosis>
+    : public basic_moment<T, with::skew>
+{
+protected:
+    using super = basic_moment<T, with::skew>;
+
+public:
+    using typename super::value_type;
+
+    basic_moment(value_type mean_factor, value_type var_factor, value_type skew_factor, value_type kurtosis_factor) noexcept;
+
+    basic_moment(const basic_moment&) = default;
+    basic_moment(basic_moment&&) = default;
+    basic_moment& operator= (const basic_moment&) = default;
+    basic_moment& operator= (basic_moment&&) = default;
+
+    void clear() noexcept;
+    void push(value_type) noexcept;
+
+    using super::mean;
+    using super::variance;
+    using super::skew;
+    value_type kurtosis() const noexcept;
+
+protected:
+    const value_type kurtosis_factor;
+    struct
+    {
+        value_type kurtosis = value_type(0);
+    } sum;
+    value_type normalization = value_type(0);
+};
+
 // Convenience
 
 template <typename T>
@@ -137,6 +173,9 @@ using moment_variance = basic_moment<T, with::variance>;
 
 template <typename T>
 using moment_skew = basic_moment<T, with::skew>;
+
+template <typename T>
+using moment_kurtosis = basic_moment<T, with::kurtosis>;
 
 } // namespace decay
 } // namespace online
