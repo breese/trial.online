@@ -21,7 +21,7 @@ namespace cumulative
 template <typename T>
 void regression<T>::clear() noexcept
 {
-    covariance.clear();
+    co_moment.clear();
     x_moment.clear();
     y_moment.clear();
 }
@@ -37,7 +37,7 @@ auto regression<T>::size() const noexcept -> size_type
 template <typename T>
 void regression<T>::push(value_type x, value_type y) noexcept
 {
-    covariance.push(x, y);
+    co_moment.push(x, y);
     x_moment.push(x);
     y_moment.push(y);
 }
@@ -54,7 +54,7 @@ auto regression<T>::slope() const noexcept -> value_type
     const auto divisor = x_moment.variance();
     return (divisor == 0)
         ? value_type(0)
-        : covariance.value() / divisor;
+        : co_moment.variance() / divisor;
 }
 
 } // namespace cumulative

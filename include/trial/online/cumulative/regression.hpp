@@ -15,7 +15,7 @@
 
 #include <cstddef>
 #include <type_traits>
-#include <trial/online/cumulative/covariance.hpp>
+#include <trial/online/cumulative/comoment.hpp>
 
 namespace trial
 {
@@ -59,7 +59,7 @@ public:
     value_type slope() const noexcept;
 
 private:
-    class covariance<value_type> covariance;
+    basic_comoment<value_type, with::variance> co_moment;
     basic_moment<value_type, with::variance> x_moment;
     basic_moment<value_type, with::variance> y_moment;
 };

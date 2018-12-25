@@ -13,7 +13,7 @@
 
 // https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
 
-#include <trial/online/cumulative/covariance.hpp>
+#include <trial/online/cumulative/comoment.hpp>
 
 namespace trial
 {
@@ -38,7 +38,7 @@ public:
     value_type value() const noexcept;
 
 private:
-    class covariance<value_type> covariance;
+    basic_comoment<value_type, with::variance> co_moment;
     basic_moment<value_type, with::variance> x_moment;
     basic_moment<value_type, with::variance> y_moment;
 };
