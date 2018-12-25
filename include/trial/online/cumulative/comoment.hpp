@@ -51,9 +51,6 @@ protected:
 // Convenience
 
 template <typename T>
-using comean = basic_comoment<T, with::mean>;
-
-template <typename T>
 using covariance = basic_comoment<T, with::variance>;
 
 } // namespace cumulative
