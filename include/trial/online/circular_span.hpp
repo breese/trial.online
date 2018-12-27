@@ -40,20 +40,29 @@ public:
     //! @brief Clears span and inserts elements at end of span.
     circular_span& operator= (std::initializer_list<value_type>) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
+    //! @brief Creates circular span.
+    //!
+    //! The span covers the range from begin to end.
     template <typename ContiguousIterator>
     circular_span(ContiguousIterator begin,
                   ContiguousIterator end) noexcept;
 
+    //! @brief Creates circular span.
+    //!
+    //! The span covers the range from @c begin to @c end.
+    //!
+    //! The span is initialized as if the pre-existing @c length values from
+    //! @c first had already been pushed onto the span.
     template <typename ContiguousIterator>
     circular_span(ContiguousIterator begin,
                   ContiguousIterator end,
                   ContiguousIterator first,
                   size_type length) noexcept;
 
-    //! @brief Check if span is empty.
+    //! @brief Checks if span is empty.
     bool empty() const noexcept;
 
-    //! @brief Check if span is full.
+    //! @brief Checks if span is full.
     bool full() const noexcept;
 
     //! @brief Returns the maximum possible number of elements in span.
