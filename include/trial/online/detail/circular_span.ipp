@@ -28,6 +28,16 @@ circular_span<T>::circular_span(ContiguousIterator begin,
 }
 
 template <typename T>
+template <typename ContiguousIterator>
+circular_span<T>::circular_span(ContiguousIterator begin,
+                                ContiguousIterator end,
+                                ContiguousIterator first,
+                                size_type length) noexcept
+    : member{std::addressof(*begin), size_type(std::distance(begin, end)), length, size_type(std::distance(begin, first))}
+{
+}
+
+template <typename T>
 auto circular_span<T>::operator= (std::initializer_list<value_type> input) noexcept(std::is_nothrow_copy_assignable<T>::value) -> circular_span&
 {
     assign(std::move(input));

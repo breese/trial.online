@@ -41,7 +41,14 @@ public:
     circular_span& operator= (std::initializer_list<value_type>) noexcept(std::is_nothrow_copy_assignable<T>::value);
 
     template <typename ContiguousIterator>
-    circular_span(ContiguousIterator begin, ContiguousIterator end) noexcept;
+    circular_span(ContiguousIterator begin,
+                  ContiguousIterator end) noexcept;
+
+    template <typename ContiguousIterator>
+    circular_span(ContiguousIterator begin,
+                  ContiguousIterator end,
+                  ContiguousIterator first,
+                  size_type length) noexcept;
 
     //! @brief Check if span is empty.
     bool empty() const noexcept;

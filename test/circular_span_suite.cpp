@@ -22,7 +22,7 @@ using namespace trial::online;
 namespace plain_array_suite
 {
 
-void test_empty()
+void test_ctor()
 {
     int array[4];
     circular_span<decltype(array)> span(array);
@@ -305,7 +305,7 @@ void test_assign_initializer_list()
 
 void run()
 {
-    test_empty();
+    test_ctor();
     test_push_front();
     test_push_back();
     test_push_alternating();
@@ -323,13 +323,23 @@ void run()
 namespace std_array_suite
 {
 
-void test_empty()
+void test_ctor()
 {
     std::array<int, 4> array;
     circular_span<int> span(array.begin(), array.end());
     TRIAL_ONLINE_TEST(span.empty());
     TRIAL_ONLINE_TEST(!span.full());
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 0);
+    TRIAL_ONLINE_TEST_EQUAL(span.capacity(), 4);
+}
+
+void test_ctor_init()
+{
+    std::array<int, 4> array = { 1, 2, 3, 4 };
+    circular_span<int> span(array.begin(), array.end(), array.begin(), array.size());
+    TRIAL_ONLINE_TEST(!span.empty());
+    TRIAL_ONLINE_TEST(span.full());
+    TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
     TRIAL_ONLINE_TEST_EQUAL(span.capacity(), 4);
 }
 
@@ -397,7 +407,8 @@ void test_push_back()
 
 void run()
 {
-    test_empty();
+    test_ctor();
+    test_ctor_init();
     test_push_front();
     test_push_back();
 }
@@ -409,7 +420,7 @@ void run()
 namespace std_vector_suite
 {
 
-void test_very_empty()
+void test_ctor_empty()
 {
     std::vector<int> array;
     circular_span<int> span(array.begin(), array.end());
@@ -419,7 +430,7 @@ void test_very_empty()
     TRIAL_ONLINE_TEST_EQUAL(span.capacity(), 0);
 }
 
-void test_empty()
+void test_ctor()
 {
     std::vector<int> array(4);
     circular_span<int> span(array.begin(), array.end());
@@ -462,8 +473,8 @@ void test_push_back()
 
 void run()
 {
-    test_very_empty();
-    test_empty();
+    test_ctor_empty();
+    test_ctor();
     test_push_back();
 }
 
