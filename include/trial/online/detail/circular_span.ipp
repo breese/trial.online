@@ -73,7 +73,7 @@ auto circular_span<T>::front() const noexcept -> const_reference
 {
     assert(!empty());
 
-    return at(index(member.next) - member.size);
+    return at(member.next - member.size);
 }
 
 template <typename T>

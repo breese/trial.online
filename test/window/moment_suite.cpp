@@ -9,13 +9,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
+#include <trial/online/detail/functional.hpp>
 #include <trial/online/window/moment.hpp>
 
 using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
-namespace average_double_1_suite
+namespace mean_double_1_suite
 {
 
 void test_ctor()
@@ -55,11 +56,11 @@ void run()
     test_many();
 }
 
-} // namespace average_double_1_suite
+} // namespace mean_double_1_suite
 
 //-----------------------------------------------------------------------------
 
-namespace average_double_2_suite
+namespace mean_double_2_suite
 {
 
 void test_ctor()
@@ -118,6 +119,23 @@ void test_three()
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
 }
 
+void test_linear_increase()
+{
+    window::moment<double, 2> filter;
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.5);
+    filter.push(4.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.5);
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 4.5);
+    filter.push(6.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 5.5);
+}
+
 void test_clear()
 {
     window::moment<double, 2> filter;
@@ -137,14 +155,56 @@ void run()
     test_one();
     test_two();
     test_three();
+    test_linear_increase();
     test_clear();
 }
 
-} // namespace average_double_2_suite
+} // namespace mean_double_2_suite
 
 //-----------------------------------------------------------------------------
 
-namespace average_double_4_suite
+namespace mean_double_3_suite
+{
+
+void test_ctor()
+{
+    window::moment<double, 3> filter;
+    TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 3);
+    TRIAL_ONLINE_TEST_EQUAL(filter.empty(), true);
+    TRIAL_ONLINE_TEST_EQUAL(filter.full(), false);
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
+}
+
+void test_linear_increase()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    window::moment<double, 3> filter;
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 1.0, tolerance);
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 1.5, tolerance);
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.0, tolerance);
+    filter.push(4.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 3.0, tolerance);
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 4.0, tolerance);
+    filter.push(6.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 5.0, tolerance);
+}
+
+void run()
+{
+    test_ctor();
+    test_linear_increase();
+}
+
+} // namespace mean_double_3_suite
+
+//-----------------------------------------------------------------------------
+
+namespace mean_double_4_suite
 {
 
 void test_ctor()
@@ -239,11 +299,11 @@ void run()
     test_linear_decrease();
 }
 
-} // namespace average_double_4_suite
+} // namespace mean_double_4_suite
 
 //-----------------------------------------------------------------------------
 
-namespace average_float_2_suite
+namespace mean_float_2_suite
 {
 
 void test_ctor()
@@ -324,11 +384,11 @@ void run()
     test_clear();
 }
 
-} // namespace average_float_2_suite
+} // namespace mean_float_2_suite
 
 //-----------------------------------------------------------------------------
 
-namespace average_int_2_suite
+namespace mean_int_2_suite
 {
 
 void test_ctor()
@@ -409,7 +469,7 @@ void run()
     test_clear();
 }
 
-} // namespace average_int_2_suite
+} // namespace mean_int_2_suite
 
 //-----------------------------------------------------------------------------
 
@@ -573,11 +633,12 @@ void run()
 
 int main()
 {
-    average_double_1_suite::run();
-    average_double_2_suite::run();
-    average_double_4_suite::run();
-    average_float_2_suite::run();
-    average_int_2_suite::run();
+    mean_double_1_suite::run();
+    mean_double_2_suite::run();
+    mean_double_3_suite::run();
+    mean_double_4_suite::run();
+    mean_float_2_suite::run();
+    mean_int_2_suite::run();
 
     variance_double_1_suite::run();
     variance_double_2_suite::run();
