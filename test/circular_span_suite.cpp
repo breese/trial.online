@@ -742,6 +742,269 @@ void run()
 
 //-----------------------------------------------------------------------------
 
+namespace window_size_suite
+{
+
+void test_1()
+{
+    std::array<int, 1> array;
+    circular_span<int> span(array.begin(), array.end());
+    span.push_back(1);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 1);
+        std::vector<int> expect = { 1 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(2);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 2);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 2);
+        std::vector<int> expect = { 2 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(3);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 3);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 3);
+        std::vector<int> expect = { 3 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(4);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 4);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 4);
+        std::vector<int> expect = { 4 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(5);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 5);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 5);
+        std::vector<int> expect = { 5 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(6);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 6);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 6);
+        std::vector<int> expect = { 6 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+}
+
+void test_2()
+{
+    std::array<int, 2> array;
+    circular_span<int> span(array.begin(), array.end());
+    span.push_back(1);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 1);
+        std::vector<int> expect = { 1 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(2);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 2);
+        std::vector<int> expect = { 1, 2 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(3);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 2);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 3);
+        std::vector<int> expect = { 2, 3 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(4);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 3);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 4);
+        std::vector<int> expect = { 3, 4 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(5);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 4);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 5);
+        std::vector<int> expect = { 4, 5 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(6);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 5);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 6);
+        std::vector<int> expect = { 5, 6 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+}
+
+void test_3()
+{
+    std::array<int, 3> array;
+    circular_span<int> span(array.begin(), array.end());
+    span.push_back(1);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 1);
+        std::vector<int> expect = { 1 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(2);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 2);
+        std::vector<int> expect = { 1, 2 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(3);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 3);
+        std::vector<int> expect = { 1, 2, 3 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(4);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 2);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 4);
+        std::vector<int> expect = { 2, 3, 4 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(5);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 3);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 5);
+        std::vector<int> expect = { 3, 4, 5 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(6);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 4);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 6);
+        std::vector<int> expect = { 4, 5, 6 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(7);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 5);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 7);
+        std::vector<int> expect = { 5, 6, 7 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+}
+
+void test_4()
+{
+    std::array<int, 4> array;
+    circular_span<int> span(array.begin(), array.end());
+    span.push_back(1);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 1);
+        std::vector<int> expect = { 1 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(2);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 2);
+        std::vector<int> expect = { 1, 2 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(3);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 3);
+        std::vector<int> expect = { 1, 2, 3 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(4);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 4);
+        std::vector<int> expect = { 1, 2, 3, 4 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(5);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 2);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 5);
+        std::vector<int> expect = { 2, 3, 4, 5 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(6);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 3);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 6);
+        std::vector<int> expect = { 3, 4, 5, 6 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(7);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 4);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 7);
+        std::vector<int> expect = { 4, 5, 6, 7 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(8);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 5);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 8);
+        std::vector<int> expect = { 5, 6, 7, 8 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+    span.push_back(9);
+    {
+        TRIAL_ONLINE_TEST_EQUAL(span.front(), 6);
+        TRIAL_ONLINE_TEST_EQUAL(span.back(), 9);
+        std::vector<int> expect = { 6, 7, 8, 9 };
+        TRIAL_ONLINE_TEST_ALL_EQUAL(span.begin(), span.end(),
+                                    expect.begin(), expect.end());
+    }
+}
+
+void run()
+{
+    test_1();
+    test_2();
+    test_3();
+    test_4();
+}
+
+} // namespace window_size_suite
+
+//-----------------------------------------------------------------------------
+
 namespace std_algorithm_suite
 {
 
@@ -869,6 +1132,7 @@ int main()
     std_vector_suite::run();
     iterator_suite::run();
     clear_suite::run();
+    window_size_suite::run();
     std_algorithm_suite::run();
     std_numeric_suite::run();
 

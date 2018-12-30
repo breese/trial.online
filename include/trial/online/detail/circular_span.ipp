@@ -81,7 +81,7 @@ auto circular_span<T>::back() const noexcept -> const_reference
 {
     assert(!empty());
 
-    return at(index(member.next) - 1);
+    return at(member.next - 1);
 }
 
 template <typename T>
@@ -118,7 +118,7 @@ void circular_span<T>::push_front(value_type input) noexcept(std::is_nothrow_mov
 {
     if (full())
     {
-        member.next = vindex(member.next) - 1;
+        member.next = member.capacity + index(member.next) - 1;
     }
     else
     {
@@ -131,7 +131,7 @@ template <typename T>
 void circular_span<T>::push_back(value_type input) noexcept(std::is_nothrow_move_assignable<T>::value)
 {
     at(member.next) = std::move(input);
-    member.next = vindex(member.next) + 1;
+    member.next = member.capacity + index(member.next) + 1;
     if (!full())
     {
         ++member.size;
@@ -151,7 +151,7 @@ void circular_span<T>::pop_back() noexcept
 {
     assert(!empty());
 
-    member.next = vindex(member.next - 1);
+    member.next = member.capacity + index(member.next - 1);
     --member.size;
 }
 
