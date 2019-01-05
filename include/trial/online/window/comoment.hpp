@@ -39,18 +39,23 @@ public:
     void push(value_type first, value_type second) noexcept;
 
     size_type size() const noexcept;
-    // O(W)
     value_type variance() const noexcept;
     value_type unbiased_variance() const noexcept;
 
 private:
-    value_type sum() const noexcept;
+    value_type cosum() const noexcept;
 
 private:
     basic_moment<value_type, Window, with::mean> x_moment;
     basic_moment<value_type, Window, with::mean> y_moment;
     std::pair<value_type, value_type> storage[Window];
     circular_span<decltype(storage)> window;
+    struct
+    {
+        value_type x = value_type(0);
+        value_type y = value_type(0);
+        value_type xy = value_type(0);
+    } sum;
 };
 
 // Convenience

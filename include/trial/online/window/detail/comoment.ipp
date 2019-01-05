@@ -33,6 +33,7 @@ void basic_comoment<T, W, with::variance>::clear() noexcept
     x_moment.clear();
     y_moment.clear();
     window.clear();
+    sum.x = sum.y = sum.xy = value_type(0);
 }
 
 template <typename T, std::size_t W>
@@ -40,27 +41,39 @@ void basic_comoment<T, W, with::variance>::push(value_type x, value_type y) noex
 {
     x_moment.push(x);
     y_moment.push(y);
+    if (window.full())
+    {
+        const auto front_x = window.front().first;
+        const auto front_y = window.front().second;
+        sum.x += x - front_x;
+        sum.y += y - front_y;
+        sum.xy += x * y - front_x * front_y;
+    }
+    else
+    {
+        sum.x += x;
+        sum.y += y;
+        sum.xy += x * y;
+    }
     window.push_back(std::make_pair(x, y));
 }
 
 template <typename T, std::size_t W>
-auto basic_comoment<T, W, with::variance>::sum() const noexcept -> value_type
+auto basic_comoment<T, W, with::variance>::cosum() const noexcept -> value_type
 {
-    value_type sum(0);
     const auto x_mean = x_moment.mean();
     const auto y_mean = y_moment.mean();
-    for (const auto& item : window)
-    {
-        sum += (item.first - x_mean) * (item.second - y_mean);
-    }
-    return sum;
+    return size() * x_mean * y_mean
+        + sum.xy
+        - sum.x * y_mean
+        - sum.y * x_mean;
 }
 
 template <typename T, std::size_t W>
 auto basic_comoment<T, W, with::variance>::variance() const noexcept -> value_type
 {
     if (size() > 0)
-        return sum() / size();
+        return cosum() / size();
     return value_type(0);
 }
 
@@ -68,7 +81,7 @@ template <typename T, std::size_t W>
 auto basic_comoment<T, W, with::variance>::unbiased_variance() const noexcept -> value_type
 {
     if (size() > 1)
-        return sum() / (size() - 1);
+        return cosum() / (size() - 1);
     return value_type(0);
 }
 
