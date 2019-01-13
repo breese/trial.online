@@ -105,34 +105,34 @@ void basic_moment<T, with::variance>::push(value_type input) noexcept
 //-----------------------------------------------------------------------------
 
 template <typename T>
-void basic_moment<T, with::skew>::clear() noexcept
+void basic_moment<T, with::skewness>::clear() noexcept
 {
     super::clear();
-    sum.skew = value_type(0);
+    sum.skewness = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with::skew>::skew() const noexcept -> value_type
+auto basic_moment<T, with::skewness>::skewness() const noexcept -> value_type
 {
-    if (sum.skew < std::numeric_limits<value_type>::epsilon())
+    if (sum.skewness < std::numeric_limits<value_type>::epsilon())
         return value_type(0);
-    return std::sqrt(super::size()) * sum.skew / (std::sqrt(super::sum.variance) * super::sum.variance);
+    return std::sqrt(super::size()) * sum.skewness / (std::sqrt(super::sum.variance) * super::sum.variance);
 }
 
 template <typename T>
-auto basic_moment<T, with::skew>::unbiased_skew() const noexcept -> value_type
+auto basic_moment<T, with::skewness>::unbiased_skewness() const noexcept -> value_type
 {
     const auto count = size();
     if (count < 2)
         return value_type(0);
-    if (sum.skew < std::numeric_limits<value_type>::epsilon())
+    if (sum.skewness < std::numeric_limits<value_type>::epsilon())
         return value_type(0);
     // Bias-correction from Octave manual
-    return skew() * std::sqrt(count * (count - 1)) / value_type(count - 2);
+    return skewness() * std::sqrt(count * (count - 1)) / value_type(count - 2);
 }
 
 template <typename T>
-void basic_moment<T, with::skew>::push(value_type input) noexcept
+void basic_moment<T, with::skewness>::push(value_type input) noexcept
 {
     // Use old sums
     const auto count = super::size();
@@ -140,7 +140,7 @@ void basic_moment<T, with::skew>::push(value_type input) noexcept
     const auto n = count + 1;
     const auto delta_over_n = delta / n;
 
-    sum.skew += ((delta * delta_over_n * (n - 1) * (n - 2)) - 3 * super::sum.variance) * delta_over_n;
+    sum.skewness += ((delta * delta_over_n * (n - 1) * (n - 2)) - 3 * super::sum.variance) * delta_over_n;
 
     super::push(input);
 }
@@ -187,8 +187,8 @@ void basic_moment<T, with::kurtosis>::push(value_type input) noexcept
 
     const auto expr = delta * delta_over_n * (n - 1) * (n * (n - 3) + 3);
     const auto var_expr = value_type(6) * super::super::sum.variance;
-    const auto skew_expr = value_type(4) * super::sum.skew;
-    sum.kurtosis += ((expr + var_expr) * delta_over_n - skew_expr) * delta_over_n;
+    const auto skewness_expr = value_type(4) * super::sum.skewness;
+    sum.kurtosis += ((expr + var_expr) * delta_over_n - skewness_expr) * delta_over_n;
 
     super::push(input);
 }

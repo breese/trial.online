@@ -86,7 +86,7 @@ protected:
 // With skewness
 
 template <typename T>
-class basic_moment<T, with::skew>
+class basic_moment<T, with::skewness>
     : protected basic_moment<T, with::variance>
 {
 protected:
@@ -104,13 +104,13 @@ public:
     using super::unbiased_mean;
     using super::variance;
     using super::unbiased_variance;
-    value_type skew() const noexcept;
-    value_type unbiased_skew() const noexcept;
+    value_type skewness() const noexcept;
+    value_type unbiased_skewness() const noexcept;
 
 protected:
     struct
     {
-        value_type skew = 0;
+        value_type skewness = 0;
     } sum;
 };
 
@@ -118,10 +118,10 @@ protected:
 
 template <typename T>
 class basic_moment<T, with::kurtosis>
-    : public basic_moment<T, with::skew>
+    : public basic_moment<T, with::skewness>
 {
 protected:
-    using super = basic_moment<T, with::skew>;
+    using super = basic_moment<T, with::skewness>;
 
 public:
     using typename super::value_type;
@@ -134,8 +134,8 @@ public:
     using super::unbiased_mean;
     using super::variance;
     using super::unbiased_variance;
-    using super::skew;
-    using super::unbiased_skew;
+    using super::skewness;
+    using super::unbiased_skewness;
     value_type kurtosis() const noexcept;
     value_type unbiased_kurtosis() const noexcept;
 
@@ -155,7 +155,7 @@ template <typename T>
 using moment_variance = basic_moment<T, with::variance>;
 
 template <typename T>
-using moment_skew = basic_moment<T, with::skew>;
+using moment_skewness = basic_moment<T, with::skewness>;
 
 template <typename T>
 using moment_kurtosis = basic_moment<T, with::kurtosis>;

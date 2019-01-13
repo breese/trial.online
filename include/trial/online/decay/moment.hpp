@@ -95,7 +95,7 @@ protected:
 // With skewness
 
 template <typename T>
-class basic_moment<T, with::skew>
+class basic_moment<T, with::skewness>
     : public basic_moment<T, with::variance>
 {
 protected:
@@ -104,7 +104,7 @@ protected:
 public:
     using typename super::value_type;
 
-    basic_moment(value_type mean_factor, value_type var_factor, value_type skew_factor) noexcept;
+    basic_moment(value_type mean_factor, value_type var_factor, value_type skewness_factor) noexcept;
 
     basic_moment(const basic_moment&) = default;
     basic_moment(basic_moment&&) = default;
@@ -116,14 +116,14 @@ public:
 
     using super::mean;
     using super::variance;
-    value_type skew() const noexcept;
+    value_type skewness() const noexcept;
 
 protected:
-    const value_type skew_factor;
+    const value_type skewness_factor;
     value_type normalization = value_type(0);
     struct
     {
-        value_type skew = value_type(0);
+        value_type skewness = value_type(0);
     } sum;
 };
 
@@ -131,15 +131,15 @@ protected:
 
 template <typename T>
 class basic_moment<T, with::kurtosis>
-    : public basic_moment<T, with::skew>
+    : public basic_moment<T, with::skewness>
 {
 protected:
-    using super = basic_moment<T, with::skew>;
+    using super = basic_moment<T, with::skewness>;
 
 public:
     using typename super::value_type;
 
-    basic_moment(value_type mean_factor, value_type var_factor, value_type skew_factor, value_type kurtosis_factor) noexcept;
+    basic_moment(value_type mean_factor, value_type var_factor, value_type skewness_factor, value_type kurtosis_factor) noexcept;
 
     basic_moment(const basic_moment&) = default;
     basic_moment(basic_moment&&) = default;
@@ -151,7 +151,7 @@ public:
 
     using super::mean;
     using super::variance;
-    using super::skew;
+    using super::skewness;
     value_type kurtosis() const noexcept;
 
 protected:
@@ -172,7 +172,7 @@ template <typename T>
 using moment_variance = basic_moment<T, with::variance>;
 
 template <typename T>
-using moment_skew = basic_moment<T, with::skew>;
+using moment_skewness = basic_moment<T, with::skewness>;
 
 template <typename T>
 using moment_kurtosis = basic_moment<T, with::kurtosis>;

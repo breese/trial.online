@@ -99,44 +99,44 @@ void basic_moment<T, with::variance>::push(value_type input) noexcept
 //-----------------------------------------------------------------------------
 
 template <typename T>
-basic_moment<T, with::skew>::basic_moment(value_type mean_factor,
-                                          value_type var_factor,
-                                          value_type skew_factor) noexcept
+basic_moment<T, with::skewness>::basic_moment(value_type mean_factor,
+                                              value_type var_factor,
+                                              value_type skewness_factor) noexcept
     : super(mean_factor, var_factor),
-      skew_factor(skew_factor)
+      skewness_factor(skewness_factor)
 {
-    assert(skew_factor > 0.0);
-    assert(skew_factor <= 1.0);
+    assert(skewness_factor > 0.0);
+    assert(skewness_factor <= 1.0);
 }
 
 template <typename T>
-void basic_moment<T, with::skew>::clear() noexcept
+void basic_moment<T, with::skewness>::clear() noexcept
 {
     super::clear();
-    sum.skew = value_type(0);
+    sum.skewness = value_type(0);
 }
 
 template <typename T>
-auto basic_moment<T, with::skew>::skew() const noexcept -> value_type
+auto basic_moment<T, with::skewness>::skewness() const noexcept -> value_type
 {
     if (normalization > value_type(0))
     {
         const auto var = super::variance();
         return (var > std::numeric_limits<value_type>::epsilon())
-            ? sum.skew / (var * std::sqrt(var)) / normalization
+            ? sum.skewness / (var * std::sqrt(var)) / normalization
             : value_type(0);
     }
     return value_type(0);
 }
 
 template <typename T>
-void basic_moment<T, with::skew>::push(value_type input) noexcept
+void basic_moment<T, with::skewness>::push(value_type input) noexcept
 {
     super::push(input);
     const auto mean = super::mean();
     const value_type delta = input - mean;
-    sum.skew += skew_factor * (delta * delta * delta - sum.skew);
-    normalization += skew_factor * (value_type(1) - normalization);
+    sum.skewness += skewness_factor * (delta * delta * delta - sum.skewness);
+    normalization += skewness_factor * (value_type(1) - normalization);
 }
 
 //-----------------------------------------------------------------------------
@@ -146,9 +146,9 @@ void basic_moment<T, with::skew>::push(value_type input) noexcept
 template <typename T>
 basic_moment<T, with::kurtosis>::basic_moment(value_type mean_factor,
                                               value_type var_factor,
-                                              value_type skew_factor,
+                                              value_type skewness_factor,
                                               value_type kurtosis_factor) noexcept
-    : super(mean_factor, var_factor, skew_factor),
+    : super(mean_factor, var_factor, skewness_factor),
       kurtosis_factor(kurtosis_factor)
 {
     assert(kurtosis_factor > 0.0);

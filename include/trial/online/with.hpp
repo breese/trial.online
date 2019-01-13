@@ -20,7 +20,7 @@ enum struct with
 {
     mean = 1,
     variance = 2,
-    skew = 3,
+    skewness = 3,
     kurtosis = 4
 };
 
