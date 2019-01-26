@@ -13,6 +13,7 @@
 
 #include <cstddef>
 #include <type_traits>
+#include <trial/online/window/moment.hpp>
 #include <trial/online/window/comoment.hpp>
 
 namespace trial

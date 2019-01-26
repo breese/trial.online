@@ -10,6 +10,7 @@
 
 #include <trial/online/detail/lightweight_test.hpp>
 #include <trial/online/detail/functional.hpp>
+#include <trial/online/window/moment.hpp>
 #include <trial/online/window/comoment.hpp>
 
 using namespace trial::online;
