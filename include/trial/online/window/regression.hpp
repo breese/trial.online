@@ -25,7 +25,10 @@ namespace window
 
 template <typename T, std::size_t Window>
 class regression
+    : protected basic_comoment<T, Window, with::variance>
 {
+    using covariance = basic_comoment<T, Window, with::variance>;
+
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
 
 public:
@@ -54,9 +57,7 @@ public:
     value_type slope() const noexcept;
 
 private:
-    basic_comoment<value_type, Window, with::variance> covariance;
     basic_moment<value_type, Window, with::variance> x_moment;
-    basic_moment<value_type, Window, with::variance> y_moment;
 };
 
 } // namespace window

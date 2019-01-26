@@ -42,10 +42,10 @@ public:
     value_type variance() const noexcept;
     value_type unbiased_variance() const noexcept;
 
-private:
+protected:
     value_type cosum() const noexcept;
 
-private:
+protected:
     std::pair<value_type, value_type> storage[Window];
     circular_span<decltype(storage)> window;
     struct
