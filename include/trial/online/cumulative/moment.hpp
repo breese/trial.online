@@ -39,11 +39,28 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
+    //! @brief Resets filter.
+
     void clear() noexcept;
+
+    //! @brief Appends data point.
+
     void push(value_type) noexcept;
 
+    //! @brief Returns number of data points.
+
     size_type size() const noexcept;
+
+    //! @brief Returns biased mean.
+    //!
+    //! @pre size() > 0
+
     value_type mean() const noexcept;
+
+    //! @brief Returns unbiased mean.
+    //!
+    //! @pre size() > 1
+
     value_type unbiased_mean() const noexcept;
 
 protected:
@@ -67,13 +84,28 @@ public:
     using typename super::value_type;
     using typename super::size_type;
 
+    //! @brief Resets filter.
+
     void clear() noexcept;
+
+    //! @brief Appends data point.
+
     void push(value_type) noexcept;
 
     using super::size;
     using super::mean;
     using super::unbiased_mean;
+
+    //! @brief Returns biased variance.
+    //!
+    //! @pre size() > 0
+
     value_type variance() const noexcept;
+
+    //! @brief Returns unbiased variance.
+    //!
+    //! @pre size() > 1
+
     value_type unbiased_variance() const noexcept;
 
 protected:

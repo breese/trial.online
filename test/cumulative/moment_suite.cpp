@@ -23,8 +23,6 @@ void test_ctor()
 {
     cumulative::moment<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_mean(), 0.0);
 }
 
 void test_same()
@@ -33,7 +31,7 @@ void test_same()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_mean(), 1.0);
+    // TRIAL_ONLINE_TEST_EQUAL(filter._unbiased_mean(), undefined);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
@@ -50,7 +48,7 @@ void test_linear_increase()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_mean(), 1.0);
+    // TRIAL_ONLINE_TEST_EQUAL(filter._unbiased_mean(), undefined);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
@@ -67,7 +65,7 @@ void test_linear_decrease()
     filter.push(5.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 5.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_mean(), 5.0);
+    // TRIAL_ONLINE_TEST_EQUAL(filter._unbiased_mean(), undefined);
     filter.push(3.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 4.0);
@@ -84,7 +82,7 @@ void test_exponential_increase()
     cumulative::moment<double> filter;
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_mean(), 1.0);
+    // TRIAL_ONLINE_TEST_EQUAL(filter._unbiased_mean(), undefined);
     filter.push(1e1);
     TRIAL_ONLINE_TEST_WITH(filter.mean(), 5.5, tolerance);
     TRIAL_ONLINE_TEST_WITH(filter.unbiased_mean(), 11.0, tolerance);
@@ -134,7 +132,6 @@ void test_ctor()
 {
     cumulative::moment<int> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0);
 }
 
 void test_same()
@@ -182,9 +179,7 @@ namespace variance_double_suite
 void test_ctor()
 {
     cumulative::moment_variance<double> filter;
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
 }
 
 void test_same()
@@ -193,7 +188,7 @@ void test_same()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
+    // TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), undefined);
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
@@ -211,7 +206,7 @@ void test_linear_increase()
     filter.push(1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
+    // TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), undefined);
     filter.push(2.0);
     TRIAL_ONLINE_TEST_WITH(filter.mean(), 1.5, tolerance);
     TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.25, tolerance);
@@ -257,7 +252,7 @@ void test_exponential_increase()
     filter.push(1e0);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
     TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
+    // TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), undefined);
     filter.push(1e1);
     TRIAL_ONLINE_TEST_WITH(filter.mean(), 5.5, tolerance);
     TRIAL_ONLINE_TEST_WITH(filter.variance(), 20.25, tolerance);
@@ -314,12 +309,7 @@ namespace skewness_double_suite
 void test_ctor()
 {
     cumulative::moment_skewness<double> filter;
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_mean(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_variance(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.skewness(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_skewness(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
 }
 
 void test_same()
@@ -474,11 +464,7 @@ namespace kurtosis_double_suite
 void test_ctor()
 {
     cumulative::moment_kurtosis<double> filter;
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.skewness(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.kurtosis(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.unbiased_kurtosis(), 0.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
 }
 
 void test_same()

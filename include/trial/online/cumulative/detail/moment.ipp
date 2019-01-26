@@ -44,9 +44,7 @@ auto basic_moment<T, with::mean>::mean() const noexcept -> value_type
 template <typename T>
 auto basic_moment<T, with::mean>::unbiased_mean() const noexcept -> value_type
 {
-    return (member.count > 1)
-        ? member.mean * member.count / value_type(member.count - 1)
-        : member.mean;
+    return member.mean * member.count / value_type(member.count - 1);
 }
 
 template <typename T>
@@ -70,34 +68,21 @@ void basic_moment<T, with::variance>::clear() noexcept
 template <typename T>
 auto basic_moment<T, with::variance>::variance() const noexcept -> value_type
 {
-    const auto count = super::size();
-    return (count > 0)
-        ? sum.variance / value_type(count)
-        : value_type(0);
+    return sum.variance / value_type(super::member.count);
 }
 
 template <typename T>
 auto basic_moment<T, with::variance>::unbiased_variance() const noexcept -> value_type
 {
-    const auto count = super::size();
-    return (count > 1)
-        ? sum.variance / value_type(count - 1)
-        : value_type(0);
+    return sum.variance / value_type(super::member.count - 1);
 }
 
 template <typename T>
 void basic_moment<T, with::variance>::push(value_type input) noexcept
 {
-    if (super::size() > 0)
-    {
-        const auto diff = input - super::mean();
-        super::push(input);
-        sum.variance += diff * (input - super::mean());
-    }
-    else
-    {
-        super::push(input);
-    }
+    const auto diff = input - super::mean();
+    super::push(input);
+    sum.variance += diff * (input - super::mean());
 }
 
 //-----------------------------------------------------------------------------

@@ -37,10 +37,15 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
+    //! @brief Resets filter.
+
     void clear() noexcept;
+
+    //! @brief Returns number of data points.
+
     size_type size() const noexcept;
 
-    //! @brief Append data point.
+    //! @brief Appends data point.
 
     void push(value_type x, value_type y) noexcept;
 
@@ -49,12 +54,16 @@ public:
     //! at(0) is the intercept where the regression line crosses the y axis.
     //!
     //! @returns Predicted value at given position.
+    //!
+    //! @pre size() > 0
 
     value_type at(value_type position) const noexcept;
 
-    //! @brief Regression slope.
+    //! @brief Returns slope.
     //!
     //! @returns Slope of the regression line.
+    //!
+    //! @pre size() > 0
 
     value_type slope() const noexcept;
 

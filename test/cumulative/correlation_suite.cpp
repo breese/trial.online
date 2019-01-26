@@ -22,7 +22,6 @@ void test_empty()
 {
     cumulative::correlation<double> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 1.0);
 }
 
 void test_hinton()

@@ -31,10 +31,22 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
+    //! @brief Resets filter.
+
     void clear() noexcept;
+
+    //! @brief Appends data points.
+
     void push(value_type, value_type) noexcept;
 
+    //! @brief Returns number of data points.
+
     size_type size() const noexcept;
+
+    //! @brief Returns correlation coefficient.
+    //!
+    //! @pre size() > 0
+
     value_type value() const noexcept;
 
 private:
