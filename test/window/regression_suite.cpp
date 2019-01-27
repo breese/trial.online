@@ -23,8 +23,6 @@ void test_ctor()
 {
     window::regression<double, 4> filter;
     TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.slope(), 0.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.at(0), 0.0);
 }
 
 void test_same()
