@@ -25,7 +25,7 @@ namespace plain_array_suite
 void test_ctor()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     TRIAL_ONLINE_TEST(span.empty());
     TRIAL_ONLINE_TEST(!span.full());
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 0);
@@ -35,7 +35,7 @@ void test_ctor()
 void test_push_front()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_front(1);
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
@@ -78,7 +78,7 @@ void test_push_front()
 void test_push_back()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_back(1);
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
@@ -121,7 +121,7 @@ void test_push_back()
 void test_push_alternating()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_back(1);
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
@@ -151,7 +151,7 @@ void test_push_alternating()
 void test_pop_front()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_back(1);
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
@@ -182,7 +182,7 @@ void test_pop_front()
 void test_pop_back()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_back(1);
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(span.front(), 1);
@@ -213,7 +213,7 @@ void test_pop_back()
 void test_assign_operator()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span = { 11 };
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(span.front(), 11);
@@ -239,7 +239,7 @@ void test_assign_operator()
 void test_assign_iterator()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     {
         std::vector<int> input = { 11 };
         span.assign(input.begin(), input.end());
@@ -280,7 +280,7 @@ void test_assign_iterator()
 void test_assign_initializer_list()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.assign({ 11 });
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 1);
     TRIAL_ONLINE_TEST_EQUAL(span.front(), 11);
@@ -685,7 +685,7 @@ namespace clear_suite
 void clear_empty()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 0);
     span.clear();
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 0);
@@ -694,7 +694,7 @@ void clear_empty()
 void clear_partial()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_back(1);
     span.push_back(2);
     span.push_back(3);
@@ -706,7 +706,7 @@ void clear_partial()
 void clear_full()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_back(1);
     span.push_back(2);
     span.push_back(3);
@@ -719,7 +719,7 @@ void clear_full()
 void clear_overfull()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span.push_back(1);
     span.push_back(2);
     span.push_back(3);
@@ -1011,7 +1011,7 @@ namespace std_algorithm_suite
 void test_any_of()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span = { 1, 2, 3, 4 };
     TRIAL_ONLINE_TEST(std::any_of(span.begin(), span.end(), [] (int current) { return current == 1; }));
     span.push_back(5);
@@ -1021,7 +1021,7 @@ void test_any_of()
 void test_fill_n()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     std::fill_n(std::back_inserter(span), 2 * span.capacity(), 42);
     TRIAL_ONLINE_TEST_EQUAL(span.size(), span.capacity());
     {
@@ -1034,7 +1034,7 @@ void test_fill_n()
 void test_lower_bound()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span = { 1, 2, 3, 4 };
     auto lower = std::lower_bound(span.begin(), span.end(), 3);
     {
@@ -1047,7 +1047,7 @@ void test_lower_bound()
 void test_minmax_element()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span = { 1, 2, 3, 4 };
     auto where = std::minmax_element(span.begin(), span.end());
     TRIAL_ONLINE_TEST_EQUAL(*where.first, 1);
@@ -1057,7 +1057,7 @@ void test_minmax_element()
 void test_unique()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span = { 1, 1, 1, 4 };
     TRIAL_ONLINE_TEST_EQUAL(span.size(), 4);
     auto where = std::unique(span.begin(), span.end());
@@ -1094,7 +1094,7 @@ namespace std_numeric_suite
 void test_accumulate()
 {
     int array[4];
-    circular_span<decltype(array)> span(array);
+    circular_span<int> span(array);
     span = { 1, 2, 3, 4 };
     TRIAL_ONLINE_TEST_EQUAL(std::accumulate(span.begin(), span.end(), 0), 1 + 2 + 3 + 4);
     span.push_back(5);

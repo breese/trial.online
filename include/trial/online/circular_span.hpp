@@ -59,6 +59,9 @@ public:
                   ContiguousIterator first,
                   size_type length) noexcept;
 
+    template <std::size_t N>
+    circular_span(value_type (&array)[N]) noexcept;
+
     //! @brief Checks if span is empty.
     bool empty() const noexcept;
 
@@ -166,45 +169,6 @@ private:
         size_type size;
         size_type next;
     } member;
-};
-
-template <typename T, std::size_t N>
-class circular_span<T[N]>
-    : protected circular_span<T>
-{
-    using super = circular_span<T>;
-
-public:
-    using typename super::value_type;
-    using typename super::size_type;
-    using typename super::pointer;
-    using typename super::reference;
-    using typename super::const_reference;
-
-    circular_span(T (&array)[N]) noexcept;
-
-    using super::operator=;
-
-    using super::empty;
-    using super::full;
-    using super::size;
-    using super::capacity;
-    using super::front;
-    using super::back;
-
-    using super::clear;
-    using super::assign;
-    using super::push_front;
-    using super::push_back;
-    using super::pop_front;
-    using super::pop_back;
-
-    using typename super::iterator;
-    using typename super::const_iterator;
-    using super::begin;
-    using super::cbegin;
-    using super::end;
-    using super::cend;
 };
 
 } // namespace online

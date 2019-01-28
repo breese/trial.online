@@ -50,7 +50,7 @@ public:
 
 protected:
     value_type storage[N];
-    circular_span<decltype(storage)> window;
+    circular_span<value_type> window;
     struct
     {
         value_type mean = value_type(0);

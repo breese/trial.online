@@ -47,7 +47,7 @@ protected:
 
 protected:
     std::pair<value_type, value_type> storage[Window];
-    circular_span<decltype(storage)> window;
+    circular_span<std::pair<value_type, value_type>> window;
     struct
     {
         value_type x = value_type(0);

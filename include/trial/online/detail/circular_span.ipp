@@ -38,6 +38,13 @@ circular_span<T>::circular_span(ContiguousIterator begin,
 }
 
 template <typename T>
+template <std::size_t N>
+circular_span<T>::circular_span(value_type (&array)[N]) noexcept
+    : circular_span(array, array + N)
+{
+}
+
+template <typename T>
 auto circular_span<T>::operator= (std::initializer_list<value_type> input) noexcept(std::is_nothrow_copy_assignable<T>::value) -> circular_span&
 {
     assign(std::move(input));
@@ -264,16 +271,6 @@ template <typename U>
 bool circular_span<T>::basic_iterator<U>::operator!= (const iterator_type& other) const noexcept
 {
     return !operator==(other);
-}
-
-//-----------------------------------------------------------------------------
-// circular_span<T[N]>
-//-----------------------------------------------------------------------------
-
-template <typename T, std::size_t N>
-circular_span<T[N]>::circular_span(T (&array)[N]) noexcept
-    : super(array, array + N)
-{
 }
 
 } // namespace online
