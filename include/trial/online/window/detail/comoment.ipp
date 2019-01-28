@@ -57,12 +57,7 @@ void basic_comoment<T, W, with::variance>::push(value_type x, value_type y) noex
 template <typename T, std::size_t W>
 auto basic_comoment<T, W, with::variance>::cosum() const noexcept -> value_type
 {
-    const auto x_mean = sum.x / value_type(size());
-    const auto y_mean = sum.y / value_type(size());
-    return size() * x_mean * y_mean
-        + sum.xy
-        - sum.x * y_mean
-        - sum.y * x_mean;
+    return sum.xy - sum.x * sum.y / size();
 }
 
 template <typename T, std::size_t W>
