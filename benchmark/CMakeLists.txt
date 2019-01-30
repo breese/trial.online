@@ -28,3 +28,6 @@ trial_online_add_benchmark(cumulative_moment_benchmark cumulative/moment_benchma
 
 # decay
 trial_online_add_benchmark(decay_moment_benchmark decay/moment_benchmark.cpp)
+
+# window
+trial_online_add_benchmark(window_moment_benchmark window/moment_benchmark.cpp)
