@@ -692,6 +692,83 @@ void test_linear_increase()
     TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 5.0, tolerance); // 5.5
     TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 7.0, tolerance); // 7.75
     TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 10.0, tolerance);
+
+    quantile.push(11);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 3.0, tolerance); // 3.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 5.0, tolerance); // 6.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 8.0, tolerance); // 8.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 11.0, tolerance); // 11.0
+
+    quantile.push(12);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 3.0, tolerance); // 3.75
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 5.0, tolerance); // 6.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 9.0, tolerance); // 9.25
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 12.0, tolerance); // 12.0
+
+    quantile.push(13);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 3.0, tolerance); // 4.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 6.0, tolerance); // 7.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 10.0, tolerance); // 10.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 13.0, tolerance); // 13.0
+
+    quantile.push(14);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 3.0, tolerance); // 4.25
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 7.0, tolerance); // 7.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 11.0, tolerance); // 10.75
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 14.0, tolerance); // 14.0
+
+    quantile.push(15);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 4.0, tolerance); // 4.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 8.0, tolerance); // 8.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 12.0, tolerance); // 11.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 15.0, tolerance); // 15.0
+
+    quantile.push(16);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 5.0, tolerance); // 4.75
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 9.0, tolerance); // 8.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 13.0, tolerance); // 12.25
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 16.0, tolerance); // 16.0
+
+    quantile.push(17);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 5.0, tolerance); // 5.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 9.0, tolerance); // 9.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 13.0, tolerance); // 13.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 17.0, tolerance); // 17.0
+
+    quantile.push(18);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 6.0, tolerance); // 5.25
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 10.0, tolerance); // 9.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 14.0, tolerance); // 13.75
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 18.0, tolerance); // 18.0
+
+    quantile.push(19);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 5.0, tolerance); // 5.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 10.0, tolerance); // 10.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 15.0, tolerance); // 14.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 19.0, tolerance); // 19.0
+
+    quantile.push(20);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 6.0, tolerance); // 5.75
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 11.0, tolerance); // 10.5
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 16.0, tolerance); // 15.25
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 20.0, tolerance); // 20.0
+
+    quantile.push(21);
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<minimum_ratio>(), 1.0, tolerance); // 1.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<lower_quartile_ratio>(), 6.0, tolerance); // 6.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<median_ratio>(), 11.0, tolerance); // 11.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<upper_quartile_ratio>(), 16.0, tolerance); // 16.0
+    TRIAL_ONLINE_TEST_CLOSE(quantile.value<maximum_ratio>(), 21.0, tolerance); // 21.0
 }
 
 void run()
