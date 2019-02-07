@@ -21,6 +21,9 @@ namespace quantile
 {
 
 template <typename T, typename... Quantiles>
+constexpr T psquare<T, Quantiles...>::quantiles[];
+
+template <typename T, typename... Quantiles>
 psquare<T, Quantiles...>::parameter_type::parameter_type(size_type position,
                                                          value_type height)
     : position(position),

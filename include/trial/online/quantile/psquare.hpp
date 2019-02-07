@@ -92,7 +92,7 @@ private:
 private:
     static constexpr size_type quantile_length = sizeof...(Quantiles);
     static constexpr size_type parameter_length = 2 * quantile_length + 3;
-    const value_type quantiles[quantile_length] = { (Quantiles::num / value_type(Quantiles::den))... };
+    static constexpr value_type quantiles[quantile_length] = { (Quantiles::num / value_type(Quantiles::den))... };
 
     size_type count {0};
     std::array<size_type, parameter_length> positions;
