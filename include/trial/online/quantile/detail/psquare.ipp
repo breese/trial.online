@@ -38,15 +38,6 @@ psquare<T, Quantiles...>::psquare() noexcept
 }
 
 template <typename T, typename... Quantiles>
-psquare<T, Quantiles...>::psquare(const psquare& other) noexcept
-    : count(other.count)
-{
-    positions = other.positions;
-    heights = other.heights;
-    desired_positions = other.desired_positions;
-}
-
-template <typename T, typename... Quantiles>
 void psquare<T, Quantiles...>::initialize() noexcept
 {
     count = 0;

@@ -51,7 +51,10 @@ public:
     using size_type = std::size_t;
 
     psquare() noexcept;
-    psquare(const psquare&) noexcept;
+    psquare(const psquare&) noexcept = default;
+    psquare(psquare&&) noexcept = default;
+    psquare& operator= (const psquare&) noexcept = default;
+    psquare& operator= (psquare&&) noexcept = default;
 
     void clear() noexcept;
     bool empty() const noexcept;

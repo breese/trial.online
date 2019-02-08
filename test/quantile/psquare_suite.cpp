@@ -20,6 +20,31 @@ using upper_decile_ratio = std::ratio<9, 10>;
 namespace api_suite
 {
 
+void test_ctor()
+{
+    psquare_median<double> filter;
+    filter.push(1);
+    TRIAL_ONLINE_TEST(!filter.empty());
+
+    // Copy constructor
+    psquare_median<double> copy(filter);
+    TRIAL_ONLINE_TEST(!copy.empty());
+
+    // Copy assignment
+    psquare_median<double> assign;
+    assign = filter;
+    TRIAL_ONLINE_TEST(!assign.empty());
+
+    // Move constructor
+    psquare_median<double> mover(std::move(copy));
+    TRIAL_ONLINE_TEST(!mover.empty());
+
+    // Move assignment
+    psquare_median<double> massign;
+    massign = std::move(assign);
+    TRIAL_ONLINE_TEST(!massign.empty());
+ }
+
 void test_empty()
 {
     psquare_median<double> quantile;
@@ -96,6 +121,7 @@ void test_get()
 
 void run()
 {
+    test_ctor();
     test_empty();
     test_clear();
     test_value();
