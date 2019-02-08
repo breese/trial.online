@@ -50,29 +50,29 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
-    psquare();
-    psquare(const psquare&);
+    psquare() noexcept;
+    psquare(const psquare&) noexcept;
 
-    void clear();
-    bool empty() const;
+    void clear() noexcept;
+    bool empty() const noexcept;
 
-    void push(value_type);
+    void push(value_type) noexcept;
 
     // Get value by type.
     // Select middle quantile parameter by default.
     template < typename Q = boost::mp11::mp_at_c<QuantileList, 1 + sizeof...(Quantiles) / 2> >
-    value_type value() const;
+    value_type value() const noexcept;
 
     // Get value by index.
     template <std::size_t Index = 1 + sizeof...(Quantiles) / 2>
-    value_type get() const;
+    value_type get() const noexcept;
 
     struct parameter_type
     {
         parameter_type(size_type position,
-                       value_type height);
+                       value_type height) noexcept;
 
-        bool operator== (const parameter_type& other)
+        bool operator== (const parameter_type& other) const noexcept
         {
             return ((position == other.position) &&
                     (height == other.height));
@@ -82,12 +82,12 @@ public:
         value_type height;
     };
     std::vector<parameter_type> parameters() const;
-    void parameters(const std::vector<parameter_type>&);
+    void parameters(const std::vector<parameter_type>&) noexcept;
 
 private:
-    void initialize();
-    value_type linear(size_type, int) const;
-    value_type parabolic(size_type, int) const;
+    void initialize() noexcept;
+    value_type linear(size_type, int) const noexcept;
+    value_type parabolic(size_type, int) const noexcept;
 
 private:
     static constexpr size_type quantile_length = sizeof...(Quantiles);

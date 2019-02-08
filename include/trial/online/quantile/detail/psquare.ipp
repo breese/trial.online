@@ -25,20 +25,20 @@ constexpr T psquare<T, Quantiles...>::quantiles[];
 
 template <typename T, typename... Quantiles>
 psquare<T, Quantiles...>::parameter_type::parameter_type(size_type position,
-                                                         value_type height)
+                                                         value_type height) noexcept
     : position(position),
       height(height)
 {
 }
 
 template <typename T, typename... Quantiles>
-psquare<T, Quantiles...>::psquare()
+psquare<T, Quantiles...>::psquare() noexcept
 {
     initialize();
 }
 
 template <typename T, typename... Quantiles>
-psquare<T, Quantiles...>::psquare(const psquare& other)
+psquare<T, Quantiles...>::psquare(const psquare& other) noexcept
     : count(other.count)
 {
     positions = other.positions;
@@ -47,7 +47,7 @@ psquare<T, Quantiles...>::psquare(const psquare& other)
 }
 
 template <typename T, typename... Quantiles>
-void psquare<T, Quantiles...>::initialize()
+void psquare<T, Quantiles...>::initialize() noexcept
 {
     count = 0;
 
@@ -70,19 +70,19 @@ void psquare<T, Quantiles...>::initialize()
 }
 
 template <typename T, typename... Quantiles>
-void psquare<T, Quantiles...>::clear()
+void psquare<T, Quantiles...>::clear() noexcept
 {
     initialize();
 }
 
 template <typename T, typename... Quantiles>
-bool psquare<T, Quantiles...>::empty() const
+bool psquare<T, Quantiles...>::empty() const noexcept
 {
     return (count == 0);
 }
 
 template <typename T, typename... Quantiles>
-void psquare<T, Quantiles...>::push(value_type number)
+void psquare<T, Quantiles...>::push(value_type number) noexcept
 {
     if (count >= parameter_length)
     {
@@ -149,7 +149,7 @@ void psquare<T, Quantiles...>::push(value_type number)
 template <typename T, typename... Quantiles>
 template <typename Q>
 typename psquare<T, Quantiles...>::value_type
-psquare<T, Quantiles...>::value() const
+psquare<T, Quantiles...>::value() const noexcept
 {
     using index_type = boost::mp11::mp_find<QuantileList, Q>;
 
@@ -159,7 +159,7 @@ psquare<T, Quantiles...>::value() const
 template <typename T, typename... Quantiles>
 template <std::size_t Index>
 typename psquare<T, Quantiles...>::value_type
-psquare<T, Quantiles...>::get() const
+psquare<T, Quantiles...>::get() const noexcept
 {
     static_assert((Index <= boost::mp11::mp_find<QuantileList, maximum_ratio>::value), "Index must be within range");
 
@@ -218,7 +218,7 @@ psquare<T, Quantiles...>::parameters() const
 }
 
 template <typename T, typename... Quantiles>
-void psquare<T, Quantiles...>::parameters(const std::vector<parameter_type>& data)
+void psquare<T, Quantiles...>::parameters(const std::vector<parameter_type>& data) noexcept
 {
     for (size_type i = 0; i < parameter_length; ++i)
     {
@@ -231,7 +231,7 @@ void psquare<T, Quantiles...>::parameters(const std::vector<parameter_type>& dat
 
 template <typename T, typename... Quantiles>
 typename psquare<T, Quantiles...>::value_type
-psquare<T, Quantiles...>::linear(size_type index, int sign) const
+psquare<T, Quantiles...>::linear(size_type index, int sign) const noexcept
 {
     assert(index > 0);
     assert(index < parameter_length);
@@ -243,7 +243,7 @@ psquare<T, Quantiles...>::linear(size_type index, int sign) const
 
 template <typename T, typename... Quantiles>
 typename psquare<T, Quantiles...>::value_type
-psquare<T, Quantiles...>::parabolic(size_type index, int sign) const
+psquare<T, Quantiles...>::parabolic(size_type index, int sign) const noexcept
 {
     assert(index > 0);
     assert(index < parameter_length);
