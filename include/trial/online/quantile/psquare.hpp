@@ -58,6 +58,7 @@ public:
 
     void clear() noexcept;
     bool empty() const noexcept;
+    size_type size() const noexcept;
 
     void push(value_type) noexcept;
 

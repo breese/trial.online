@@ -73,6 +73,12 @@ bool psquare<T, Quantiles...>::empty() const noexcept
 }
 
 template <typename T, typename... Quantiles>
+auto psquare<T, Quantiles...>::size() const noexcept -> size_type
+{
+    return count;
+}
+
+template <typename T, typename... Quantiles>
 void psquare<T, Quantiles...>::push(value_type number) noexcept
 {
     if (count >= parameter_length)
