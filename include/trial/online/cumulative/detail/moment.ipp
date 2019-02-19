@@ -36,6 +36,12 @@ auto basic_moment<T, with::mean>::size() const noexcept -> size_type
 }
 
 template <typename T>
+bool basic_moment<T, with::mean>::empty() const noexcept
+{
+    return size() == 0;
+}
+
+template <typename T>
 auto basic_moment<T, with::mean>::mean() const noexcept -> value_type
 {
     return member.mean;

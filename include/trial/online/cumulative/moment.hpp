@@ -51,6 +51,10 @@ public:
 
     size_type size() const noexcept;
 
+    //! @brief Returns true if no data points.
+
+    bool empty() const noexcept;
+
     //! @brief Returns biased mean.
     //!
     //! @pre size() > 0
@@ -93,6 +97,7 @@ public:
     void push(value_type) noexcept;
 
     using super::size;
+    using super::empty;
     using super::mean;
     using super::unbiased_mean;
 
@@ -132,6 +137,7 @@ public:
     void push(value_type) noexcept;
 
     using super::size;
+    using super::empty;
     using super::mean;
     using super::unbiased_mean;
     using super::variance;
@@ -162,6 +168,8 @@ public:
     void clear() noexcept;
     void push(value_type) noexcept;
 
+    using super::size;
+    using super::empty;
     using super::mean;
     using super::unbiased_mean;
     using super::variance;
