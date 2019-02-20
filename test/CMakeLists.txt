@@ -37,6 +37,9 @@ trial_online_add_test(window_moment_suite window/moment_suite.cpp)
 trial_online_add_test(window_comoment_suite window/comoment_suite.cpp)
 trial_online_add_test(window_regression_suite window/regression_suite.cpp)
 
+# interim
+trial_online_add_test(interim_moment_suite interim/moment_suite.cpp)
+
 # quantile
 trial_online_add_test(quantile_psquare_suite quantile/psquare_suite.cpp)
 trial_online_add_test(quantile_interim_psquare_suite quantile/interim_psquare_suite.cpp)
