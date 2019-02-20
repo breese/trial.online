@@ -8,8 +8,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef TRIAL_ONLINE_QUANTILE_INTERIM_PSQUARE_HPP
-#define TRIAL_ONLINE_QUANTILE_INTERIM_PSQUARE_HPP
+#ifndef TRIAL_ONLINE_INTERIM_PSQUARE_QUANTILE_HPP
+#define TRIAL_ONLINE_INTERIM_PSQUARE_QUANTILE_HPP
 
 #include <trial/online/quantile/psquare.hpp>
 
@@ -17,7 +17,7 @@ namespace trial
 {
 namespace online
 {
-namespace quantile
+namespace interim
 {
 
 //! @brief Sliding-window quantile estimator
@@ -44,7 +44,7 @@ namespace quantile
 //! when its weight decays to zero.
 
 template <typename T, std::size_t Window, typename... Quantiles>
-class interim_psquare
+class basic_psquare_quantile
 {
     using QuantileList = boost::mp11::mp_sort<boost::mp11::mp_list<quantile::minimum_ratio, Quantiles..., quantile::maximum_ratio>, std::ratio_less>;
 
@@ -55,11 +55,11 @@ public:
     using value_type = T;
     using size_type = std::size_t;
 
-    interim_psquare() noexcept;
-    interim_psquare(const interim_psquare&) noexcept = default;
-    interim_psquare(interim_psquare&&) noexcept = default;
-    interim_psquare& operator= (const interim_psquare&) noexcept = default;
-    interim_psquare& operator= (interim_psquare&&) noexcept = default;
+    basic_psquare_quantile() noexcept;
+    basic_psquare_quantile(const basic_psquare_quantile&) noexcept = default;
+    basic_psquare_quantile(basic_psquare_quantile&&) noexcept = default;
+    basic_psquare_quantile& operator= (const basic_psquare_quantile&) noexcept = default;
+    basic_psquare_quantile& operator= (basic_psquare_quantile&&) noexcept = default;
 
     //! @brief Resets filter.
 
@@ -91,15 +91,15 @@ private:
 };
 
 template <typename T, std::size_t Window>
-using interim_psquare_median = interim_psquare<T, Window, quantile::median_ratio>;
+using psquare_median = basic_psquare_quantile<T, Window, quantile::median_ratio>;
 
 template <typename T, std::size_t Window>
-using interim_psquare_quartile = interim_psquare<T, Window, quantile::lower_quartile_ratio, quantile::median_ratio, quantile::upper_quartile_ratio>;
+using psquare_quartile = basic_psquare_quantile<T, Window, quantile::lower_quartile_ratio, quantile::median_ratio, quantile::upper_quartile_ratio>;
 
-} // namespace quantile
+} // namespace interim
 } // namespace online
 } // namespace trial
 
-#include <trial/online/quantile/detail/interim_psquare.ipp>
+#include <trial/online/interim/detail/psquare_quantile.ipp>
 
-#endif // TRIAL_ONLINE_QUANTILE_INTERIM_PSQUARE_HPP
+#endif // TRIAL_ONLINE_INTERIM_PSQUARE_QUANTILE_HPP

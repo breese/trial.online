@@ -15,18 +15,18 @@ namespace trial
 {
 namespace online
 {
-namespace quantile
+namespace interim
 {
 
 template <typename T, std::size_t W, typename... Quantiles>
-interim_psquare<T, W, Quantiles...>::interim_psquare() noexcept
+basic_psquare_quantile<T, W, Quantiles...>::basic_psquare_quantile() noexcept
     : active(std::addressof(first)),
       inactive(nullptr)
 {
 }
 
 template <typename T, std::size_t W, typename... Quantiles>
-void interim_psquare<T, W, Quantiles...>::clear() noexcept
+void basic_psquare_quantile<T, W, Quantiles...>::clear() noexcept
 {
     first.clear();
     second.clear();
@@ -35,7 +35,7 @@ void interim_psquare<T, W, Quantiles...>::clear() noexcept
 }
 
 template <typename T, std::size_t W, typename... Quantiles>
-void interim_psquare<T, W, Quantiles...>::push(value_type input) noexcept
+void basic_psquare_quantile<T, W, Quantiles...>::push(value_type input) noexcept
 {
     assert(active);
 
@@ -56,14 +56,14 @@ void interim_psquare<T, W, Quantiles...>::push(value_type input) noexcept
 }
 
 template <typename T, std::size_t W, typename... Quantiles>
-bool interim_psquare<T, W, Quantiles...>::empty() const noexcept
+bool basic_psquare_quantile<T, W, Quantiles...>::empty() const noexcept
 {
     return active->empty() && ((inactive == nullptr) || inactive->empty());
 }
 
 template <typename T, std::size_t W, typename... Quantiles>
 template <typename Q>
-auto interim_psquare<T, W, Quantiles...>::value() const noexcept -> value_type
+auto basic_psquare_quantile<T, W, Quantiles...>::value() const noexcept -> value_type
 {
     using index_type = boost::mp11::mp_find<QuantileList, Q>;
 
@@ -72,7 +72,7 @@ auto interim_psquare<T, W, Quantiles...>::value() const noexcept -> value_type
 
 template <typename T, std::size_t W, typename... Quantiles>
 template <std::size_t Index>
-auto interim_psquare<T, W, Quantiles...>::get() const noexcept -> value_type
+auto basic_psquare_quantile<T, W, Quantiles...>::get() const noexcept -> value_type
 {
     assert(active);
 
@@ -85,6 +85,6 @@ auto interim_psquare<T, W, Quantiles...>::get() const noexcept -> value_type
     return active->template get<Index>();
 }
 
-} // namespace quantile
+} // namespace interim
 } // namespace online
 } // namespace trial

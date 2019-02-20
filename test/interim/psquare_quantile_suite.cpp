@@ -1,6 +1,6 @@
 #include <trial/online/detail/lightweight_test.hpp>
 #include <trial/online/detail/functional.hpp>
-#include <trial/online/quantile/interim_psquare.hpp>
+#include <trial/online/interim/psquare_quantile.hpp>
 
 using namespace trial::online;
 
@@ -11,32 +11,32 @@ namespace api_suite
 
 void test_ctor()
 {
-    quantile::interim_psquare_median<double, 8> filter;
+    interim::psquare_median<double, 8> filter;
     filter.push(1);
     TRIAL_ONLINE_TEST(!filter.empty());
 
     // Copy constructor
-    quantile::interim_psquare_median<double, 8> copy(filter);
+    interim::psquare_median<double, 8> copy(filter);
     TRIAL_ONLINE_TEST(!copy.empty());
 
     // Copy assignment
-    quantile::interim_psquare_median<double, 8> assign;
+    interim::psquare_median<double, 8> assign;
     assign = filter;
     TRIAL_ONLINE_TEST(!assign.empty());
 
     // Move constructor
-    quantile::interim_psquare_median<double, 8> mover(std::move(copy));
+    interim::psquare_median<double, 8> mover(std::move(copy));
     TRIAL_ONLINE_TEST(!mover.empty());
 
     // Move assignment
-    quantile::interim_psquare_median<double, 8> massign;
+    interim::psquare_median<double, 8> massign;
     massign = std::move(assign);
     TRIAL_ONLINE_TEST(!massign.empty());
 }
 
 void test_empty()
 {
-    quantile::interim_psquare_median<double, 8> filter;
+    interim::psquare_median<double, 8> filter;
     TRIAL_ONLINE_TEST(filter.empty());
     filter.push(1.0);
     TRIAL_ONLINE_TEST(!filter.empty());
@@ -44,7 +44,7 @@ void test_empty()
 
 void test_clear()
 {
-    quantile::interim_psquare_median<double, 8> filter;
+    interim::psquare_median<double, 8> filter;
     filter.push(1.0);
     filter.push(2.0);
     filter.push(3.0);
@@ -72,7 +72,7 @@ namespace double_quartile_suite
 void test_linear_increase()
 {
     const double tolerance = 1e-4;
-    quantile::interim_psquare<double, 8, std::ratio<1,2>> filter;
+    interim::basic_psquare_quantile<double, 8, std::ratio<1,2>> filter;
 
     filter.push(1);
     TRIAL_ONLINE_TEST_CLOSE(filter.get<0>(), 1.0, tolerance);
@@ -138,7 +138,7 @@ void test_linear_increase()
 void test_linear_increase_with_approximation()
 {
     const double tolerance = 1e-4;
-    quantile::interim_psquare<double, 12, std::ratio<1,2>> filter;
+    interim::basic_psquare_quantile<double, 12, std::ratio<1,2>> filter;
 
     filter.push(1);
     TRIAL_ONLINE_TEST_CLOSE(filter.get<0>(), 1.0, tolerance);
