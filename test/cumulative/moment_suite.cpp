@@ -291,12 +291,51 @@ void test_exponential_increase()
     TRIAL_ONLINE_TEST_WITH(filter.unbiased_variance(), 9.8516e16, tolerance);
 }
 
+void test_scatter()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    cumulative::moment_variance<double> filter;
+
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.0, tolerance);
+
+    filter.push(0.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 1.33333, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.55556, tolerance);
+
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 3.6875, tolerance);
+
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.2, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.96, tolerance);
+
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.33333, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.55556, tolerance);
+
+    filter.push(4.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.57143, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.53061, tolerance);
+
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.375, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 2.48438, tolerance);
+}
+
 void run()
 {
     test_ctor();
     test_same();
     test_linear_increase();
     test_exponential_increase();
+    test_scatter();
 }
 
 } // namespace variance_double_suite
