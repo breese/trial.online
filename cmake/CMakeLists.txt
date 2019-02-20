@@ -35,7 +35,7 @@ endif()
 ###############################################################################
 
 # Boost.Circular Buffer
-find_package(Boost 1.63.0 QUIET)
+find_package(Boost 1.57.0 QUIET)
 if (NOT ${Boost_FOUND})
   message(FATAL_ERROR "${Boost_ERROR_REASON}")
 endif()
