@@ -45,8 +45,8 @@ trial_online_add_test(interim_psquare_quantile_suite interim/psquare_quantile_su
 trial_online_add_test(quantile_psquare_suite quantile/psquare_suite.cpp)
 
 # impulse
-trial_online_add_test(finite_suite impulse/finite_suite.cpp)
-trial_online_add_test(infinite_suite impulse/infinite_suite.cpp)
+trial_online_add_test(impulse_finite_suite impulse/finite_suite.cpp)
+trial_online_add_test(impulse_infinite_suite impulse/infinite_suite.cpp)
 
 # sampling
-trial_online_add_test(reservoir_suite sampling/reservoir_suite.cpp)
+trial_online_add_test(sampling_reservoir_suite sampling/reservoir_suite.cpp)
