@@ -35,7 +35,7 @@ endif()
 ###############################################################################
 
 # Boost.Circular Buffer
-find_package(Boost 1.55.0 QUIET)
+find_package(Boost 1.63.0 QUIET)
 if (NOT ${Boost_FOUND})
   message(FATAL_ERROR "${Boost_ERROR_REASON}")
 endif()
@@ -49,10 +49,11 @@ add_library(trial-online INTERFACE)
 ###############################################################################
 # External packages
 ###############################################################################
-
 set_target_properties(trial-online PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${Boost_INCLUDE_DIRS}"
   INTERFACE_INCLUDE_DIRECTORIES "${TRIAL_ONLINE_ROOT_DIR}/include")
+
+set_property(TARGET trial-online APPEND PROPERTY
+    INTERFACE_INCLUDE_DIRECTORIES "${Boost_INCLUDE_DIRS}")
 
 # Use own copy if Boost.Mp11 is unavailable
 if (${Boost_VERSION} LESS 106600)
