@@ -628,6 +628,101 @@ void run()
 } // namespace variance_double_2_suite
 
 //-----------------------------------------------------------------------------
+
+namespace variance_double_4_suite
+{
+
+void test_linear_increase()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    window::moment_variance<double, 4> filter;
+
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.0, tolerance);
+
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.25, tolerance);
+
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 0.666667, tolerance);
+
+    filter.push(4.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.5);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+
+    // Window is full
+
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.5);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+
+    filter.push(6.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 4.5);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+
+    filter.push(7.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 5.5);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+
+    filter.push(8.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 6.5);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+
+    filter.push(9.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 7.5);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+}
+
+void test_scatter()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    window::moment_variance<double, 4> filter;
+
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2.0);
+    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 1.0);
+
+    filter.push(0.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 1.33333, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.55556, tolerance);
+
+    filter.push(5.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.25, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 3.6875, tolerance);
+
+    filter.push(2.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 3.25, tolerance);
+
+    filter.push(3.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 3.25, tolerance);
+
+    filter.push(4.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 3.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+
+    filter.push(1.0);
+    TRIAL_ONLINE_TEST_WITH(filter.mean(), 2.5, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.25, tolerance);
+}
+
+void run()
+{
+    test_linear_increase();
+    test_scatter();
+}
+
+} // namespace variance_double_4_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -642,6 +737,7 @@ int main()
 
     variance_double_1_suite::run();
     variance_double_2_suite::run();
+    variance_double_4_suite::run();
 
     return boost::report_errors();
 }
