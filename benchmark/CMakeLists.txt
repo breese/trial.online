@@ -32,6 +32,7 @@ trial_online_add_benchmark(decay_moment_benchmark decay/moment_benchmark.cpp)
 
 # window
 trial_online_add_benchmark(window_moment_benchmark window/moment_benchmark.cpp)
+trial_online_add_benchmark(window_regression_benchmark window/regression_benchmark.cpp)
 
 # interim
 trial_online_add_benchmark(interim_moment_benchmark interim/moment_benchmark.cpp)
