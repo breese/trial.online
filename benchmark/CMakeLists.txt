@@ -25,6 +25,7 @@ trial_online_add_benchmark(circular_span_benchmark circular_span_benchmark.cpp)
 
 # cumulative
 trial_online_add_benchmark(cumulative_moment_benchmark cumulative/moment_benchmark.cpp)
+trial_online_add_benchmark(cumulative_regression_benchmark cumulative/regression_benchmark.cpp)
 
 # decay
 trial_online_add_benchmark(decay_moment_benchmark decay/moment_benchmark.cpp)
