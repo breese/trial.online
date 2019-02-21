@@ -36,4 +36,5 @@ trial_online_add_benchmark(window_regression_benchmark window/regression_benchma
 
 # interim
 trial_online_add_benchmark(interim_moment_benchmark interim/moment_benchmark.cpp)
+trial_online_add_benchmark(interim_regression_benchmark interim/regression_benchmark.cpp)
 trial_online_add_benchmark(interim_psquare_quantile_benchmark interim/psquare_quantile_benchmark.cpp)
