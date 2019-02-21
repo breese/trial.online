@@ -133,24 +133,39 @@ void test_scatter()
 
     filter.push(1.0, 1.0);
     TRIAL_ONLINE_TEST_WITH(filter.slope(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(1.0), 1.0, tolerance);
 
     filter.push(2.0, 2.0);
     TRIAL_ONLINE_TEST_WITH(filter.slope(), 1.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 0.0, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(2.0), 2.0, tolerance);
 
     filter.push(3.0, 1.3);
     TRIAL_ONLINE_TEST_WITH(filter.slope(), 0.15, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0), 1.13333, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.13333, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(3.0), 1.58333, tolerance);
 
     filter.push(4.0, 3.75);
     TRIAL_ONLINE_TEST_WITH(filter.slope(), 0.755, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0), 0.125, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 0.125, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(4.0), 3.145, tolerance);
 
     // Window full
     filter.push(5.0, 2.25);
     TRIAL_ONLINE_TEST_WITH(filter.slope(), 0.32, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0), 1.205, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.205, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(5.0), 2.805, tolerance);
+
+    filter.push(6.0, 4.5);
+    TRIAL_ONLINE_TEST_WITH(filter.slope(), 0.81, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), -0.695, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(6.0), 4.165, tolerance);
+
+    filter.push(7.0, 4.5);
+    TRIAL_ONLINE_TEST_WITH(filter.slope(), 0.45, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.275, tolerance);
+    TRIAL_ONLINE_TEST_WITH(filter.at(7.0), 4.425, tolerance);
 }
 
 void run()
