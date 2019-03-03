@@ -18,10 +18,15 @@ namespace online
 
 enum struct with
 {
+    // Moments
     mean = 1,
     variance = 2,
     skewness = 3,
-    kurtosis = 4
+    kurtosis = 4,
+
+    // Density
+    density = 10,
+    cumulation = 11
 };
 
 } // namespace online

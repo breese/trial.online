@@ -25,6 +25,7 @@ trial_online_add_benchmark(circular_span_benchmark circular_span_benchmark.cpp)
 # cumulative
 trial_online_add_benchmark(cumulative_moment_benchmark cumulative/moment_benchmark.cpp)
 trial_online_add_benchmark(cumulative_regression_benchmark cumulative/regression_benchmark.cpp)
+trial_online_add_benchmark(cumulative_hermite_density_benchmark cumulative/hermite_density_benchmark.cpp)
 
 # decay
 trial_online_add_benchmark(decay_moment_benchmark decay/moment_benchmark.cpp)
@@ -36,4 +37,5 @@ trial_online_add_benchmark(window_regression_benchmark window/regression_benchma
 # interim
 trial_online_add_benchmark(interim_moment_benchmark interim/moment_benchmark.cpp)
 trial_online_add_benchmark(interim_regression_benchmark interim/regression_benchmark.cpp)
+trial_online_add_benchmark(interim_hermite_density_benchmark interim/hermite_density_benchmark.cpp)
 trial_online_add_benchmark(interim_psquare_quantile_benchmark interim/psquare_quantile_benchmark.cpp)

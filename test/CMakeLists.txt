@@ -24,6 +24,7 @@ trial_online_add_test(cumulative_comoment_suite cumulative/comoment_suite.cpp)
 trial_online_add_test(cumulative_correlation_suite cumulative/correlation_suite.cpp)
 trial_online_add_test(cumulative_regression_suite cumulative/regression_suite.cpp)
 trial_online_add_test(cumulative_trend_suite cumulative/trend_suite.cpp)
+trial_online_add_test(cumulative_hermite_density_suite cumulative/hermite_density_suite.cpp)
 
 # decay
 trial_online_add_test(decay_moment_suite decay/moment_suite.cpp)
@@ -32,6 +33,7 @@ trial_online_add_test(decay_moment_suite decay/moment_suite.cpp)
 trial_online_add_test(window_moment_suite window/moment_suite.cpp)
 trial_online_add_test(window_comoment_suite window/comoment_suite.cpp)
 trial_online_add_test(window_regression_suite window/regression_suite.cpp)
+trial_online_add_test(window_hermite_density_suite window/hermite_density_suite.cpp)
 
 # interim
 trial_online_add_test(interim_moment_suite interim/moment_suite.cpp)
