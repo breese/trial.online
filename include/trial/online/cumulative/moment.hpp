@@ -43,6 +43,8 @@ public:
 
     void clear() noexcept;
 
+    void assign(value_type) noexcept;
+
     //! @brief Appends data point.
 
     void push(value_type) noexcept;
