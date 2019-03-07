@@ -34,17 +34,18 @@ endif()
 # Boost package
 ###############################################################################
 
-# Boost.Circular Buffer
 find_package(Boost 1.57.0 QUIET)
-if (NOT ${Boost_FOUND})
-  message(FATAL_ERROR "${Boost_ERROR_REASON}")
-endif()
 
 ###############################################################################
 # Trial.Online
 ###############################################################################
 
 add_library(trial-online INTERFACE)
+
+install(DIRECTORY ${TRIAL_ONLINE_ROOT_DIR}/include
+  DESTINATION .
+  FILES_MATCHING PATTERN "*.[hi]pp"
+  )
 
 ###############################################################################
 # External packages
@@ -59,4 +60,8 @@ set_property(TARGET trial-online APPEND PROPERTY
 if (${Boost_VERSION} LESS 106600)
   set_property(TARGET trial-online APPEND PROPERTY
     INTERFACE_INCLUDE_DIRECTORIES "${TRIAL_ONLINE_ROOT_DIR}/external/mp11/include")
+
+  install(DIRECTORY ${TRIAL_ONLINE_ROOT_DIR}/external/mp11/include
+    DESTINATION .
+    )
 endif()
