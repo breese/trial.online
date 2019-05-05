@@ -39,7 +39,7 @@ auto basic_moment<T, N, with::mean>::capacity() const noexcept -> size_type
 template <typename T, std::size_t N>
 void basic_moment<T, N, with::mean>::clear() noexcept
 {
-    sum.mean = value_type(0);
+    member.mean = value_type(0);
     window.clear();
 }
 
@@ -64,23 +64,21 @@ bool basic_moment<T, N, with::mean>::full() const noexcept
 template <typename T, std::size_t N>
 auto basic_moment<T, N, with::mean>::mean() const noexcept -> value_type
 {
-    if (empty())
-        return value_type();
-    return sum.mean / value_type(size());
+    return member.mean;
 }
 
 template <typename T, std::size_t N>
-void basic_moment<T, N, with::mean>::push(value_type value) noexcept
+void basic_moment<T, N, with::mean>::push(value_type input) noexcept
 {
     if (full())
     {
-        sum.mean += value - window.front();
-    }
+        member.mean += (input - window.front()) / value_type(size());
+}
     else
     {
-        sum.mean += value;
+        member.mean += (input - member.mean) / value_type(size() + 1);
     }
-    window.push_back(value);
+    window.push_back(input);
 }
 
 //-----------------------------------------------------------------------------
@@ -107,14 +105,14 @@ void basic_moment<T, N, with::variance>::push(value_type input) noexcept
     if (super::full())
     {
         const value_type old_input = super::window.front();
-        super::sum.mean += input - old_input;
+        super::member.mean += (input - old_input) / value_type(size());
         super::window.push_back(input);
         sum.variance += delta(input, old_mean);
         sum.variance -= delta(old_input, old_mean);
     }
     else
     {
-        super::sum.mean += input;
+        super::member.mean += (input - super::member.mean) / value_type(size() + 1);
         super::window.push_back(input);
         sum.variance += delta(input, old_mean);
     }

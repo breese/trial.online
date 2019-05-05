@@ -444,7 +444,7 @@ void test_three()
     filter.push(3);
     TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2);
     filter.push(0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1); // Rounded down
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 2); // Rounded up
 }
 
 void test_clear()

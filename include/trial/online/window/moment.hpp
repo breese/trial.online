@@ -54,7 +54,7 @@ protected:
     struct
     {
         value_type mean = value_type(0);
-    } sum;
+    } member;
 };
 
 template <typename T, std::size_t N>
