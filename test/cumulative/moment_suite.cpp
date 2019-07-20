@@ -8,6 +8,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <algorithm>
+#include <vector>
+#include <trial/online/iterator.hpp>
 #include <trial/online/detail/lightweight_test.hpp>
 #include <trial/online/detail/functional.hpp>
 #include <trial/online/cumulative/moment.hpp>
@@ -673,6 +676,113 @@ void run()
 } // namespace kurtosis_double_suite
 
 //-----------------------------------------------------------------------------
+
+namespace algorithm_suite
+{
+
+template <typename T>
+struct less_than
+{
+    less_than(T value) : threshold(value) {}
+    bool operator()(T input)
+    {
+        return input < threshold;
+    }
+    const T threshold;
+};
+
+template <typename T>
+struct squared
+{
+    T operator()(T value)
+    {
+        return value * value;
+    }
+};
+
+void copy_empty()
+{
+    std::vector<double> input = {};
+    cumulative::moment<double> filter;
+    std::copy(input.begin(), input.end(), push_inserter(filter));
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+}
+
+void copy_sequence()
+{
+    std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+    cumulative::moment<double> filter;
+    std::copy(input.begin(), input.end(), push_inserter(filter));
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.0);
+}
+
+void copy_if_empty()
+{
+    std::vector<double> input = {};
+    cumulative::moment<double> filter;
+    std::copy_if(input.begin(), input.end(), push_inserter(filter), less_than<double>(3.0));
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+}
+
+void copy_if_sequence()
+{
+    std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+    cumulative::moment<double> filter;
+    std::copy_if(input.begin(), input.end(), push_inserter(filter), less_than<double>(3.0));
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
+}
+
+void move_empty()
+{
+    std::vector<double> input = {};
+    cumulative::moment<double> filter;
+    std::move(input.begin(), input.end(), push_inserter(filter));
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+}
+
+void move_sequence()
+{
+    std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+    cumulative::moment<double> filter;
+    std::move(input.begin(), input.end(), push_inserter(filter));
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.0);
+}
+
+void transform_empty()
+{
+    std::vector<double> input = {};
+    cumulative::moment<double> filter;
+    std::transform(input.begin(), input.end(), push_inserter(filter), squared<double>());
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+}
+
+void transform_sequence()
+{
+    std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
+    cumulative::moment<double> filter;
+    std::transform(input.begin(), input.end(), push_inserter(filter), squared<double>());
+    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
+    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 11.0);
+}
+
+void run()
+{
+    copy_empty();
+    copy_sequence();
+    copy_if_empty();
+    copy_if_sequence();
+    move_empty();
+    move_sequence();
+    transform_empty();
+    transform_sequence();
+}
+
+} // namespace algorithm_suite
+
+//-----------------------------------------------------------------------------
 // main
 //-----------------------------------------------------------------------------
 
@@ -683,6 +793,7 @@ int main()
     variance_double_suite::run();
     skewness_double_suite::run();
     kurtosis_double_suite::run();
+    algorithm_suite::run();
 
     return boost::report_errors();
 }
