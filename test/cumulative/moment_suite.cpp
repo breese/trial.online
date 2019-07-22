@@ -705,7 +705,7 @@ void copy_empty()
     std::vector<double> input = {};
     cumulative::moment<double> filter;
     std::copy(input.begin(), input.end(), push_inserter(filter));
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.size(), 0);
 }
 
 void copy_sequence()
@@ -713,8 +713,8 @@ void copy_sequence()
     std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
     cumulative::moment<double> filter;
     std::copy(input.begin(), input.end(), push_inserter(filter));
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.0);
+    TRIAL_TEST_EQ(filter.size(), 5);
+    TRIAL_TEST_EQ(filter.mean(), 3.0);
 }
 
 void copy_if_empty()
@@ -722,7 +722,7 @@ void copy_if_empty()
     std::vector<double> input = {};
     cumulative::moment<double> filter;
     std::copy_if(input.begin(), input.end(), push_inserter(filter), less_than<double>(3.0));
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.size(), 0);
 }
 
 void copy_if_sequence()
@@ -730,8 +730,8 @@ void copy_if_sequence()
     std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
     cumulative::moment<double> filter;
     std::copy_if(input.begin(), input.end(), push_inserter(filter), less_than<double>(3.0));
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 1.5);
+    TRIAL_TEST_EQ(filter.size(), 2);
+    TRIAL_TEST_EQ(filter.mean(), 1.5);
 }
 
 void move_empty()
@@ -739,7 +739,7 @@ void move_empty()
     std::vector<double> input = {};
     cumulative::moment<double> filter;
     std::move(input.begin(), input.end(), push_inserter(filter));
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.size(), 0);
 }
 
 void move_sequence()
@@ -747,8 +747,8 @@ void move_sequence()
     std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
     cumulative::moment<double> filter;
     std::move(input.begin(), input.end(), push_inserter(filter));
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 3.0);
+    TRIAL_TEST_EQ(filter.size(), 5);
+    TRIAL_TEST_EQ(filter.mean(), 3.0);
 }
 
 void transform_empty()
@@ -756,7 +756,7 @@ void transform_empty()
     std::vector<double> input = {};
     cumulative::moment<double> filter;
     std::transform(input.begin(), input.end(), push_inserter(filter), squared<double>());
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.size(), 0);
 }
 
 void transform_sequence()
@@ -764,8 +764,8 @@ void transform_sequence()
     std::vector<double> input = { 1.0, 2.0, 3.0, 4.0, 5.0 };
     cumulative::moment<double> filter;
     std::transform(input.begin(), input.end(), push_inserter(filter), squared<double>());
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 5);
-    TRIAL_ONLINE_TEST_EQUAL(filter.mean(), 11.0);
+    TRIAL_TEST_EQ(filter.size(), 5);
+    TRIAL_TEST_EQ(filter.mean(), 11.0);
 }
 
 void run()
