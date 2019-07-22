@@ -69,117 +69,117 @@ void test_alpha()
         0, 0            // skip = 0, => 0
     };
     sampling::reservoir<int, simulate_engine> sampler(2, engine);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.size(), 0U);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 0U);
+    TRIAL_TEST_EQ(sampler.size(), 0U);
+    TRIAL_TEST_EQ(sampler.count(), 0U);
 
     // First two are accepted directly
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(11), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.size(), 1U);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 1U);
+    TRIAL_TEST_EQ(sampler.push(11), true);
+    TRIAL_TEST_EQ(sampler.size(), 1U);
+    TRIAL_TEST_EQ(sampler.count(), 1U);
     {
         std::vector<int> expected = { 11 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(22), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.size(), 2U);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 2U);
+    TRIAL_TEST_EQ(sampler.push(22), true);
+    TRIAL_TEST_EQ(sampler.size(), 2U);
+    TRIAL_TEST_EQ(sampler.count(), 2U);
     {
         std::vector<int> expected = { 11, 22 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
     // Next six are accepted by accept-reject
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(33), false);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.size(), 2U);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 3U);
+    TRIAL_TEST_EQ(sampler.push(33), false);
+    TRIAL_TEST_EQ(sampler.size(), 2U);
+    TRIAL_TEST_EQ(sampler.count(), 3U);
     {
         std::vector<int> expected = { 11, 22 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(44), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 4U);
+    TRIAL_TEST_EQ(sampler.push(44), true);
+    TRIAL_TEST_EQ(sampler.count(), 4U);
     {
         std::vector<int> expected = { 11, 44 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(55), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 5U);
+    TRIAL_TEST_EQ(sampler.push(55), true);
+    TRIAL_TEST_EQ(sampler.count(), 5U);
     {
         std::vector<int> expected = { 55, 44 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(66), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 6U);
+    TRIAL_TEST_EQ(sampler.push(66), true);
+    TRIAL_TEST_EQ(sampler.count(), 6U);
     {
         std::vector<int> expected = { 55, 66 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(77), false);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 7U);
+    TRIAL_TEST_EQ(sampler.push(77), false);
+    TRIAL_TEST_EQ(sampler.count(), 7U);
     {
         std::vector<int> expected = { 55, 66 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(88), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 8U);
+    TRIAL_TEST_EQ(sampler.push(88), true);
+    TRIAL_TEST_EQ(sampler.count(), 8U);
     {
         std::vector<int> expected = { 88, 66 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
     // Remainder are accepted by skip count
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(90), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 9U);
+    TRIAL_TEST_EQ(sampler.push(90), true);
+    TRIAL_TEST_EQ(sampler.count(), 9U);
     {
         std::vector<int> expected = { 88, 90 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(100), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 10U);
+    TRIAL_TEST_EQ(sampler.push(100), true);
+    TRIAL_TEST_EQ(sampler.count(), 10U);
     {
         std::vector<int> expected = { 100, 90 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(110), false);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 11U);
+    TRIAL_TEST_EQ(sampler.push(110), false);
+    TRIAL_TEST_EQ(sampler.count(), 11U);
     {
         std::vector<int> expected = { 100, 90 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(120), false);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 12U);
+    TRIAL_TEST_EQ(sampler.push(120), false);
+    TRIAL_TEST_EQ(sampler.count(), 12U);
     {
         std::vector<int> expected = { 100, 90 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 
-    TRIAL_ONLINE_TEST_EQUAL(sampler.push(130), true);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 13U);
+    TRIAL_TEST_EQ(sampler.push(130), true);
+    TRIAL_TEST_EQ(sampler.count(), 13U);
     {
         std::vector<int> expected = { 130, 90 };
-        TRIAL_ONLINE_TEST_ALL_EQUAL(sampler.data().begin(), sampler.data().end(),
-                                    expected.begin(), expected.end());
+        TRIAL_TEST_ALL_EQ(sampler.data().begin(), sampler.data().end(),
+                          expected.begin(), expected.end());
     }
 }
 
@@ -199,7 +199,7 @@ void test_default()
 {
     sampling::reservoir_default<double> sampler(2);
     sampler.push(11.0);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 1U);
+    TRIAL_TEST_EQ(sampler.count(), 1U);
 }
 
 void test_default_random_engine()
@@ -207,7 +207,7 @@ void test_default_random_engine()
     std::default_random_engine engine;
     sampling::reservoir<double, decltype(engine)> sampler(2, engine);
     sampler.push(11.0);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 1U);
+    TRIAL_TEST_EQ(sampler.count(), 1U);
 }
 
 void test_minstd_rand()
@@ -216,7 +216,7 @@ void test_minstd_rand()
     std::minstd_rand engine;
     sampling::reservoir<double, decltype(engine)> sampler(2, engine);
     sampler.push(11.0);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 1U);
+    TRIAL_TEST_EQ(sampler.count(), 1U);
 }
 
 void test_mt19937()
@@ -225,7 +225,7 @@ void test_mt19937()
     std::mt19937 engine;
     sampling::reservoir<double, decltype(engine)> sampler(2, engine);
     sampler.push(11.0);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 1U);
+    TRIAL_TEST_EQ(sampler.count(), 1U);
 }
 
 void test_ranlux24()
@@ -234,7 +234,7 @@ void test_ranlux24()
     std::ranlux24 engine;
     sampling::reservoir<double, decltype(engine)> sampler(2, engine);
     sampler.push(11.0);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 1U);
+    TRIAL_TEST_EQ(sampler.count(), 1U);
 }
 
 void test_knuth_b()
@@ -243,7 +243,7 @@ void test_knuth_b()
     std::knuth_b engine;
     sampling::reservoir<double, decltype(engine)> sampler(2, engine);
     sampler.push(11.0);
-    TRIAL_ONLINE_TEST_EQUAL(sampler.count(), 1U);
+    TRIAL_TEST_EQ(sampler.count(), 1U);
 }
 
 void run()

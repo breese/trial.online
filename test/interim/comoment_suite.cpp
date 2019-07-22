@@ -23,79 +23,79 @@ void test_ctor()
 {
     interim::covariance<double, 4> filter;
     filter.push(1.0, 1.0);
-    TRIAL_ONLINE_TEST(!filter.empty());
+    TRIAL_TEST(!filter.empty());
 
     // Copy constructor
     interim::covariance<double, 4> copy(filter);
-    TRIAL_ONLINE_TEST(!copy.empty());
+    TRIAL_TEST(!copy.empty());
 
     // Copy assignment
     interim::covariance<double, 4> assign;
     assign = filter;
-    TRIAL_ONLINE_TEST(!assign.empty());
+    TRIAL_TEST(!assign.empty());
 
     // Move constructor
     interim::covariance<double, 4> mover(std::move(copy));
-    TRIAL_ONLINE_TEST(!mover.empty());
+    TRIAL_TEST(!mover.empty());
 
     // Move assignment
     interim::covariance<double, 4> massign;
     massign = std::move(assign);
-    TRIAL_ONLINE_TEST(!massign.empty());
+    TRIAL_TEST(!massign.empty());
 }
 
 void test_clear()
 {
     interim::covariance<double, 4> filter;
     filter.push(1.0, 1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
+    TRIAL_TEST_EQ(filter.size(), 1);
 
     filter.clear();
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.size(), 0);
 }
 
 void test_capacity()
 {
     interim::covariance<double, 4> filter;
-    TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 4);
+    TRIAL_TEST_EQ(filter.capacity(), 4);
 }
 
 void test_size()
 {
     interim::covariance<double, 4> filter;
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.size(), 0);
     filter.push(1.0, 1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
+    TRIAL_TEST_EQ(filter.size(), 1);
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
+    TRIAL_TEST_EQ(filter.size(), 2);
     filter.push(3.0, 3.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 3);
+    TRIAL_TEST_EQ(filter.size(), 3);
     filter.push(4.0, 4.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 4);
+    TRIAL_TEST_EQ(filter.size(), 4);
     filter.push(5.0, 5.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 4);
+    TRIAL_TEST_EQ(filter.size(), 4);
 }
 
 void test_empty()
 {
     interim::covariance<double, 4> filter;
-    TRIAL_ONLINE_TEST(filter.empty());
+    TRIAL_TEST(filter.empty());
     filter.push(1.0, 1.0);
-    TRIAL_ONLINE_TEST(!filter.empty());
+    TRIAL_TEST(!filter.empty());
 }
 
 void test_full()
 {
     interim::covariance<double, 4> filter;
-    TRIAL_ONLINE_TEST(!filter.full());
+    TRIAL_TEST(!filter.full());
     filter.push(1.0, 1.0);
     filter.push(2.0, 2.0);
     filter.push(3.0, 3.0);
-    TRIAL_ONLINE_TEST(!filter.full());
+    TRIAL_TEST(!filter.full());
     filter.push(4.0, 4.0);
-    TRIAL_ONLINE_TEST(filter.full());
+    TRIAL_TEST(filter.full());
     filter.push(5.0, 5.0);
-    TRIAL_ONLINE_TEST(filter.full());
+    TRIAL_TEST(filter.full());
 }
 
 void run()
@@ -120,91 +120,91 @@ void test_same_no_increment()
     interim::covariance<double, 4> filter;
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     // Window full
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 }
 
 void test_same_increment_by_one()
 {
-    const double tolerance = 1e-5;
+    const auto tolerance = detail::close_to<double>(1e-5);
     interim::covariance<double, 4> filter;
 
     filter.push(1.0, 1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 0.25, tolerance);
 
     filter.push(3.0, 3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.666667, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 0.666667, tolerance);
 
     filter.push(4.0, 4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.25, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 1.25, tolerance);
 
     // Window full
     filter.push(5.0, 5.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.25, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 1.25, tolerance);
 
     filter.push(6.0, 6.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.06818, tolerance); // 1.25
+    TRIAL_TEST_WITH(filter.variance(), 1.06818, tolerance); // 1.25
 
     filter.push(7.0, 7.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.95833, tolerance); // 1.25
+    TRIAL_TEST_WITH(filter.variance(), 0.95833, tolerance); // 1.25
 
     filter.push(8.0, 8.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 1.25, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 1.25, tolerance);
 }
 
 void test_same_increment_by_half()
 {
-    const double tolerance = 1e-5;
+    const auto tolerance = detail::close_to<double>(1e-5);
     interim::covariance<double, 4> filter;
 
     filter.push(1.0, 1.0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(1.5, 1.5);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.0625, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 0.0625, tolerance);
 
     filter.push(2.0, 2.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.166667, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 0.166667, tolerance);
 
     filter.push(2.5, 2.5);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.3125, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 0.3125, tolerance);
 
     // Window full
     filter.push(3.0, 3.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.3125, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 0.3125, tolerance);
 
     filter.push(3.5, 3.5);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.267045, tolerance); // 0.3125
+    TRIAL_TEST_WITH(filter.variance(), 0.267045, tolerance); // 0.3125
 
     filter.push(4.0, 4.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.239583, tolerance); // 0.3125
+    TRIAL_TEST_WITH(filter.variance(), 0.239583, tolerance); // 0.3125
 
     filter.push(4.5, 4.5);
-    TRIAL_ONLINE_TEST_CLOSE(filter.variance(), 0.3125, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 0.3125, tolerance);
 }
 
 void test_exponential_increase()
@@ -214,26 +214,26 @@ void test_exponential_increase()
 
     std::cout << sizeof(filter) << std::endl;
     filter.push(1e0, 1e0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.variance(), 0.0);
+    TRIAL_TEST_EQ(filter.variance(), 0.0);
 
     filter.push(1e1, 1e1);
-    TRIAL_ONLINE_TEST_WITH(filter.variance(), 20.25, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 20.25, tolerance);
 
     filter.push(1e2, 1e2);
-    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1998.0, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 1998.0, tolerance);
 
     filter.push(1e3, 1e3);
-    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.7538e5, tolerance);
+    TRIAL_TEST_WITH(filter.variance(), 1.7538e5, tolerance);
 
     // Window full
     filter.push(1e4, 1e4);
-    TRIAL_ONLINE_TEST_WITH(filter.variance(), 1.7538e5, tolerance); // 1.7538e7
+    TRIAL_TEST_WITH(filter.variance(), 1.7538e5, tolerance); // 1.7538e7
 
     filter.push(1e5, 1e5);
-    TRIAL_ONLINE_TEST_WITH(filter.variance(), 3.68325e8, tolerance); // 1.7538e9
+    TRIAL_TEST_WITH(filter.variance(), 3.68325e8, tolerance); // 1.7538e9
 
     filter.push(1e6, 1e6);
-    TRIAL_ONLINE_TEST_WITH(filter.variance(), 9.99001e10, tolerance); // 1.7538e11
+    TRIAL_TEST_WITH(filter.variance(), 9.99001e10, tolerance); // 1.7538e11
 }
 
 void run()

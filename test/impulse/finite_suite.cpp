@@ -9,7 +9,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
+#include <trial/online/detail/functional.hpp>
 #include <trial/online/impulse/finite.hpp>
+
+using namespace trial::online;
 
 //-----------------------------------------------------------------------------
 
@@ -18,38 +21,38 @@ namespace double_1_suite
 
 void test_half()
 {
-    const double tolerance = 1e-5;
-    trial::online::impulse::finite<double> filter({0.5});
-    TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 1);
-    TRIAL_ONLINE_TEST(filter.empty());
-    TRIAL_ONLINE_TEST(!filter.full());
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.0, tolerance);
+    const auto tolerance = detail::close_to<double>(1e-5);
+    impulse::finite<double> filter({0.5});
+    TRIAL_TEST_EQ(filter.capacity(), 1);
+    TRIAL_TEST(filter.empty());
+    TRIAL_TEST(!filter.full());
+    TRIAL_TEST_EQ(filter.size(), 0);
+    TRIAL_TEST_WITH(filter.value(), 0.0, tolerance);
     filter.push(1);
-    TRIAL_ONLINE_TEST(!filter.empty());
-    TRIAL_ONLINE_TEST(filter.full());
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1 * 0.5, tolerance);
+    TRIAL_TEST(!filter.empty());
+    TRIAL_TEST(filter.full());
+    TRIAL_TEST_EQ(filter.size(), 1);
+    TRIAL_TEST_WITH(filter.value(), 1 * 0.5, tolerance);
     filter.push(3);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3 * 0.5, tolerance);
+    TRIAL_TEST_EQ(filter.size(), 1);
+    TRIAL_TEST_WITH(filter.value(), 3 * 0.5, tolerance);
     filter.push(5);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 5 * 0.5, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 5 * 0.5, tolerance);
 }
 
 void test_quarter()
 {
-    const double tolerance = 1e-5;
-    trial::online::impulse::finite<double> filter({0.25});
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    const auto tolerance = detail::close_to<double>(1e-5);
+    impulse::finite<double> filter({0.25});
+    TRIAL_TEST_EQ(filter.value(), 0.0);
     filter.push(1);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1 * 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 1 * 0.25, tolerance);
     filter.push(1);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1 * 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 1 * 0.25, tolerance);
     filter.push(2);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 2 * 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 2 * 0.25, tolerance);
     filter.push(3);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3 * 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 3 * 0.25, tolerance);
 }
 
 void test()
@@ -65,40 +68,40 @@ namespace double_2_suite
 
 void test_half_half()
 {
-    const double tolerance = 1e-5;
-    trial::online::impulse::finite<double> filter({0.5, 0.5});
-    TRIAL_ONLINE_TEST_EQUAL(filter.capacity(), 2);
-    TRIAL_ONLINE_TEST(filter.empty());
-    TRIAL_ONLINE_TEST(!filter.full());
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
-    TRIAL_ONLINE_TEST_EQUAL(filter.value(), 0.0);
+    const auto tolerance = detail::close_to<double>(1e-5);
+    impulse::finite<double> filter({0.5, 0.5});
+    TRIAL_TEST_EQ(filter.capacity(), 2);
+    TRIAL_TEST(filter.empty());
+    TRIAL_TEST(!filter.full());
+    TRIAL_TEST_EQ(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.value(), 0.0);
     filter.push(1);
-    TRIAL_ONLINE_TEST(!filter.empty());
-    TRIAL_ONLINE_TEST(!filter.full());
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 1);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.5, tolerance);
+    TRIAL_TEST(!filter.empty());
+    TRIAL_TEST(!filter.full());
+    TRIAL_TEST_EQ(filter.size(), 1);
+    TRIAL_TEST_WITH(filter.value(), 0.5, tolerance);
     filter.push(3);
-    TRIAL_ONLINE_TEST(!filter.empty());
-    TRIAL_ONLINE_TEST(filter.full());
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3 * 0.5 + 1 * 0.5, tolerance);
+    TRIAL_TEST(!filter.empty());
+    TRIAL_TEST(filter.full());
+    TRIAL_TEST_EQ(filter.size(), 2);
+    TRIAL_TEST_WITH(filter.value(), 3 * 0.5 + 1 * 0.5, tolerance);
     filter.push(6);
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 2);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 6 * 0.5 + 3 * 0.5, tolerance);
+    TRIAL_TEST_EQ(filter.size(), 2);
+    TRIAL_TEST_WITH(filter.value(), 6 * 0.5 + 3 * 0.5, tolerance);
 }
 
 void test_half_quarter()
 {
-    const double tolerance = 1e-5;
-    trial::online::impulse::finite<double> filter({0.5, 0.25});
+    const auto tolerance = detail::close_to<double>(1e-5);
+    impulse::finite<double> filter({0.5, 0.25});
     filter.push(1);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1 * 0.5, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 1 * 0.5, tolerance);
     filter.push(3);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 3 * 0.5 + 1 * 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 3 * 0.5 + 1 * 0.25, tolerance);
     filter.push(6);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 6 * 0.5 + 3 * 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 6 * 0.5 + 3 * 0.25, tolerance);
     filter.push(9);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 9 * 0.5 + 6 * 0.25, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 9 * 0.5 + 6 * 0.25, tolerance);
 }
 
 void test()

@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/online/detail/lightweight_test.hpp>
+#include <trial/online/detail/functional.hpp>
 #include <trial/online/cumulative/correlation.hpp>
 
 using namespace trial::online;
@@ -21,33 +22,33 @@ namespace double_suite
 void test_empty()
 {
     cumulative::correlation<double> filter;
-    TRIAL_ONLINE_TEST_EQUAL(filter.size(), 0);
+    TRIAL_TEST_EQ(filter.size(), 0);
 }
 
 void test_hinton()
 {
-    const double tolerance = 1e-5;
+    const auto tolerance = detail::close_to<double>(1e-5);
     cumulative::correlation<double> filter;
     filter.push(40.0, 58.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.0, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 1.0, tolerance);
     filter.push(43.0, 73.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 1.0, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 1.0, tolerance);
     filter.push(18.0, 56.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.67543, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.67543, tolerance);
     filter.push(10.0, 47.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.84317, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.84317, tolerance);
     filter.push(25.0, 58.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.84181, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.84181, tolerance);
     filter.push(33.0, 54.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.77024, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.77024, tolerance);
     filter.push(27.0, 45.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.67569, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.67569, tolerance);
     filter.push(17.0, 32.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.68849, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.68849, tolerance);
     filter.push(30.0, 68.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.66685, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.66685, tolerance);
     filter.push(47.0, 69.0);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.72071, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.72071, tolerance);
 }
 
 void run()
@@ -65,7 +66,7 @@ namespace anscombe_quartet
 
 void anscombe_I()
 {
-    const float tolerance = 5e-2;
+    const auto tolerance = detail::close_to<double>(5e-2);
     cumulative::correlation<double> filter;
 
     filter.push(10.0, 8.04);
@@ -79,12 +80,12 @@ void anscombe_I()
     filter.push(12.0, 10.84);
     filter.push(7.0, 4.82);
     filter.push(5.0, 5.68);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.816, tolerance);
 }
 
 void anscombe_II()
 {
-    const float tolerance = 5e-2;
+    const auto tolerance = detail::close_to<double>(5e-2);
     cumulative::correlation<double> filter;
 
     filter.push(10.0, 9.14);
@@ -98,12 +99,12 @@ void anscombe_II()
     filter.push(12.0, 9.13);
     filter.push(7.0, 7.26);
     filter.push(5.0, 4.74);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.816, tolerance);
 }
 
 void anscombe_III()
 {
-    const float tolerance = 5e-2;
+    const auto tolerance = detail::close_to<double>(5e-2);
     cumulative::correlation<double> filter;
 
     filter.push(10.0, 7.46);
@@ -117,12 +118,12 @@ void anscombe_III()
     filter.push(12.0, 8.15);
     filter.push(7.0, 6.42);
     filter.push(5.0, 5.73);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.816, tolerance);
 }
 
 void anscombe_IV()
 {
-    const float tolerance = 5e-2;
+    const auto tolerance = detail::close_to<double>(5e-2);
     cumulative::correlation<double> filter;
 
     filter.push(8.0, 6.58);
@@ -136,7 +137,7 @@ void anscombe_IV()
     filter.push(8.0, 5.56);
     filter.push(8.0, 7.91);
     filter.push(8.0, 6.89);
-    TRIAL_ONLINE_TEST_CLOSE(filter.value(), 0.816, tolerance);
+    TRIAL_TEST_WITH(filter.value(), 0.816, tolerance);
 }
 
 void run()
