@@ -16,12 +16,6 @@ namespace window
 {
 
 template <typename T, std::size_t W>
-basic_comoment<T, W, with::variance>::basic_comoment() noexcept
-    : window(storage)
-{
-}
-
-template <typename T, std::size_t W>
 auto basic_comoment<T, W, with::variance>::size() const noexcept -> size_type
 {
     return window.size();

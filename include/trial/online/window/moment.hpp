@@ -14,7 +14,7 @@
 #include <cstddef> // std::size_t
 #include <type_traits>
 #include <trial/online/with.hpp>
-#include <trial/online/circular_span.hpp>
+#include <trial/circular/array.hpp>
 
 namespace trial
 {
@@ -37,7 +37,7 @@ public:
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
     static_assert((!std::is_same<T, bool>::value), "T cannot be bool");
 
-    basic_moment() noexcept;
+    basic_moment() noexcept = default;
 
     void clear() noexcept;
     void push(value_type value) noexcept;
@@ -49,10 +49,9 @@ public:
     size_type size() const noexcept;
 
 protected:
-    value_type storage[N];
-    circular_span<value_type> window;
     struct
     {
+        circular::array<value_type, N> window;
         value_type mean = value_type(0);
     } member;
 };

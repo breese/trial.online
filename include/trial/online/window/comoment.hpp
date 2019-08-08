@@ -11,7 +11,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <trial/online/circular_span.hpp>
+#include <trial/circular/array.hpp>
 #include <trial/online/with.hpp>
 
 namespace trial
@@ -33,7 +33,7 @@ public:
     
     static_assert(std::is_floating_point<T>::value, "T must be an floating-point type");
 
-    basic_comoment() noexcept;
+    basic_comoment() noexcept = default;
 
     void clear() noexcept;
     void push(value_type first, value_type second) noexcept;
@@ -46,8 +46,7 @@ protected:
     value_type cosum() const noexcept;
 
 protected:
-    std::pair<value_type, value_type> storage[Window];
-    circular_span<std::pair<value_type, value_type>> window;
+    circular::array<std::pair<value_type, value_type>, Window> window;
     struct
     {
         value_type x = value_type(0);

@@ -65,3 +65,7 @@ if (${Boost_VERSION} LESS 106600)
     DESTINATION .
     )
 endif()
+
+# Trial.Circular
+set_property(TARGET trial-online APPEND PROPERTY
+  INTERFACE_INCLUDE_DIRECTORIES "${TRIAL_ONLINE_ROOT_DIR}/external/trial.circular/include")

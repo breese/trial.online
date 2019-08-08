@@ -23,42 +23,36 @@ namespace window
 //-----------------------------------------------------------------------------
 
 template <typename T, std::size_t N>
-basic_moment<T, N, with::mean>::basic_moment() noexcept
-    : window(storage)
-{
-}
-
-template <typename T, std::size_t N>
 auto basic_moment<T, N, with::mean>::capacity() const noexcept -> size_type
 {
-    assert(window.capacity() == N);
+    assert(member.window.capacity() == N);
 
-    return window.capacity();
+    return member.window.capacity();
 }
 
 template <typename T, std::size_t N>
 void basic_moment<T, N, with::mean>::clear() noexcept
 {
     member.mean = value_type(0);
-    window.clear();
+    member.window.clear();
 }
 
 template <typename T, std::size_t N>
 bool basic_moment<T, N, with::mean>::empty() const noexcept
 {
-    return window.empty();
+    return member.window.empty();
 }
 
 template <typename T, std::size_t N>
 auto basic_moment<T, N, with::mean>::size() const noexcept -> size_type
 {
-    return window.size();
+    return member.window.size();
 }
 
 template <typename T, std::size_t N>
 bool basic_moment<T, N, with::mean>::full() const noexcept
 {
-    return window.full();
+    return member.window.full();
 }
 
 template <typename T, std::size_t N>
@@ -72,13 +66,13 @@ void basic_moment<T, N, with::mean>::push(value_type input) noexcept
 {
     if (full())
     {
-        member.mean += (input - window.front()) / value_type(size());
+        member.mean += (input - member.window.front()) / value_type(size());
 }
     else
     {
         member.mean += (input - member.mean) / value_type(size() + 1);
     }
-    window.push_back(input);
+    member.window.push_back(input);
 }
 
 //-----------------------------------------------------------------------------
@@ -104,16 +98,16 @@ void basic_moment<T, N, with::variance>::push(value_type input) noexcept
     const value_type old_mean = super::mean();
     if (super::full())
     {
-        const value_type old_input = super::window.front();
+        const value_type old_input = super::member.window.front();
         super::member.mean += (input - old_input) / value_type(size());
-        super::window.push_back(input);
+        super::member.window.push_back(input);
         sum.variance += delta(input, old_mean);
         sum.variance -= delta(old_input, old_mean);
     }
     else
     {
         super::member.mean += (input - super::member.mean) / value_type(size() + 1);
-        super::window.push_back(input);
+        super::member.window.push_back(input);
         sum.variance += delta(input, old_mean);
     }
 }

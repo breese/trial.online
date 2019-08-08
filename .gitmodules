@@ -1,3 +1,6 @@
 [submodule "external/mp11"]
 	path = external/mp11
 	url = https://github.com/pdimov/mp11.git
+[submodule "external/trial.circular"]
+	path = external/trial.circular
+	url = https://github.com/breese/trial.circular.git

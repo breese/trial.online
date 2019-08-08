@@ -16,9 +16,6 @@ function(trial_online_add_test name)
   target_compile_features(${name} PRIVATE ${TRIAL_ONLINE_FEATURES})
 endfunction()
 
-# online
-trial_online_add_test(circular_span_suite circular_span_suite.cpp)
-
 # detail
 trial_online_add_test(type_traits_suite detail/type_traits_suite.cpp)
 
