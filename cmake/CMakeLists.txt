@@ -19,9 +19,9 @@ set(EXECUTABLE_OUTPUT_PATH ${TRIAL_ONLINE_BUILD_DIR}/bin)
 get_filename_component(TRIAL_ONLINE_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../" ABSOLUTE)
 
 if (${CMAKE_VERSION} VERSION_LESS 3.8)
-  set(TRIAL_ONLINE_FEATURES cxx_auto_type PARENT_SCOPE)
+  set(TRIAL_ONLINE_FEATURES cxx_auto_type)
 else()
-  set(TRIAL_ONLINE_FEATURES cxx_std_11 PARENT_SCOPE)
+  set(TRIAL_ONLINE_FEATURES cxx_std_11)
 endif()
 
 if (MSVC)
@@ -41,6 +41,7 @@ find_package(Boost 1.57.0 QUIET)
 ###############################################################################
 
 add_library(trial-online INTERFACE)
+target_compile_features(trial-online INTERFACE ${TRIAL_ONLINE_FEATURES})
 
 install(DIRECTORY ${TRIAL_ONLINE_ROOT_DIR}/include
   DESTINATION .

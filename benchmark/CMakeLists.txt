@@ -16,7 +16,6 @@ function(trial_online_add_benchmark name)
   add_executable(${name} ${ARGN})
   target_link_libraries(${name} trial-online Google::benchmark)
   target_compile_options(${name} PRIVATE ${TRIAL_ONLINE_WARNING_FLAGS} -DNDEBUG=1)
-  target_compile_features(${name} PRIVATE ${TRIAL_ONLINE_FEATURES})
   add_dependencies(benchmark ${name})
 endfunction()
 

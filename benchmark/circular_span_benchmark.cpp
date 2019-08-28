@@ -9,12 +9,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <benchmark/benchmark.h>
-#include <trial/online/circular_span.hpp>
+#include <trial/circular/span.hpp>
 
 void empty(benchmark::State& state)
 {
     int storage[8];
-    trial::online::circular_span<int> window(storage);
+    trial::circular::span<int> window(storage);
     window.assign({ 1, 2, 3, 4, 5, 6, 7, 8 });
 
     for (auto _ : state)
@@ -28,7 +28,7 @@ BENCHMARK(empty);
 void full(benchmark::State& state)
 {
     int storage[8];
-    trial::online::circular_span<int> window(storage);
+    trial::circular::span<int> window(storage);
     window.assign({ 1, 2, 3, 4, 5, 6, 7, 8 });
 
     for (auto _ : state)
@@ -42,7 +42,7 @@ BENCHMARK(full);
 void push_back(benchmark::State& state)
 {
     int storage[256];
-    trial::online::circular_span<int> window(storage);
+    trial::circular::span<int> window(storage);
 
     for (auto _ : state)
     {
@@ -55,7 +55,7 @@ BENCHMARK(push_back);
 void push_front(benchmark::State& state)
 {
     int storage[256];
-    trial::online::circular_span<int> window(storage);
+    trial::circular::span<int> window(storage);
 
     for (auto _ : state)
     {
@@ -68,7 +68,7 @@ BENCHMARK(push_front);
 void push_back_pop_front(benchmark::State& state)
 {
     int storage[256];
-    trial::online::circular_span<int> window(storage);
+    trial::circular::span<int> window(storage);
     window.assign({1, 2, 3, 4, 5});
 
     for (auto _ : state)
@@ -83,7 +83,7 @@ BENCHMARK(push_back_pop_front);
 void push_front_pop_back(benchmark::State& state)
 {
     int storage[256];
-    trial::online::circular_span<int> window(storage);
+    trial::circular::span<int> window(storage);
     window.assign({1, 2, 3, 4, 5});
 
     for (auto _ : state)
