@@ -14,7 +14,7 @@
 #include <cstddef> // std::size_t
 #include <vector>
 #include <type_traits>
-#include <boost/circular_buffer.hpp>
+#include <trial/circular/vector.hpp>
 
 namespace trial
 {
@@ -48,7 +48,7 @@ public:
     size_type size() const;
 
 private:
-    using window_type = boost::circular_buffer<value_type>;
+    using window_type = trial::circular::vector<value_type>;
     window_type input;
     value_type output;
     std::vector<value_type> coefficients;

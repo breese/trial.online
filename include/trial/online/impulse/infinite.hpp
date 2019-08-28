@@ -14,7 +14,7 @@
 #include <cstddef> // std::size_t
 #include <vector>
 #include <type_traits>
-#include <boost/circular_buffer.hpp>
+#include <trial/circular/vector.hpp>
 
 namespace trial
 {
@@ -49,7 +49,7 @@ public:
     void push(value_type);
 
 private:
-    using window_type = boost::circular_buffer<value_type>;
+    using window_type = trial::circular::vector<value_type>;
     struct
     {
         window_type window;

@@ -21,7 +21,7 @@ namespace impulse
 template <typename T>
 template <std::size_t P>
 finite<T>::finite(const value_type (&coefficients)[P])
-    : input{P},
+    : input(P),
       output(),
       coefficients{std::begin(coefficients), std::end(coefficients)}
 {
@@ -30,7 +30,7 @@ finite<T>::finite(const value_type (&coefficients)[P])
 template <typename T>
 template <std::size_t P>
 finite<T>::finite(value_type (&&coefficients)[P])
-    : input{P},
+    : input(P),
       output(),
       coefficients{std::make_move_iterator(std::begin(coefficients)), std::make_move_iterator(std::end(coefficients))}
 {
