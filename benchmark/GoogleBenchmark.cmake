@@ -50,7 +50,7 @@ add_library(Google::test STATIC IMPORTED GLOBAL)
 add_dependencies(Google::test project-google-test)
 set_target_properties(Google::test PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_BINARY_DIR}/include
-  INTERFACE_LINK_LIBRARIES ${CMAKE_THREAD_LIBS_INIT}
+  INTERFACE_LINK_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}"
   IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/lib/libgtest.a
   )
 
