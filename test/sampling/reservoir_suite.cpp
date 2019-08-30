@@ -34,11 +34,11 @@ struct simulate_engine
         return data[index++];
     }
 
-    result_type min()
+    static constexpr result_type min()
     {
         return std::numeric_limits<result_type>::min();
     }
-    result_type max()
+    static constexpr result_type max()
     {
         return std::numeric_limits<result_type>::max();
     }
