@@ -12,3 +12,9 @@ add_executable(ex-density-interim
   interim.cpp
   )
 target_link_libraries(ex-density-interim trial-online)
+
+add_custom_target(ex-density DEPENDS
+  ex-density-cumulative
+  ex-density-window
+  ex-density-interim
+  )
