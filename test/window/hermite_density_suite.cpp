@@ -30,30 +30,30 @@ void test_same()
     window::hermite_density<double, 4, 6> filter;
 
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_WITH(filter.lower(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.upper(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
+    TRIAL_TEST_WITH(filter.lower(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.upper(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
 
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_WITH(filter.lower(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.upper(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
+    TRIAL_TEST_WITH(filter.lower(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.upper(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
 
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_WITH(filter.lower(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.upper(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
+    TRIAL_TEST_WITH(filter.lower(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.upper(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
 
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_WITH(filter.lower(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.upper(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
+    TRIAL_TEST_WITH(filter.lower(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.upper(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
 
     // Window full
     filter.push(0.0);
-    TRIAL_ONLINE_TEST_WITH(filter.lower(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.upper(), 0.0, tolerance);
-    TRIAL_ONLINE_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
+    TRIAL_TEST_WITH(filter.lower(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.upper(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0.0), 1.23416, tolerance);
 }
 
 void run()
