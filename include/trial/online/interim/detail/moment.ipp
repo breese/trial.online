@@ -146,6 +146,93 @@ auto basic_moment<T, W, with::variance, UseMoment>::variance() const noexcept ->
         / (passive_weight + active_weight);
 }
 
+//-----------------------------------------------------------------------------
+// With skewness
+//-----------------------------------------------------------------------------
+
+template <typename T, std::size_t N, online::with UseMoment>
+class basic_moment<T, N, with::skewness, UseMoment>
+    : protected basic_moment<T, N, with::variance, UseMoment>
+{
+    using super = basic_moment<T, N, with::variance, UseMoment>;
+
+    static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
+
+public:
+    using typename super::value_type;
+    using typename super::size_type;
+
+    using super::clear;
+    using super::push;
+    using super::capacity;
+    using super::empty;
+    using super::full;
+    using super::mean;
+    using super::variance;
+    using super::size;
+    value_type skewness() const noexcept;
+};
+
+template <typename T, std::size_t W, online::with UseMoment>
+auto basic_moment<T, W, with::skewness, UseMoment>::skewness() const noexcept -> value_type
+{
+    if (super::passive.empty())
+        return super::active.skewness();
+    if (super::active.size() <= 1) // Insufficient data points to calculate skewness
+        return super::passive.skewness();
+
+    // Weighted combined skewness
+    const auto sz = super::active.size() - 1;
+    const auto passive_weight = (W - sz);
+    const auto active_weight = 2 * sz;
+    return (passive_weight * super::passive.skewness() + active_weight * super::active.skewness())
+        / (passive_weight + active_weight);
+}
+
+//-----------------------------------------------------------------------------
+// With kurtosis
+//-----------------------------------------------------------------------------
+
+template <typename T, std::size_t N, online::with UseMoment>
+class basic_moment<T, N, with::kurtosis, UseMoment>
+    : protected basic_moment<T, N, with::skewness, UseMoment>
+{
+    using super = basic_moment<T, N, with::skewness, UseMoment>;
+
+    static_assert(std::is_floating_point<T>::value, "T must be a floating-point type");
+
+public:
+    using typename super::value_type;
+    using typename super::size_type;
+
+    using super::clear;
+    using super::push;
+    using super::capacity;
+    using super::empty;
+    using super::full;
+    using super::mean;
+    using super::variance;
+    using super::skewness;
+    using super::size;
+    value_type kurtosis() const noexcept;
+};
+
+template <typename T, std::size_t W, online::with UseMoment>
+auto basic_moment<T, W, with::kurtosis, UseMoment>::kurtosis() const noexcept -> value_type
+{
+    if (super::passive.empty())
+        return super::active.kurtosis();
+    if (super::active.size() <= 1) // Insufficient data points to calculate kurtosis
+        return super::passive.kurtosis();
+
+    // Weighted combined kurtosis
+    const auto sz = super::active.size() - 1;
+    const auto passive_weight = (W - sz);
+    const auto active_weight = 2 * sz;
+    return (passive_weight * super::passive.kurtosis() + active_weight * super::active.kurtosis())
+        / (passive_weight + active_weight);
+}
+
 } // namespace detail
 } // namespace interim
 } // namespace online
