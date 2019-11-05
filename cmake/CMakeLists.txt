@@ -11,6 +11,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(trial.online)
 
+option(TRIAL_ONLINE_WITH_MP11_INSTALL "Install Boost.Mp11 if missing" TRUE)
+
 set(TRIAL_ONLINE_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(TRIAL_ONLINE_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 set(LIBRARY_OUTPUT_PATH ${TRIAL_ONLINE_BUILD_DIR}/lib)
@@ -59,12 +61,17 @@ set_property(TARGET trial-online APPEND PROPERTY
 
 # Use own copy if Boost.Mp11 is unavailable
 if (${Boost_VERSION} LESS 106600)
-  set_property(TARGET trial-online APPEND PROPERTY
-    INTERFACE_INCLUDE_DIRECTORIES "${TRIAL_ONLINE_ROOT_DIR}/external/mp11/include")
+  if (TRIAL_ONLINE_WITH_MP11_INSTALL)
+    set_property(TARGET trial-online APPEND PROPERTY
+      INTERFACE_INCLUDE_DIRECTORIES "${TRIAL_ONLINE_ROOT_DIR}/external/mp11/include")
 
-  install(DIRECTORY ${TRIAL_ONLINE_ROOT_DIR}/external/mp11/include
-    DESTINATION .
-    )
+    install(DIRECTORY ${TRIAL_ONLINE_ROOT_DIR}/external/mp11/include
+      DESTINATION .
+      )
+  endif()
+elseif (Boost_Found)
+    set_property(TARGET trial-online APPEND PROPERTY
+      INTERFACE_INCLUDE_DIRECTORIES "${Boost_INCLUDE_DIR}")
 endif()
 
 # Trial.Circular
