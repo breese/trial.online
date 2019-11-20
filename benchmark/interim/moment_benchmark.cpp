@@ -54,16 +54,52 @@ void interim_variance(benchmark::State& state)
     }
 }
 
+template <std::size_t Window>
+void interim_skewness(benchmark::State& state)
+{
+    auto values = dataset<double>(datasize);
+    trial::online::interim::moment_skewness<double, Window> filter;
+    std::size_t k = 0;
+    for (auto _ : state)
+    {
+        filter.push(values[k % values.size()]);
+        benchmark::DoNotOptimize(filter.skewness());
+        ++k;
+    }
+}
+
+template <std::size_t Window>
+void interim_kurtosis(benchmark::State& state)
+{
+    auto values = dataset<double>(datasize);
+    trial::online::interim::moment_kurtosis<double, Window> filter;
+    std::size_t k = 0;
+    for (auto _ : state)
+    {
+        filter.push(values[k % values.size()]);
+        benchmark::DoNotOptimize(filter.kurtosis());
+        ++k;
+    }
+}
+
 BENCHMARK_TEMPLATE(interim_mean, 2);
 BENCHMARK_TEMPLATE(interim_variance, 2);
+BENCHMARK_TEMPLATE(interim_skewness, 2);
+BENCHMARK_TEMPLATE(interim_kurtosis, 2);
 
 BENCHMARK_TEMPLATE(interim_mean, 16);
 BENCHMARK_TEMPLATE(interim_variance, 16);
+BENCHMARK_TEMPLATE(interim_skewness, 16);
+BENCHMARK_TEMPLATE(interim_kurtosis, 16);
 
 BENCHMARK_TEMPLATE(interim_mean, 256);
 BENCHMARK_TEMPLATE(interim_variance, 256);
+BENCHMARK_TEMPLATE(interim_skewness, 256);
+BENCHMARK_TEMPLATE(interim_kurtosis, 256);
 
 BENCHMARK_TEMPLATE(interim_mean, 4096);
 BENCHMARK_TEMPLATE(interim_variance, 4096);
+BENCHMARK_TEMPLATE(interim_skewness, 4096);
+BENCHMARK_TEMPLATE(interim_kurtosis, 4096);
 
 BENCHMARK_MAIN();
