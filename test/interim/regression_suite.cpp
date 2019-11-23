@@ -167,6 +167,90 @@ void test_linear_increase_slope_2()
     TRIAL_TEST_WITH(filter.at(8.0), 16.0, tolerance);
 }
 
+void test_linear_increase_slope_1_alternating_noise()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    interim::regression<double, 4> filter;
+
+    // Fixed absolute error on increasing values means reduced relative error
+
+    filter.push(0.0, 0.0);
+    TRIAL_TEST_WITH(filter.slope(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+
+    filter.push(1.0, 1.01);
+    TRIAL_TEST_WITH(filter.slope(), 1.01, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(1.0), 1.01, tolerance);
+
+    filter.push(2.0, 1.99);
+    TRIAL_TEST_WITH(filter.slope(), 0.995, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.005, tolerance);
+    TRIAL_TEST_WITH(filter.at(2.0), 1.995, tolerance);
+
+    filter.push(3.0, 3.01);
+    TRIAL_TEST_WITH(filter.slope(), 1.001, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.001, tolerance);
+    TRIAL_TEST_WITH(filter.at(3.0), 3.004, tolerance);
+
+    // Window full
+
+    filter.push(4.0, 3.99);
+    TRIAL_TEST_WITH(filter.slope(), 1.001, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.005, tolerance);
+    TRIAL_TEST_WITH(filter.at(4.0), 3.999, tolerance);
+
+    filter.push(5.0, 5.01);
+    TRIAL_TEST_WITH(filter.slope(), 1.00181, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.00549645, tolerance);
+    TRIAL_TEST_WITH(filter.at(5.0), 5.00355, tolerance);
+
+    filter.push(6.0, 5.99);
+    TRIAL_TEST_WITH(filter.slope(), 1.00065, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.0054348, tolerance);
+    TRIAL_TEST_WITH(filter.at(6.0), 5.99848, tolerance);
+
+    filter.push(7.0, 7.01);
+    TRIAL_TEST_WITH(filter.slope(), 1.00357, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.019643, tolerance);
+    TRIAL_TEST_WITH(filter.at(7.0), 7.00536, tolerance);
+
+    filter.push(8.0, 7.99);
+    TRIAL_TEST_WITH(filter.slope(), 1.004, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.03, tolerance);
+    TRIAL_TEST_WITH(filter.at(8.0), 8.002, tolerance);
+
+    filter.push(9.0, 9.01);
+    TRIAL_TEST_WITH(filter.slope(), 1.00468, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.0351064, tolerance);
+    TRIAL_TEST_WITH(filter.at(9.0), 9.00702, tolerance);
+
+    filter.push(10.0, 9.99);
+    TRIAL_TEST_WITH(filter.slope(), 1.00261, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.0250311, tolerance);
+    TRIAL_TEST_WITH(filter.at(10.0), 10.0011, tolerance);
+
+    filter.push(11.0, 11.01);
+    TRIAL_TEST_WITH(filter.slope(), 1.004, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.038, tolerance);
+    TRIAL_TEST_WITH(filter.at(11.0), 11.006, tolerance);
+
+    filter.push(12.0, 11.99);
+    TRIAL_TEST_WITH(filter.slope(), 1.004, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.046, tolerance);
+    TRIAL_TEST_WITH(filter.at(12.0), 12.002, tolerance);
+
+    filter.push(13.0, 13.01);
+    TRIAL_TEST_WITH(filter.slope(), 1.00468, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.05383, tolerance);
+    TRIAL_TEST_WITH(filter.at(13.0), 13.007, tolerance);
+
+    filter.push(14.0, 13.99);
+    TRIAL_TEST_WITH(filter.slope(), 1.00261, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), -0.035466, tolerance);
+    TRIAL_TEST_WITH(filter.at(14.0), 14.0011, tolerance);
+}
+
 void test_exponential_increase()
 {
     const auto tolerance = detail::close_to<double>(1e-5);
@@ -252,6 +336,7 @@ void run()
     test_same();
     test_linear_increase_slope_1();
     test_linear_increase_slope_2();
+    test_linear_increase_slope_1_alternating_noise();
     test_exponential_increase();
     test_scatter();
 }
