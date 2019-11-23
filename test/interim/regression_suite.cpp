@@ -63,7 +63,7 @@ void test_same()
     TRIAL_TEST_WITH(filter.at(0), 1.0, tolerance);
 }
 
-void test_linear_increase()
+void test_linear_increase_slope_1()
 {
     const auto tolerance = detail::close_to<double>(1e-5);
     interim::regression<double, 4> filter;
@@ -113,6 +113,58 @@ void test_linear_increase()
     TRIAL_TEST_WITH(filter.slope(), 1.0, tolerance);
     TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
     TRIAL_TEST_WITH(filter.at(8.0), 8.0, tolerance);
+}
+
+void test_linear_increase_slope_2()
+{
+    const auto tolerance = detail::close_to<double>(1e-5);
+    interim::regression<double, 4> filter;
+
+    filter.push(0.0, 0.0);
+    TRIAL_TEST_WITH(filter.slope(), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+
+    filter.push(1.0, 2.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(1.0), 2.0, tolerance);
+
+    filter.push(2.0, 4.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(2.0), 4.0, tolerance);
+
+    filter.push(3.0, 6.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(3.0), 6.0, tolerance);
+
+    // Window full
+
+    filter.push(4.0, 8.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(4.0), 8.0, tolerance);
+
+    filter.push(5.0, 10.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(5.0), 10.0, tolerance);
+
+    filter.push(6.0, 12.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(6.0), 12.0, tolerance);
+
+    filter.push(7.0, 14.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(7.0), 14.0, tolerance);
+
+    filter.push(8.0, 16.0);
+    TRIAL_TEST_WITH(filter.slope(), 2.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(0), 0.0, tolerance);
+    TRIAL_TEST_WITH(filter.at(8.0), 16.0, tolerance);
 }
 
 void test_exponential_increase()
@@ -198,7 +250,8 @@ void run()
 {
     test_ctor();
     test_same();
-    test_linear_increase();
+    test_linear_increase_slope_1();
+    test_linear_increase_slope_2();
     test_exponential_increase();
     test_scatter();
 }
