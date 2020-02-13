@@ -11,7 +11,6 @@
 #include <cmath>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/factorials.hpp>
-#include <boost/math/special_functions/erf.hpp>
 #include <trial/online/detail/math.hpp>
 #ifndef NDEBUG
 #include <boost/math/special_functions/gamma.hpp>
@@ -170,7 +169,7 @@ auto hermite_density<T, P, with::cumulation, M>::until(value_type position) cons
     value_type x2 = initial_x2;
 
     value_type upper_gamma_cache[2 * P];
-    upper_gamma_cache[0] = root_pi * (value_type(1) - boost::math::erf(initial_x1));
+    upper_gamma_cache[0] = root_pi * (value_type(1) - std::erf(initial_x1));
     upper_gamma_cache[1] = exp_constant;
 
     for (size_type k = 1; k < P; ++k)
